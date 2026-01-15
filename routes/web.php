@@ -18,5 +18,27 @@ Route::get('/', function () {
 });
 
 Route::get('/index', function () {
-    return view('index');
+    return view('landing_page.index');
 });
+
+Route::get('/kilas_balik', function () {
+    return view('landing_page.kilas_balik');
+});
+
+Route::get('/visi_misi', function () {
+    return view('landing_page.visi_misi');
+});
+
+Route::get('/struktur_organisasi', function () {
+    return view('landing_page.struktur_organisasi');
+});
+
+Route::get('/fasilitas', function () {
+    return view('landing_page.layout_fasilitas');
+});
+
+Route::get('/maklumat', function () {
+    return view('landing_page.maklumat');
+});
+
+

@@ -41,17 +41,17 @@
 
 <body>
     <!-- Topbar -->
-    @include('partials.topbar')
+    @include('landing_page.partials.topbar')
 
     <!-- Navbar & Hero -->
-    @include('partials.navbar')
+    @include('landing_page.partials.navbar')
 
     <!-- Content -->
     @yield('content')
 
     <!-- Footer -->
-    @include('partials.footer')
-
+    @include('landing_page.partials.footer')
+    
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

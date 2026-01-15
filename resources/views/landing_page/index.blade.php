@@ -1,7 +1,6 @@
-@extends('layouts.main')
+@extends('landing_page.layouts.main')
 
 @section('content')
-
 <body>
   <!-- Spinner Start -->
   <div
