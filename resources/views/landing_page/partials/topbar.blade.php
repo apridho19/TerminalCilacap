@@ -11,19 +11,16 @@
             <div class="d-inline-flex align-items-center" style="height: 45px">
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
-                    href=""><i class="fab fa-twitter fw-normal text-warning"></i></a>
+                    href="{{ url('https://www.facebook.com/ttabmdcilacap/') }}"><i class="fab fa-facebook-f fw-normal text-warning"></i></a>
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
-                    href=""><i class="fab fa-facebook-f fw-normal text-warning"></i></a>
+                    href=""><i class="fab fa-whatsapp fw-normal text-warning"></i></a>
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
-                    href=""><i class="fab fa-linkedin-in fw-normal text-warning"></i></a>
-                <a
-                    class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
-                    href=""><i class="fab fa-instagram fw-normal text-warning"></i></a>
+                    href="{{ url('https://www.instagram.com/tta_bmdcilacap/') }}"><i class="fab fa-instagram fw-normal text-warning"></i></a>
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle"
-                    href=""><i class="fab fa-youtube fw-normal text-warning"></i></a>
+                    href="{{ url('https://www.youtube.com/@tta_bmdcilacap') }}"><i class="fab fa-youtube fw-normal text-warning"></i></a>
             </div>
         </div>
         <div class="col-lg-4 text-center text-lg-end">

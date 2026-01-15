@@ -41,4 +41,40 @@ Route::get('/maklumat', function () {
     return view('landing_page.maklumat');
 });
 
+Route::get('/hasil_skm', function () {
+    return view('landing_page.hasil_skm');
+});
+
+Route::get('/layanan_pengaduan', function () {
+    return view('landing_page.layanan_pengaduan');
+});
+
+Route::get('/kontak', function () {
+    return view('landing_page.kontak');
+});
+
+Route::get('/daftar_po', function () {
+    return view('landing_page.daftar_po');
+});
+
+Route::get('/tarif_tiket', function () {
+    return view('landing_page.tarif_tiket');
+});
+
+Route::get('/tarif_jabodetabek', function () {
+    return view('landing_page.detail_tarif.tarif_jabodetabek');
+});
+
+Route::get('/tarif_jateng', function () {
+    return view('landing_page.detail_tarif.tarif_jateng');
+});
+
+Route::get('/tarif_jatim', function () {
+    return view('landing_page.detail_tarif.tarif_jatim');
+});
+
+Route::get('/tarif_jabar', function () {
+    return view('landing_page.detail_tarif.tarif_jabar');
+});
+
 

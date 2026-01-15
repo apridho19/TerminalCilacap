@@ -43,23 +43,9 @@
                         <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item">Layanan Pengaduan</a>
                     </div>
                 </div>
-                <a href="" class="nav-item nav-link">Kegiatan</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                        <span class="dropdown-toggle">Informasi</span>
-                    </a>
-                    <div class="dropdown-menu m-0">
-                        <a href="berita.html" class="dropdown-item">Berita</a>
-                        <a href="peraturan-perundangan.html" class="dropdown-item">
-                            Peraturan perundang-undangan
-                        </a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="tempat-wisata.html" class="dropdown-item">Tempat Wisata</a>
-                        <a href="restoran.html" class="dropdown-item">Restoran</a>
-                    </div>
-                </div>
+               
                 <a
-                    href="contact.html"
+                    href="{{ url('/kontak') }}"
                     class="nav-item nav-link px-lg-3 mb-3 mb-md-3 mb-lg-0">Kontak</a>
             </div>
             <!-- <button
