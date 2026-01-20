@@ -28,13 +28,13 @@
                 <ol
                     class="breadcrumb justify-content-center mb-0 wow fadeInDown"
                     data-wow-delay="0.3s">
-                    <li class="breadcrumb-item">
+                    <!-- <li class="breadcrumb-item">
                         <a href="{{url ('/index')}}" class="text-white">Beranda</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{url('/tarif_tiket')}}" class="text-white">Tarif Tiket</a>
                     </li>
-                    <li class="breadcrumb-item active text-warning">Jawa Barat</li>
+                    <li class="breadcrumb-item active text-warning">Jawa Barat</li> -->
                 </ol>
             </nav>
         </div>

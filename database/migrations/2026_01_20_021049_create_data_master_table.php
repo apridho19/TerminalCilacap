@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('data_master', function (Blueprint $table) {
+            $table->id();
+            $table->string('no_kendaraan', 10)->unique();
+            $table->string('nama_po', 100);
+            $table->string('jenis_trayek', 50);
+            $table->string('asal_tujuan', 100);
+            $table->string('data_trayek', 255);
+            $table->string('provinsi', 50);
+            $table->string('terminal_tujuan', 50);
+            $table->string('kabupaten', 50);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('data_master');
+    }
+};
