@@ -1,4 +1,4 @@
-@exrtends('landing_page.main_landing_page')
+@extends('landing_page.layouts.main')
 
 @section('content')
     <body>
@@ -427,5 +427,4 @@
         <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
     </body>
-
-</html>
+@endsection

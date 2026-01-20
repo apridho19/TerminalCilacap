@@ -7,8 +7,8 @@
                 <img
                     src="{{ asset('assets/img/logo_kemenhub.png') }}"
                     class="img-fluid"
-                    alt="logo" />Terminal BMD Cilacap
-            </h4>
+                    alt="logo" />     Terminal BMD Cilacap
+            </h4> 
             <!-- <img src="img/logo.png" alt="Logo"> -->
         </a>
         <button
@@ -20,33 +20,33 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="index.html" class="nav-item nav-link active">Beranda</a>
+                <a href="{{ url('/index') }}" class="nav-item nav-link {{ Request::is('index') ? 'active' : '' }}">Beranda</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                    <a href="#" class="nav-link {{ Request::is('kilas_balik', 'visi_misi', 'struktur_organisasi', 'fasilitas') ? 'active' : '' }}" data-bs-toggle="dropdown">
                         <span class="dropdown-toggle">Profile</span>
                     </a>
                     <div class="dropdown-menu m-0">
-                        <a href="{{ url('/kilas_balik') }}" class="dropdown-item">Kilas Balik</a>
-                        <a href="{{ url('/visi_misi') }}" class="dropdown-item">Visi Misi</a>
-                        <a href="{{ url('/struktur_organisasi') }}" class="dropdown-item">Struktur Organisasi</a>
-                        <a href="{{ url('/fasilitas') }}" class="dropdown-item">Fasilitas</a>
+                        <a href="{{ url('/kilas_balik') }}" class="dropdown-item {{ Request::is('kilas_balik') ? 'active' : '' }}">Kilas Balik</a>
+                        <a href="{{ url('/visi_misi') }}" class="dropdown-item {{ Request::is('visi_misi') ? 'active' : '' }}">Visi Misi</a>
+                        <a href="{{ url('/struktur_organisasi') }}" class="dropdown-item {{ Request::is('struktur_organisasi') ? 'active' : '' }}">Struktur Organisasi</a>
+                        <a href="{{ url('/fasilitas') }}" class="dropdown-item {{ Request::is('fasilitas') ? 'active' : '' }}">Fasilitas</a>
                     </div>
                 </div>
                 <!-- <a href="service.html" class="nav-item nav-link">Layanan</a> -->
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link" data-bs-toggle="dropdown"><span class="dropdown-toggle">Layanan</span></a>
+                    <a href="#" class="nav-link {{ Request::is('maklumat', 'tarif_tiket', 'daftar_po', 'hasil_skm', 'layanan_pengaduan') ? 'active' : '' }}" data-bs-toggle="dropdown"><span class="dropdown-toggle">Layanan</span></a>
                     <div class="dropdown-menu m-0">
-                        <a href="{{ url('/maklumat') }}" class="dropdown-item">Maklumat</a>
-                        <a href="{{ url('/tarif_tiket') }}" class="dropdown-item">Tarif Tiket</a>
-                        <a href="{{ url('/daftar_po') }}" class="dropdown-item">Daftar PO BUS</a>
-                        <a href="{{ url('/hasil_skm') }}" class="dropdown-item">Hasil SKM</a>
-                        <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item">Layanan Pengaduan</a>
+                        <a href="{{ url('/maklumat') }}" class="dropdown-item {{ Request::is('maklumat') ? 'active' : '' }}">Maklumat</a>
+                        <a href="{{ url('/tarif_tiket') }}" class="dropdown-item {{ Request::is('tarif_tiket') ? 'active' : '' }}">Tarif Tiket</a>
+                        <a href="{{ url('/daftar_po') }}" class="dropdown-item {{ Request::is('daftar_po') ? 'active' : '' }}">Daftar PO BUS</a>
+                        <a href="{{ url('/hasil_skm') }}" class="dropdown-item {{ Request::is('hasil_skm') ? 'active' : '' }}">Hasil SKM</a>
+                        <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item {{ Request::is('layanan_pengaduan') ? 'active' : '' }}">Layanan Pengaduan</a>
                     </div>
                 </div>
-               
+
                 <a
                     href="{{ url('/kontak') }}"
-                    class="nav-item nav-link px-lg-3 mb-3 mb-md-3 mb-lg-0">Kontak</a>
+                    class="nav-item nav-link px-lg-3 mb-3 mb-md-3 mb-lg-0 {{ Request::is('kontak') ? 'active' : '' }}">Kontak</a>
             </div>
             <!-- <button
             class="btn btn-primary btn-md-square border-warning mb-3 mb-md-3 mb-lg-0 me-3"

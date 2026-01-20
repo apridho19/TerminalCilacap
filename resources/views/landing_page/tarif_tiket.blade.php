@@ -16,7 +16,6 @@
     </div>
     <!-- Spinner End -->
 
-
     <!-- Modal Search Start -->
     <div
         class="modal fade"
@@ -81,11 +80,10 @@
             </div>
 
             <!-- Pilihan Provinsi Tujuan -->
-            <div class="row g-4 mb-4">
-
+            <div class="row justify-content-center g-4 mb-4">
 
                 <!-- Card DKI Jakarta -->
-                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.4s">
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch wow fadeInUp" data-wow-delay="0.4s">
                     <div class="card border-0 shadow-lg h-100 province-card">
                         <div class="card-header bg-primary text-white text-center py-4">
                             <img
@@ -97,7 +95,7 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <div class="text-center mb-4">
-                                <h5 class="text-primary mb-3">85 Tujuan Tersedia</h5>
+                                <h5 class="text-primary mb-3">TRAYEK KE JABODETABEK</h5>
                                 <p class="text-muted">
                                     Bus ke berbagai wilayah di JABODETABEK seperti Kampung
                                     Rambutan, Kalideres, Grogol, dan lainnya
@@ -144,7 +142,7 @@
                 </div>
 
                 <!-- Card Jawa Barat -->
-                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.6s">
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch wow fadeInUp" data-wow-delay="0.6s">
                     <div class="card border-0 shadow-lg h-100 province-card">
                         <div class="card-header bg-primary text-white text-center py-4">
                             <img
@@ -156,10 +154,10 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <div class="text-center mb-4">
-                                <h5 class="text-primary mb-3">11 Tujuan Tersedia</h5>
+                                <h5 class="text-primary mb-3">TRAYEK KE JAWA BARAT</h5>
                                 <p class="text-muted">
-                                    Bus ke kota-kota di Jawa Barat seperti Bekasi, Bogor,
-                                    Cirebon, Karawang, dan lainnya
+                                    Bus ke berbagai wilayah di Jawa Barat seperti Bandung,
+                                    Bekasi, Bogor, dan lainnya
                                 </p>
                             </div>
 
@@ -168,7 +166,7 @@
                                 <div class="col-6">
                                     <div class="border rounded p-2">
                                         <small class="text-muted d-block">Tarif Mulai</small>
-                                        <strong class="text-success">IDR 100.000</strong>
+                                        <strong class="text-success">IDR 50.000</strong>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -183,11 +181,11 @@
                             <div class="mb-4">
                                 <h6 class="text-primary mb-2">Tujuan Populer:</h6>
                                 <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-warning text-dark">Bandung</span>
                                     <span class="badge bg-warning text-dark">Bekasi</span>
                                     <span class="badge bg-warning text-dark">Bogor</span>
-                                    <span class="badge bg-warning text-dark">Cirebon</span>
-                                    <span class="badge bg-warning text-dark">Karawang</span>
                                     <span class="badge bg-warning text-dark">Depok</span>
+                                    <span class="badge bg-warning text-dark">Cirebon</span>
                                 </div>
                             </div>
 
@@ -201,12 +199,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Second Row of Province Cards -->
-            <div class="row g-4 mb-5">
                 <!-- Card Jawa Tengah -->
-                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.8s">
+                <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.8s">
                     <div class="card border-0 shadow-lg h-100 province-card">
                         <div class="card-header bg-primary text-white text-center py-4">
                             <img
@@ -218,7 +213,7 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <div class="text-center mb-4">
-                                <h5 class="text-primary mb-3">61 Tujuan Tersedia</h5>
+                                <h5 class="text-primary mb-3">TRAYEK KE JAWA TENGAH DAN DIY</h5>
                                 <p class="text-muted">
                                     Bus ke kota-kota di Jawa Tengah dan DIY seperti Purwokerto, Solo,
                                     Semarang, Kebumen, dan lainnya
@@ -247,9 +242,9 @@
                                 <div class="d-flex flex-wrap gap-1">
                                     <span class="badge bg-warning text-dark">Purwokerto</span>
                                     <span class="badge bg-warning text-dark">Solo</span>
-                                    <span class="badge bg-warning text-dark">Kebumen</span>
                                     <span class="badge bg-warning text-dark">Semarang</span>
-                                    <span class="badge bg-warning text-dark">Banyumas</span>
+                                    <span class="badge bg-warning text-dark">Kebumen</span>
+                                    <span class="badge bg-warning text-dark">Yogyakarta</span>
                                 </div>
                             </div>
 
@@ -264,9 +259,8 @@
                     </div>
                 </div>
 
-
                 <!-- Card Jawa Timur -->
-                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="1.2s">
+                <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="1.2s">
                     <div class="card border-0 shadow-lg h-100 province-card">
                         <div class="card-header bg-primary text-white text-center py-4">
                             <img
@@ -278,7 +272,7 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <div class="text-center mb-4">
-                                <h5 class="text-primary mb-3">21 Tujuan Tersedia</h5>
+                                <h5 class="text-primary mb-3">TRAYEK KE JAWA TIMUR</h5>
                                 <p class="text-muted">
                                     Bus ke kota-kota di Jawa Timur seperti Surabaya, Malang,
                                     Madiun, Jember, dan lainnya
@@ -309,6 +303,7 @@
                                     <span class="badge bg-warning text-dark">Malang</span>
                                     <span class="badge bg-warning text-dark">Madiun</span>
                                     <span class="badge bg-warning text-dark">Jember</span>
+                                    <span class="badge bg-warning text-dark">Kediri</span>
                                 </div>
                             </div>
 
@@ -369,4 +364,32 @@
     <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
 
 </body>
+
+<style>
+    .province-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .province-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.province-card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                card.classList.add('animate__animated', 'animate__pulse');
+
+                // Remove animation class after animation ends
+                card.addEventListener('animationend', () => {
+                    card.classList.remove('animate__animated', 'animate__pulse');
+                });
+            });
+        });
+    });
+</script>
 @endsection
