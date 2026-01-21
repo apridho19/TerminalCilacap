@@ -81,3 +81,12 @@ Route::get('/tarif_jabar', function () {
 });
 
 
+
+
+#####################################
+# SISTEM INFORMASI TERMINAL CILACAP #
+#####################################
+
+Route::get('/dashboard', function () {
+    return view('sistem_informasi.dashboard');
+});
