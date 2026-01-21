@@ -13,13 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/index', function () {
     return view('landing_page.index');
 });
+
+// Route::get('/index', function () {
+//     return view('landing_page.index');
+// });
 
 Route::get('/kilas_balik', function () {
     return view('landing_page.kilas_balik');

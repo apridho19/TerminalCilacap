@@ -20,7 +20,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="{{ url('/index') }}" class="nav-item nav-link {{ Request::is('index') ? 'active' : '' }}">Beranda</a>
+                <a href="{{ url('/') }}" class="nav-item nav-link {{ Request::is('/', 'index') ? 'active' : '' }}">Beranda</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link {{ Request::is('kilas_balik', 'visi_misi', 'struktur_organisasi', 'fasilitas') ? 'active' : '' }}" data-bs-toggle="dropdown">
                         <span class="dropdown-toggle">Profile</span>

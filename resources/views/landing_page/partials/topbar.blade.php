@@ -8,6 +8,28 @@
             </div>
         </div>
         <div class="col-lg-3 row-cols-1 text-center mb-2 mb-lg-0">
+            <!-- <div class="d-inline-flex align-items-center" style="height: 45px">
+                <a
+                    class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
+                    href="{{ url('https://www.facebook.com/ttabmdcilacap/') }}"><i class="fab fa-facebook-f fw-normal text-warning"></i></a>
+                <a
+                    class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
+                    href=""><i class="fab fa-whatsapp fw-normal text-warning"></i></a>
+                <a
+                    class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
+                    href="{{ url('https://www.instagram.com/tta_bmdcilacap/') }}"><i class="fab fa-instagram fw-normal text-warning"></i></a>
+                <a
+                    class="btn btn-sm btn-outline-light btn-square rounded-circle"
+                    href="{{ url('https://www.youtube.com/@tta_bmdcilacap') }}"><i class="fab fa-youtube fw-normal text-warning"></i></a>
+            </div> -->
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <!-- <div class="d-inline-flex align-items-center" style="height: 45px">
+                <a href="#" class="text-muted me-2"> Help</a><small> / </small>
+                <a href="#" class="text-muted mx-2"> Support</a><small> / </small>
+                <a href="#" class="text-muted ms-2"> Contact</a>
+            </div> -->
+
             <div class="d-inline-flex align-items-center" style="height: 45px">
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle me-2"
@@ -21,13 +43,6 @@
                 <a
                     class="btn btn-sm btn-outline-light btn-square rounded-circle"
                     href="{{ url('https://www.youtube.com/@tta_bmdcilacap') }}"><i class="fab fa-youtube fw-normal text-warning"></i></a>
-            </div>
-        </div>
-        <div class="col-lg-4 text-center text-lg-end">
-            <div class="d-inline-flex align-items-center" style="height: 45px">
-                <a href="#" class="text-muted me-2"> Help</a><small> / </small>
-                <a href="#" class="text-muted mx-2"> Support</a><small> / </small>
-                <a href="#" class="text-muted ms-2"> Contact</a>
             </div>
         </div>
     </div>

@@ -36,7 +36,25 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-warning mb-4">Lokasi Terminal</h4>
+                    <div class="col-12 wow zoomIn" data-wow-delay="0.1s">
+                        <div class="rounded">
+                            <iframe class="rounded"
+                                style="height: 250px; width: 250%;"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.8240479346255!2d109.0251117!3d-7.702022999999998!2m3!1f0!2f0!3f0!3m2!1i1024!1i768!4f13.1!3m3!1m2!1s0x2e651303860b682f%3A0x8d9331d0332ebf16!2sTerminal%20Tipe%20A%20Bangga%20Mbangun%20Desa!5e0!3m2!1sid!2sid!4v1768465284798!5m2!1sid!2sid"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="footer-item d-flex flex-column">
                     <h4 class="text-warning mb-4">Our Services</h4>
                     <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Business</a>
@@ -66,7 +84,9 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
+
+
         </div>
     </div>
 </div>
