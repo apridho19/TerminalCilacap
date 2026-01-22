@@ -3,7 +3,9 @@
     <header class="header">
         <div class="page-brand">
             <a class="link" href="{{ url('/dashboard') }}">
-                <span class="brand">Si
+                <span class="brand">
+                    <!-- <img src="{{ asset('assets/img/logo_kemenhub.png') }}" alt="logo" style="max-height: 35px; margin-right: 8px;"> -->
+                    Si
                     <span class="brand-tip">PAKAT</span>
                 </span>
                 <span class="brand-mini"><img src="{{ asset('assets/img/logo_kemenhub.png') }}" alt="logo" style="max-height: 35px;"></span>
