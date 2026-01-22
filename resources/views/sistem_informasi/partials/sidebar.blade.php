@@ -19,8 +19,8 @@
                 <li class="heading">FEATURES</li>
                 <li>
                     <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
-                        <span class="nav-label">Basic UI</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
+                        <span class="nav-label">Keberangkatan</span></a>
+                    <!-- <ul class="nav-2-level collapse">
                         <li>
                             <a href="colors.html">Colors</a>
                         </li>
@@ -48,12 +48,12 @@
                         <li>
                             <a href="cards.html">Card</a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
                 <li>
                     <a href="javascript:;"><i class="sidebar-item-icon fa fa-edit"></i>
-                        <span class="nav-label">Forms</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
+                        <span class="nav-label">Kedatangan</span></a>
+                    <!-- <ul class="nav-2-level collapse">
                         <li>
                             <a href="form_basic.html">Basic Forms</a>
                         </li>
@@ -69,21 +69,21 @@
                         <li>
                             <a href="text_editors.html">Text Editors</a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
                 <li>
-                    <a href="javascript:;"><i class="sidebar-item-icon fa fa-table"></i>
-                        <span class="nav-label">Tables</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
+                    <a href="{{ url('/datamaster') }}"><i class="sidebar-item-icon fa fa-table"></i>
+                        <span class="nav-label">Data Master</span></a>
+                    <!-- <ul class="nav-2-level collapse">
                         <li>
                             <a href="table_basic.html">Basic Tables</a>
                         </li>
                         <li>
                             <a href="datatables.html">Datatables</a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
-                <li>
+                <!-- <li>
                     <a href="javascript:;"><i class="sidebar-item-icon fa fa-bar-chart"></i>
                         <span class="nav-label">Charts</span><i class="fa fa-angle-left arrow"></i></a>
                     <ul class="nav-2-level collapse">
@@ -109,12 +109,12 @@
                             <a href="maps_vector.html">Vector maps</a>
                         </li>
                     </ul>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a href="icons.html"><i class="sidebar-item-icon fa fa-smile-o"></i>
                         <span class="nav-label">Icons</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="heading">PAGES</li>
                 <li>
                     <a href="javascript:;"><i class="sidebar-item-icon fa fa-envelope"></i>

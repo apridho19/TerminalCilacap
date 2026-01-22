@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DataMasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,3 +91,5 @@ Route::get('/tarif_jabar', function () {
 Route::get('/dashboard', function () {
     return view('sistem_informasi.dashboard');
 });
+
+Route::get('/datamaster', [DataMasterController::class, 'index'])->name('datamaster.index');
