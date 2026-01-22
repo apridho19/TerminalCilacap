@@ -43,6 +43,17 @@
                         <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item {{ Request::is('layanan_pengaduan') ? 'active' : '' }}">Layanan Pengaduan</a>
                     </div>
                 </div>
+                <!-- <a href="service.html" class="nav-item nav-link">Informasi</a> -->
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link {{ Request::is('berita', 'tarif_tiket', 'daftar_po', 'hasil_skm', 'layanan_pengaduan') ? 'active' : '' }}" data-bs-toggle="dropdown"><span class="dropdown-toggle">Berita</span></a>
+                    <div class="dropdown-menu m-0">
+                        <a href="{{ url('/maklumat') }}" class="dropdown-item {{ Request::is('maklumat') ? 'active' : '' }}">Maklumat</a>
+                        <a href="{{ url('/tarif_tiket') }}" class="dropdown-item {{ Request::is('tarif_tiket') ? 'active' : '' }}">Tarif Tiket</a>
+                        <a href="{{ url('/daftar_po') }}" class="dropdown-item {{ Request::is('daftar_po') ? 'active' : '' }}">Daftar PO BUS</a>
+                        <a href="{{ url('/hasil_skm') }}" class="dropdown-item {{ Request::is('hasil_skm') ? 'active' : '' }}">Hasil SKM</a>
+                        <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item {{ Request::is('layanan_pengaduan') ? 'active' : '' }}">Layanan Pengaduan</a>
+                    </div>
+                </div>
 
                 <a
                     href="{{ url('/kontak') }}"
