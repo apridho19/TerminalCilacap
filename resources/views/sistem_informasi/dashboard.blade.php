@@ -11,36 +11,36 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="ibox bg-success color-white widget-stat">
                             <div class="ibox-body">
-                                <h2 class="m-b-5 font-strong">201</h2>
-                                <div class="m-b-5">NEW ORDERS</div><i class="ti-shopping-cart widget-stat-icon"></i>
-                                <div><i class="fa fa-level-up m-r-5"></i><small>25% higher</small></div>
+                                <h2 class="m-b-5 font-strong">{{ $keberangkatanHariIni }}</h2>
+                                <div class="m-b-5">BUS BERANGKAT HARI INI</div><i class="fa fa-bus widget-stat-icon"></i>
+                                <div><i class="fa fa-users m-r-5"></i><small>{{ $totalPenumpangBerangkat }} Penumpang</small></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="ibox bg-info color-white widget-stat">
                             <div class="ibox-body">
-                                <h2 class="m-b-5 font-strong">1250</h2>
-                                <div class="m-b-5">UNIQUE VIEWS</div><i class="ti-bar-chart widget-stat-icon"></i>
-                                <div><i class="fa fa-level-up m-r-5"></i><small>17% higher</small></div>
+                                <h2 class="m-b-5 font-strong">{{ $kedatanganHariIni }}</h2>
+                                <div class="m-b-5">BUS DATANG HARI INI</div><i class="fa fa-bus widget-stat-icon"></i>
+                                <div><i class="fa fa-users m-r-5"></i><small>{{ $totalPenumpangDatang }} Penumpang</small></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="ibox bg-warning color-white widget-stat">
                             <div class="ibox-body">
-                                <h2 class="m-b-5 font-strong">$1570</h2>
-                                <div class="m-b-5">TOTAL INCOME</div><i class="fa fa-money widget-stat-icon"></i>
-                                <div><i class="fa fa-level-up m-r-5"></i><small>22% higher</small></div>
+                                <h2 class="m-b-5 font-strong">{{ $totalKendaraan }}</h2>
+                                <div class="m-b-5">TOTAL KENDARAAN</div><i class="ti-car widget-stat-icon"></i>
+                                <div><i class="fa fa-database m-r-5"></i><small>Data Master</small></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="ibox bg-danger color-white widget-stat">
                             <div class="ibox-body">
-                                <h2 class="m-b-5 font-strong">108</h2>
-                                <div class="m-b-5">NEW USERS</div><i class="ti-user widget-stat-icon"></i>
-                                <div><i class="fa fa-level-down m-r-5"></i><small>-12% Lower</small></div>
+                                <h2 class="m-b-5 font-strong">{{ $totalKeberangkatan + $totalKedatangan }}</h2>
+                                <div class="m-b-5">TOTAL TRANSAKSI</div><i class="fa fa-bar-chart widget-stat-icon"></i>
+                                <div><i class="fa fa-list m-r-5"></i><small>Data Produksi</small></div>
                             </div>
                         </div>
                     </div>
@@ -48,62 +48,75 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Keberangkatan Terbaru Hari Ini</div>
+                            </div>
                             <div class="ibox-body">
-                                <div class="flexbox mb-4">
-                                    <div>
-                                        <h3 class="m-0">Statistics</h3>
-                                        <div>Your shop sales analytics</div>
-                                    </div>
-                                    <div class="d-inline-flex">
-                                        <div class="px-3" style="border-right: 1px solid rgba(0,0,0,.1);">
-                                            <div class="text-muted">WEEKLY INCOME</div>
-                                            <div>
-                                                <span class="h2 m-0">$850</span>
-                                                <span class="text-success ml-2"><i class="fa fa-level-up"></i> +25%</span>
-                                            </div>
-                                        </div>
-                                        <div class="px-3">
-                                            <div class="text-muted">WEEKLY SALES</div>
-                                            <div>
-                                                <span class="h2 m-0">240</span>
-                                                <span class="text-warning ml-2"><i class="fa fa-level-down"></i> -12%</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                @if($keberangkatanTerbaru->count() > 0)
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Waktu</th>
+                                            <th>No Kendaraan</th>
+                                            <th>Nama PO</th>
+                                            <th>Asal - Tujuan</th>
+                                            <th class="text-center">Penumpang</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($keberangkatanTerbaru as $keberangkatan)
+                                        <tr>
+                                            <td>{{ \Carbon\Carbon::parse($keberangkatan->waktu_berangkat)->format('H:i') }}</td>
+                                            <td><span class="badge badge-primary">{{ $keberangkatan->no_kendaraan }}</span></td>
+                                            <td>{{ $keberangkatan->dataMaster->nama_po ?? '-' }}</td>
+                                            <td>{{ $keberangkatan->dataMaster->asal_tujuan ?? '-' }}</td>
+                                            <td class="text-center">
+                                                <span class="badge badge-success">
+                                                    <i class="fa fa-users"></i> {{ $keberangkatan->jml_pnp_berangkat }} orang
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                @else
+                                <div class="text-center py-4">
+                                    <i class="fa fa-info-circle fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Belum ada data keberangkatan hari ini</p>
                                 </div>
-                                <div>
-                                    <canvas id="bar_chart" style="height:260px;"></canvas>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="ibox">
                             <div class="ibox-head">
-                                <div class="ibox-title">Statistics</div>
+                                <div class="ibox-title">Kedatangan Terbaru Hari Ini</div>
                             </div>
                             <div class="ibox-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-6">
-                                        <canvas id="doughnut_chart" style="height:160px;"></canvas>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="m-b-20 text-success"><i class="fa fa-circle-o m-r-10"></i>Desktop 52%</div>
-                                        <div class="m-b-20 text-info"><i class="fa fa-circle-o m-r-10"></i>Tablet 27%</div>
-                                        <div class="m-b-20 text-warning"><i class="fa fa-circle-o m-r-10"></i>Mobile 21%</div>
-                                    </div>
-                                </div>
-                                <ul class="list-group list-group-divider list-group-full">
-                                    <li class="list-group-item">Chrome
-                                        <span class="float-right text-success"><i class="fa fa-caret-up"></i> 24%</span>
+                                @if($kedatanganTerbaru->count() > 0)
+                                <ul class="list-group list-group-full">
+                                    @foreach($kedatanganTerbaru as $kedatangan)
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="font-strong">{{ $kedatangan->no_kendaraan }}</div>
+                                                <small class="text-muted">{{ $kedatangan->dataMaster->nama_po ?? '-' }}</small>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="badge badge-info">{{ \Carbon\Carbon::parse($kedatangan->waktu_datang)->format('H:i') }}</div>
+                                                <div><small><i class="fa fa-users"></i> {{ $kedatangan->jml_pnp_datang }} orang</small></div>
+                                            </div>
+                                        </div>
                                     </li>
-                                    <li class="list-group-item">Firefox
-                                        <span class="float-right text-success"><i class="fa fa-caret-up"></i> 12%</span>
-                                    </li>
-                                    <li class="list-group-item">Opera
-                                        <span class="float-right text-danger"><i class="fa fa-caret-down"></i> 4%</span>
-                                    </li>
+                                    @endforeach
                                 </ul>
+                                @else
+                                <div class="text-center py-4">
+                                    <i class="fa fa-info-circle fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Belum ada data kedatangan hari ini</p>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -207,6 +220,28 @@
                         </div>
                     </div> -->
                 </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Grafik Keberangkatan & Kedatangan (7 Hari Terakhir)</div>
+                            </div>
+                            <div class="ibox-body">
+                                <canvas id="trafficChart" style="height:300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="ibox">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Distribusi Jenis Trayek</div>
+                            </div>
+                            <div class="ibox-body">
+                                <canvas id="pieChart" style="height:300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <style>
                     .visitors-table tbody tr td:last-child {
                         display: flex;
@@ -222,50 +257,11 @@
                         margin-left: 10px;
                     }
                 </style>
-                <div>
-                    <a class="adminca-banner" href="http://admincast.com/adminca/" target="_blank">
-                        <div class="adminca-banner-ribbon"><i class="fa fa-trophy mr-2"></i>PREMIUM TEMPLATE</div>
-                        <div class="wrap-1">
-                            <div class="wrap-2">
-                                <div>
-                                    <img src="{{ asset('assets/img/adminca-banner/adminca-preview.jpg') }}" style="height:160px;margin-top:50px;" />
-                                </div>
-                                <div class="color-white" style="margin-left:40px;">
-                                    <h1 class="font-bold">ADMINCA</h1>
-                                    <p class="font-16">Save your time, choose the best</p>
-                                    <ul class="list-unstyled">
-                                        <li class="m-b-5"><i class="ti-check m-r-5"></i>High Quality Design</li>
-                                        <li class="m-b-5"><i class="ti-check m-r-5"></i>Fully Customizable and Easy Code</li>
-                                        <li class="m-b-5"><i class="ti-check m-r-5"></i>Bootstrap 4 and Angular 5+</li>
-                                        <li class="m-b-5"><i class="ti-check m-r-5"></i>Best Build Tools: Gulp, SaSS, Pug...</li>
-                                        <li><i class="ti-check m-r-5"></i>More layouts, pages, components</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div style="flex:1;">
-                                <div class="d-flex justify-content-end wrap-3">
-                                    <div class="adminca-banner-b m-r-20">
-                                        <img src="{{ asset('assets/img/adminca-banner/bootstrap.png') }}" style="width:40px;margin-right:10px;" />Bootstrap v4
-                                    </div>
-                                    <div class="adminca-banner-b m-r-10">
-                                        <img src="{{ asset('assets/img/adminca-banner/angular.png') }}" style="width:35px;margin-right:10px;" />Angular v5+
-                                    </div>
-                                </div>
-                                <div class="dev-img">
-                                    <img src="{{ asset('assets/img/adminca-banner/sprite.png') }}" />
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+
             </div>
             <!-- END PAGE CONTENT-->
 
-            <footer class="page-footer">
-                <div class="font-13">2018 © <b>AdminCAST</b> - All rights reserved.</div>
-                <a class="px-4" href="http://themeforest.net/item/adminca-responsive-bootstrap-4-3-angular-4-admin-dashboard-template/20912589" target="_blank">BUY PREMIUM</a>
-                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
-            </footer>
+
         </div>
     </div>
 
@@ -406,6 +402,110 @@
         <div class="page-preloader">Loading</div>
     </div> -->
     <!-- END PAGA BACKDROPS-->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // Data dari controller
+        var labels = @json($dataGrafik['labels']);
+        var dataKeberangkatan = @json($dataGrafik['keberangkatan']);
+        var dataKedatangan = @json($dataGrafik['kedatangan']);
+
+        // Konfigurasi chart
+        var ctx = document.getElementById('trafficChart').getContext('2d');
+        var trafficChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Keberangkatan',
+                    data: dataKeberangkatan,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Kedatangan',
+                    data: dataKedatangan,
+                    borderColor: '#17a2b8',
+                    backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Pie Chart - Jenis Trayek
+        var pieData = @json($dataPieChart);
+        var pieLabels = pieData.map(item => item.jenis_trayek || 'Tidak Ada');
+        var pieValues = pieData.map(item => item.total);
+
+        var ctxPie = document.getElementById('pieChart').getContext('2d');
+        var pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieValues,
+                    backgroundColor: [
+                        '#28a745',
+                        '#17a2b8',
+                        '#ffc107',
+                        '#dc3545',
+                        '#6f42c1',
+                        '#fd7e14',
+                        '#20c997'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.parsed || 0;
+                                var total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                var percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 
 @endsection

@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KeberangkatanController;
+use App\Http\Controllers\KedatanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/check-kendaraan/{no_kendaraan}', [KeberangkatanController::class, 'checkKendaraan']);
+Route::get('/check-kendaraan-kedatangan/{no_kendaraan}', [KedatanganController::class, 'checkKendaraan']);

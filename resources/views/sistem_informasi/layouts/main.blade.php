@@ -17,7 +17,7 @@
     <!-- PAGE LEVEL STYLES-->
 </head>
 
-<body>
+<body class="fixed-navbar">
     <!-- START HEADER-->
     @include('sistem_informasi.partials.header')
 

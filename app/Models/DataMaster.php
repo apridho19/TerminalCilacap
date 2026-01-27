@@ -21,4 +21,9 @@ class DataMaster extends Model
         'terminal_tujuan',
         'kabupaten',
     ];
+
+    public function dataProduksi()
+    {
+        return $this->hasMany(DataProduksi::class, 'data_master_id');
+    }
 }

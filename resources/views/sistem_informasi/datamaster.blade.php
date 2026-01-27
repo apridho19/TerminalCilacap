@@ -1,377 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('sistem_informasi.layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1.0">
-    <title>Admincast bootstrap 4 &amp; angular 5 admin template, Шаблон админки | DataTables</title>
-    <!-- GLOBAL MAINLY STYLES-->
-    <link href="./assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="./assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="./assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
-    <!-- PLUGINS STYLES-->
-    <link href="./assets/vendors/DataTables/datatables.min.css" rel="stylesheet" />
-    <!-- THEME STYLES-->
-    <link href="assets/css/main.min.css" rel="stylesheet" />
-    <!-- PAGE LEVEL STYLES-->
-</head>
+@section('content')
+
+
 
 <body class="fixed-navbar">
     <div class="page-wrapper">
-        <!-- START HEADER-->
-        <header class="header">
-            <div class="page-brand">
-                <a class="link" href="index.html">
-                    <span class="brand">Admin
-                        <span class="brand-tip">CAST</span>
-                    </span>
-                    <span class="brand-mini">AC</span>
-                </a>
-            </div>
-            <div class="flexbox flex-1">
-                <!-- START TOP-LEFT TOOLBAR-->
-                <ul class="nav navbar-toolbar">
-                    <li>
-                        <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
-                    </li>
-                    <li>
-                        <form class="navbar-search" action="javascript:;">
-                            <div class="rel">
-                                <span class="search-icon"><i class="ti-search"></i></span>
-                                <input class="form-control" placeholder="Search here...">
-                            </div>
-                        </form>
-                    </li>
-                </ul>
-                <!-- END TOP-LEFT TOOLBAR-->
-                <!-- START TOP-RIGHT TOOLBAR-->
-                <ul class="nav navbar-toolbar">
-                    <li class="dropdown dropdown-inbox">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope-o"></i>
-                            <span class="badge badge-primary envelope-badge">9</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media">
-                            <li class="dropdown-menu-header">
-                                <div>
-                                    <span><strong>9 New</strong> Messages</span>
-                                    <a class="pull-right" href="mailbox.html">view all</a>
-                                </div>
-                            </li>
-                            <li class="list-group list-group-divider scroller" data-height="240px" data-color="#71808f">
-                                <div>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u1.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"> </div>Jeanne Gonzalez<small class="text-muted float-right">Just now</small>
-                                                <div class="font-13">Your proposal interested me.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u2.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Becky Brooks<small class="text-muted float-right">18 mins</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u3.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Frank Cruz<small class="text-muted float-right">18 mins</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <img src="./assets/img/users/u4.jpg" />
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-strong"></div>Rose Pearson<small class="text-muted float-right">3 hrs</small>
-                                                <div class="font-13">Lorem Ipsum is simply.</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown dropdown-notification">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o rel"><span class="notify-signal"></span></i></a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media">
-                            <li class="dropdown-menu-header">
-                                <div>
-                                    <span><strong>5 New</strong> Notifications</span>
-                                    <a class="pull-right" href="javascript:;">view all</a>
-                                </div>
-                            </li>
-                            <li class="list-group list-group-divider scroller" data-height="240px" data-color="#71808f">
-                                <div>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <span class="badge badge-success badge-big"><i class="fa fa-check"></i></span>
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-13">4 task compiled</div><small class="text-muted">22 mins</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <span class="badge badge-default badge-big"><i class="fa fa-shopping-basket"></i></span>
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-13">You have 12 new orders</div><small class="text-muted">40 mins</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <span class="badge badge-danger badge-big"><i class="fa fa-bolt"></i></span>
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-13">Server #7 rebooted</div><small class="text-muted">2 hrs</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-img">
-                                                <span class="badge badge-success badge-big"><i class="fa fa-user"></i></span>
-                                            </div>
-                                            <div class="media-body">
-                                                <div class="font-13">New user registered</div><small class="text-muted">2 hrs</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown dropdown-user">
-                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
-                            <img src="./assets/img/admin-avatar.png" />
-                            <span></span>Admin<i class="fa fa-angle-down m-l-5"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
-                            <a class="dropdown-item" href="profile.html"><i class="fa fa-cog"></i>Settings</a>
-                            <a class="dropdown-item" href="javascript:;"><i class="fa fa-support"></i>Support</a>
-                            <li class="dropdown-divider"></li>
-                            <a class="dropdown-item" href="login.html"><i class="fa fa-power-off"></i>Logout</a>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- END TOP-RIGHT TOOLBAR-->
-            </div>
-        </header>
-        <!-- END HEADER-->
-        <!-- START SIDEBAR-->
-        <nav class="page-sidebar" id="sidebar">
-            <div id="sidebar-collapse">
-                <div class="admin-block d-flex">
-                    <div>
-                        <img src="./assets/img/admin-avatar.png" width="45px" />
-                    </div>
-                    <div class="admin-info">
-                        <div class="font-strong">James Brown</div><small>Administrator</small>
-                    </div>
-                </div>
-                <ul class="side-menu metismenu">
-                    <li>
-                        <a href="index.html"><i class="sidebar-item-icon fa fa-th-large"></i>
-                            <span class="nav-label">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="heading">FEATURES</li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
-                            <span class="nav-label">Basic UI</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="colors.html">Colors</a>
-                            </li>
-                            <li>
-                                <a href="typography.html">Typography</a>
-                            </li>
-                            <li>
-                                <a href="panels.html">Panels</a>
-                            </li>
-                            <li>
-                                <a href="buttons.html">Buttons</a>
-                            </li>
-                            <li>
-                                <a href="tabs.html">Tabs</a>
-                            </li>
-                            <li>
-                                <a href="alerts_tooltips.html">Alerts &amp; Tooltips</a>
-                            </li>
-                            <li>
-                                <a href="badges_progress.html">Badges &amp; Progress</a>
-                            </li>
-                            <li>
-                                <a href="lists.html">List</a>
-                            </li>
-                            <li>
-                                <a href="cards.html">Card</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-edit"></i>
-                            <span class="nav-label">Forms</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="form_basic.html">Basic Forms</a>
-                            </li>
-                            <li>
-                                <a href="form_advanced.html">Advanced Plugins</a>
-                            </li>
-                            <li>
-                                <a href="form_masks.html">Form input masks</a>
-                            </li>
-                            <li>
-                                <a href="form_validation.html">Form Validation</a>
-                            </li>
-                            <li>
-                                <a href="text_editors.html">Text Editors</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="active">
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-table"></i>
-                            <span class="nav-label">Tables</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse in">
-                            <li>
-                                <a href="table_basic.html">Basic Tables</a>
-                            </li>
-                            <li>
-                                <a class="active" href="datatables.html">Datatables</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-bar-chart"></i>
-                            <span class="nav-label">Charts</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="charts_flot.html">Flot Charts</a>
-                            </li>
-                            <li>
-                                <a href="charts_morris.html">Morris Charts</a>
-                            </li>
-                            <li>
-                                <a href="chartjs.html">Chart.js</a>
-                            </li>
-                            <li>
-                                <a href="charts_sparkline.html">Sparkline Charts</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-map"></i>
-                            <span class="nav-label">Maps</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="maps_vector.html">Vector maps</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="icons.html"><i class="sidebar-item-icon fa fa-smile-o"></i>
-                            <span class="nav-label">Icons</span>
-                        </a>
-                    </li>
-                    <li class="heading">PAGES</li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-envelope"></i>
-                            <span class="nav-label">Mailbox</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="mailbox.html">Inbox</a>
-                            </li>
-                            <li>
-                                <a href="mail_view.html">Mail view</a>
-                            </li>
-                            <li>
-                                <a href="mail_compose.html">Compose mail</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="calendar.html"><i class="sidebar-item-icon fa fa-calendar"></i>
-                            <span class="nav-label">Calendar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-file-text"></i>
-                            <span class="nav-label">Pages</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="invoice.html">Invoice</a>
-                            </li>
-                            <li>
-                                <a href="profile.html">Profile</a>
-                            </li>
-                            <li>
-                                <a href="login.html">Login</a>
-                            </li>
-                            <li>
-                                <a href="register.html">Register</a>
-                            </li>
-                            <li>
-                                <a href="lockscreen.html">Lockscreen</a>
-                            </li>
-                            <li>
-                                <a href="forgot_password.html">Forgot password</a>
-                            </li>
-                            <li>
-                                <a href="error_404.html">404 error</a>
-                            </li>
-                            <li>
-                                <a href="error_500.html">500 error</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;"><i class="sidebar-item-icon fa fa-sitemap"></i>
-                            <span class="nav-label">Menu Levels</span><i class="fa fa-angle-left arrow"></i></a>
-                        <ul class="nav-2-level collapse">
-                            <li>
-                                <a href="javascript:;">Level 2</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <span class="nav-label">Level 2</span><i class="fa fa-angle-left arrow"></i></a>
-                                <ul class="nav-3-level collapse">
-                                    <li>
-                                        <a href="javascript:;">Level 3</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Level 3</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <!-- END SIDEBAR-->
+
         <div class="content-wrapper">
             <!-- START PAGE CONTENT-->
             <div class="page-heading">
@@ -389,6 +24,42 @@
                         <div class="ibox-title">Data Master</div>
                     </div>
                     <div class="ibox-body">
+                        <div class="mb-4">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalImport">
+                                <i class="fa fa-file-excel-o"></i> Import dari Excel
+                            </button>
+                            <button type="button" class="btn btn-warning ml-2" onclick="confirmRemoveDuplicates()">
+                                <i class="fa fa-trash"></i> Hapus Data Duplikat
+                            </button>
+                        </div>
+
+                        @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+
+                        @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+
+                        @if(session('info'))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {{ session('info') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+
                         <table id="example-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -406,7 +77,7 @@
                             <tbody>
                                 @foreach ($dataMaster as $data)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ ($dataMaster->currentPage() - 1) * $dataMaster->perPage() + $loop->iteration }}</td>
                                     <td>{{ $data->no_kendaraan }}</td>
                                     <td>{{ $data->nama_po }}</td>
                                     <td>{{ $data->jenis_trayek }}</td>
@@ -419,6 +90,16 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+                        <!-- Pagination Links -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                Menampilkan {{ $dataMaster->firstItem() ?? 0 }} sampai {{ $dataMaster->lastItem() ?? 0 }} dari {{ $dataMaster->total() }} data
+                            </div>
+                            <div>
+                                {{ $dataMaster->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -433,6 +114,67 @@
             </footer>
         </div>
     </div>
+
+    <!-- Modal Import Excel -->
+    <div class="modal fade" id="modalImport" tabindex="-1" role="dialog" aria-labelledby="modalImportLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalImportLabel">
+                        <i class="fa fa-file-excel-o"></i> Import Data dari Excel
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('datamaster.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <strong>Format Excel yang diperlukan:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Baris pertama harus berisi header kolom</li>
+                                <li><strong>Kolom wajib:</strong>
+                                    <ul>
+                                        <li><code>no_kendaraan</code> (atau <code>nomor_kendaraan</code>)</li>
+                                        <li><code>nama_po</code></li>
+                                        <li><code>jenis_trayek</code></li>
+                                        <li><code>asal_tujuan</code></li>
+                                        <li><code>data_trayek</code> (atau <code>trayek</code>)</li>
+                                        <li><code>provinsi</code></li>
+                                        <li><code>terminal_tujuan</code></li>
+                                        <li><code>kabupaten</code></li>
+                                    </ul>
+                                </li>
+                                <li>Format file: .xlsx, .xls, atau .csv</li>
+                                <li>Maksimal ukuran: 2MB</li>
+                                <li><strong>Header tidak case-sensitive</strong> (bisa pakai huruf besar/kecil)</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="file" class="font-strong">Pilih File Excel <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls,.csv" required>
+                            <small class="form-text text-muted">File Excel dengan data master kendaraan</small>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fa fa-exclamation-triangle"></i> <strong>Perhatian:</strong> Nomor kendaraan yang sudah ada akan dilewati (tidak akan duplikat).
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fa fa-times"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-upload"></i> Import Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- BEGIN THEME CONFIG PANEL-->
     <div class="theme-config">
         <div class="theme-config-toggle"><i class="fa fa-cog theme-config-show"></i><i class="ti-close theme-config-close"></i></div>
@@ -569,6 +311,41 @@
         <div class="page-preloader">Loading</div>
     </div>
     <!-- END PAGA BACKDROPS-->
+
+    <!-- PAGINATION STYLES -->
+    <style>
+        .pagination {
+            margin: 0;
+        }
+
+        .pagination .page-item .page-link {
+            padding: 0.5rem 0.75rem;
+            margin: 0 0.25rem;
+            border-radius: 0.25rem;
+            color: #5c6bc0;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #5c6bc0;
+            border-color: #5c6bc0;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+
+        .pagination .page-item .page-link:hover {
+            background-color: #e8eaf6;
+            border-color: #5c6bc0;
+            color: #5c6bc0;
+        }
+    </style>
+
     <!-- CORE PLUGINS-->
     <script src="./assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="./assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
@@ -582,19 +359,28 @@
     <!-- PAGE LEVEL SCRIPTS-->
     <script type="text/javascript">
         $(function() {
-            $('#example-table').DataTable({
-                pageLength: 10,
-                //"ajax": './assets/demo/data/table_data.json',
-                /*"columns": [
-                    { "data": "name" },
-                    { "data": "office" },
-                    { "data": "extn" },
-                    { "data": "start_date" },
-                    { "data": "salary" }
-                ]*/
-            });
+            // DataTables dinonaktifkan karena menggunakan Laravel pagination
+            // $('#example-table').DataTable({
+            //     pageLength: 10,
+            // });
+
+            // Auto hide alert setelah 5 detik
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
         })
+
+        function confirmRemoveDuplicates() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua data duplikat berdasarkan No Kendaraan?\n\nData yang lebih baru akan dihapus, data yang lebih lama akan dipertahankan.')) {
+                document.getElementById('removeDuplicatesForm').submit();
+            }
+        }
     </script>
+
+    <!-- Form untuk hapus duplicate (hidden) -->
+    <form id="removeDuplicatesForm" action="{{ route('datamaster.remove.duplicates') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 </body>
 
-</html>
+@endsection

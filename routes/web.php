@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataMasterController;
+use App\Http\Controllers\KeberangkatanController;
+use App\Http\Controllers\KedatanganController;
+use App\Http\Controllers\DataProduksiController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,11 @@ use App\Http\Controllers\DataMasterController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// Authentication Routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -88,8 +98,31 @@ Route::get('/tarif_jabar', function () {
 # SISTEM INFORMASI TERMINAL CILACAP #
 #####################################
 
-Route::get('/dashboard', function () {
-    return view('sistem_informasi.dashboard');
-});
+Route::middleware(['auth'])->group(function () {
+    // Dashboard - untuk semua yang login
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/datamaster', [DataMasterController::class, 'index'])->name('datamaster.index');
+    // Route khusus Admin
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/datamaster', [DataMasterController::class, 'index'])->name('datamaster.index');
+        Route::post('/datamaster/import', [DataMasterController::class, 'import'])->name('datamaster.import');
+        Route::post('/datamaster/remove-duplicates', [DataMasterController::class, 'removeDuplicates'])->name('datamaster.remove.duplicates');
+
+        Route::get('/dataproduksi', [DataProduksiController::class, 'index'])->name('dataproduksi.index');
+        Route::get('/dataproduksi/laporan-harian', [DataProduksiController::class, 'laporanHarian'])->name('dataproduksi.laporan.harian');
+        Route::get('/dataproduksi/rekap-bulanan', [DataProduksiController::class, 'rekapBulanan'])->name('dataproduksi.rekap.bulanan');
+        Route::get('/dataproduksi/grafik', [DataProduksiController::class, 'grafik'])->name('dataproduksi.grafik');
+        Route::post('/dataproduksi/export', [DataProduksiController::class, 'export'])->name('dataproduksi.export');
+        Route::post('/dataproduksi/export-pdf', [DataProduksiController::class, 'exportPdf'])->name('dataproduksi.export.pdf');
+        Route::post('/dataproduksi/export-laporan-pdf', [DataProduksiController::class, 'exportLaporanPdf'])->name('dataproduksi.export.laporan.pdf');
+    });
+
+    // Route untuk Admin dan Pegawai (Keberangkatan & Kedatangan)
+    Route::get('/keberangkatan', [KeberangkatanController::class, 'index'])->name('keberangkatan.index');
+    Route::get('/keberangkatan/create', [KeberangkatanController::class, 'create'])->name('keberangkatan.create');
+    Route::post('/keberangkatan', [KeberangkatanController::class, 'store'])->name('keberangkatan.store');
+
+    Route::get('/kedatangan', [KedatanganController::class, 'index'])->name('kedatangan.index');
+    Route::get('/kedatangan/create', [KedatanganController::class, 'create'])->name('kedatangan.create');
+    Route::post('/kedatangan', [KedatanganController::class, 'store'])->name('kedatangan.store');
+});

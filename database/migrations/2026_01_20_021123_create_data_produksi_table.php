@@ -18,11 +18,15 @@ return new class extends Migration
                 ->constrained('data_master')
                 ->cascadeOnDelete();
 
+            $table->string('no_kendaraan')->nullable();
+
             $table->integer('jml_pnp_berangkat')->nullable();
             $table->time('waktu_berangkat')->nullable();
+            $table->dateTime('bus_berangkat')->nullable();
 
             $table->integer('jml_pnp_datang')->nullable();
             $table->time('waktu_datang')->nullable();
+            $table->dateTime('bus_datang')->nullable();
 
             $table->timestamps();
         });
