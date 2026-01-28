@@ -1,6 +1,7 @@
 @extends('landing_page.layouts.main')
 
 @section('content')
+
 <body>
   <!-- Spinner Start -->
   <div
@@ -259,6 +260,167 @@
     </div>
   </div>
   <!-- About End -->
+
+  <!-- Layanan Kami Start -->
+  <div class="container-fluid training overflow-hidden bg-light py-5">
+    <div class="container py-5">
+      <div class="section-title text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="sub-style">
+          <h5 class="sub-title text-primary px-3">Layanan Kami</h5>
+        </div>
+        <h1 class="display-5 mb-4">Layanan Terminal BMD Cilacap</h1>
+        <p class="mb-0">
+          Berbagai layanan informasi dan fasilitas untuk mendukung perjalanan Anda dengan nyaman dan aman
+        </p>
+      </div>
+      <div class="row g-4">
+        <!-- Maklumat Pelayanan -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/gedung_depan.jpg') }}" class="img-fluid w-100 rounded" alt="Maklumat" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/maklumat') }}" class="h4 text-white mb-0">Maklumat</a>
+                <a href="{{ url('/maklumat') }}" class="h4 text-white mb-0">Pelayanan</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/maklumat') }}">
+                <h4 class="text-white">Maklumat Pelayanan</h4>
+              </a>
+              <p class="text-white-50">
+                Komitmen kami dalam memberikan pelayanan terbaik kepada seluruh pengguna jasa Terminal BMD Cilacap
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/maklumat') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarif Tiket -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/terminal-bus-cilacap-1.jpg') }}" class="img-fluid w-100 rounded" alt="Tarif" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/tarif_tiket') }}" class="h4 text-white mb-0">Informasi</a>
+                <a href="{{ url('/tarif_tiket') }}" class="h4 text-white mb-0">Tarif</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/tarif_tiket') }}">
+                <h4 class="text-white">Informasi Tarif Tiket</h4>
+              </a>
+              <p class="text-white-50">
+                Daftar lengkap tarif tiket bus AKAP dan AKDP untuk berbagai tujuan keberangkatan dari Terminal Cilacap
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/tarif_tiket') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daftar PO Bus -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/terminal-bus-cilacap-2.jpg') }}" class="img-fluid w-100 rounded" alt="PO Bus" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/daftar_po') }}" class="h4 text-white mb-0">Daftar</a>
+                <a href="{{ url('/daftar_po') }}" class="h4 text-white mb-0">PO Bus</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/daftar_po') }}">
+                <h4 class="text-white">Daftar PO Bus</h4>
+              </a>
+              <p class="text-white-50">
+                Informasi lengkap Perusahaan Otobus (PO) yang beroperasi di Terminal BMD Cilacap
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/daftar_po') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Survei Kepuasan -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/terminal-bus-cilacap.jpg') }}" class="img-fluid w-100 rounded" alt="SKM" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/hasil_skm') }}" class="h4 text-white mb-0">Survei</a>
+                <a href="{{ url('/hasil_skm') }}" class="h4 text-white mb-0">SKM</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/hasil_skm') }}">
+                <h4 class="text-white">Survei Kepuasan Masyarakat</h4>
+              </a>
+              <p class="text-white-50">
+                Berikan penilaian Anda tentang kualitas pelayanan Terminal BMD Cilacap melalui survei kepuasan masyarakat
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/hasil_skm') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layanan Pengaduan -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/ruang_rapat.jpeg') }}" class="img-fluid w-100 rounded" alt="Pengaduan" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/layanan_pengaduan') }}" class="h4 text-white mb-0">Layanan</a>
+                <a href="{{ url('/layanan_pengaduan') }}" class="h4 text-white mb-0">Pengaduan</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/layanan_pengaduan') }}">
+                <h4 class="text-white">Layanan Pengaduan</h4>
+              </a>
+              <p class="text-white-50">
+                Sampaikan kritik, saran, atau keluhan Anda untuk membantu kami meningkatkan kualitas pelayanan
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/layanan_pengaduan') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fasilitas Terminal -->
+        <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="training-item h-100">
+            <div class="training-inner">
+              <img src="{{ asset('assets/img/pintu_masuk_terminal.jpg') }}" class="img-fluid w-100 rounded" alt="Fasilitas" style="height: 250px; object-fit: cover;" />
+              <div class="training-title-name">
+                <a href="{{ url('/fasilitas') }}" class="h4 text-white mb-0">Denah &</a>
+                <a href="{{ url('/fasilitas') }}" class="h4 text-white mb-0">Fasilitas</a>
+              </div>
+            </div>
+            <div class="training-content bg-secondary rounded-bottom p-4">
+              <a href="{{ url('/fasilitas') }}">
+                <h4 class="text-white">Denah & Fasilitas</h4>
+              </a>
+              <p class="text-white-50">
+                Lihat denah lengkap dan berbagai fasilitas yang tersedia di Terminal BMD Cilacap untuk kenyamanan Anda
+              </p>
+              <a class="btn btn-warning rounded-pill text-white py-2 px-4" href="{{ url('/fasilitas') }}">
+                Selengkapnya <i class="fa fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Layanan Kami End -->
 
   <!-- Training Start -->
   <div class="container-fluid training overflow-hidden bg-light py-5">
