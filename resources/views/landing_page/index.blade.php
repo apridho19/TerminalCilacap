@@ -1,6 +1,213 @@
 @extends('landing_page.layouts.main')
 
 @section('content')
+
+<style>
+  /* Service Item Hover Effects */
+  .service-item {
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+    background: #fff;
+  }
+
+  .service-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    border-color: transparent;
+  }
+
+  .service-img {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-img img {
+    transition: all 0.5s ease;
+    transform: scale(1);
+  }
+
+  .service-item:hover .service-img img {
+    transform: scale(1.1) rotate(2deg);
+  }
+
+  .service-icon {
+    transition: all 0.4s ease;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .service-item:hover .service-icon {
+    transform: scale(1.1) rotate(360deg);
+    background: var(--bs-primary) !important;
+  }
+
+  .service-item:hover .service-icon i {
+    color: #fff !important;
+  }
+
+  .service-item:hover .service-icon.border-warning {
+    background: var(--bs-warning) !important;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .service-content {
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .service-item:hover .service-content {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  }
+
+  .btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .btn:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Section Title Animation */
+  .section-title h1 {
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bs-primary), var(--bs-warning));
+    transition: width 0.6s ease;
+  }
+
+  .section-title:hover h1::after {
+    width: 100%;
+  }
+
+  /* Pulse animation for service cards on load */
+  @keyframes pulseIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .service-item.wow {
+    animation: pulseIn 0.6s ease-out;
+  }
+
+  /* Smooth background gradient animation */
+  .service.py-5 {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+  }
+
+  /* Icon shine effect */
+  @keyframes shine {
+    0% {
+      box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(13, 110, 253, 0.8);
+    }
+
+    100% {
+      box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+    }
+  }
+
+  .service-icon {
+    animation: shine 2s ease-in-out infinite;
+  }
+
+  .service-icon.border-warning {
+    animation: shineWarning 2s ease-in-out infinite;
+  }
+
+  @keyframes shineWarning {
+    0% {
+      box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    }
+
+    100% {
+      box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+    }
+  }
+
+  /* Title badge animation */
+  .sub-title {
+    position: relative;
+    animation: slideInBounce 1s ease-out;
+  }
+
+  @keyframes slideInBounce {
+    0% {
+      transform: translateX(-100px);
+      opacity: 0;
+    }
+
+    60% {
+      transform: translateX(10px);
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+</style>
+
 <body>
   <!-- Spinner Start -->
   <div
@@ -260,989 +467,151 @@
   </div>
   <!-- About End -->
 
-  <!-- Training Start -->
-  <div class="container-fluid training overflow-hidden bg-light py-5">
+  <!-- Layanan Start -->
+  <div class="container-fluid service py-5">
     <div class="container py-5">
-      <div
-        class="section-title text-center mb-5 wow fadeInUp"
-        data-wow-delay="0.1s">
+      <div class="section-title text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="sub-style">
-          <h5 class="sub-title text-primary px-3">FASILITAS KAMI</h5>
+          <h5 class="sub-title text-primary px-3">LAYANAN KAMI</h5>
         </div>
-        <h1 class="display-5 mb-4">
-          Terminal Tipe A Bangga Mbangun Desa Cilacap jaya jaya jaya
-        </h1>
-        <p class="mb-0">
-          Bagi penumpang, terminal menjadi tempat untuk mendapatkan pilihan
-          berbagai angkutan umum yang tersedia. Penumpang juga membutuhkan
-          fasilitas informasi, fasilitas prasarana dan fasilitas keamanan
-          sehingga membuat rasa aman dan nyaman.
-        </p>
+        <h1 class="display-5 mb-4">Informasi & Layanan Terminal</h1>
+        <p class="mb-0">Akses mudah ke berbagai informasi dan layanan yang Anda butuhkan</p>
       </div>
+
       <div class="row g-4">
-        <div
-          class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp"
-          data-wow-delay="0.1s">
-          <div class="training-item">
-            <div class="training-inner">
-              <img
-                src="{{ asset('assets/img/training-1.jpg') }}"
-                class="img-fluid w-100 rounded"
-                alt="Image" />
-              <div class="training-title-name">
-                <a href="#" class="h4 text-white mb-0">Ruang </a>
-                <a href="#" class="h4 text-white mb-0">Tunggu</a>
-              </div>
+        <!-- Maklumat Pelayanan -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/office-1.jpg') }}" class="img-fluid w-100 rounded-top" alt="Maklumat">
             </div>
-            <div class="training-content rounded-bottom p-4">
-              <a href="#">
-                <h4 class="text-white">IELTS Coaching</h4>
-              </a>
-              <p class="text-white-50">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Autem, veritatis.
-              </p>
-              <!-- <a class="btn btn-warning rounded-pill text-white p-0" href="#"
-                  >Read More <i class="fa fa-arrow-right"></i
-                ></a> -->
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-primary bg-white rounded-circle me-3">
+                    <i class="fa fa-award text-primary fa-2x"></i>
+                  </div>
+                  <h5 class="mb-0">Maklumat Pelayanan</h5>
+                </div>
+                <p class="mb-4">Komitmen kami dalam memberikan pelayanan terbaik kepada masyarakat</p>
+                <a href="{{ url('/maklumat') }}" class="btn btn-primary rounded-pill px-4 py-2">
+                  Lihat Detail <i class="fa fa-arrow-right ms-2"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-        <div
-          class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp"
-          data-wow-delay="0.3s">
-          <div class="training-item">
-            <div class="training-inner">
-              <img
-                src="{{ asset('assets/img/training-2.jpg') }}"
-                class="img-fluid w-100 rounded"
-                alt="Image" />
-              <div class="training-title-name">
-                <a href="#" class="h4 text-white mb-0">TOEFL</a>
-                <a href="#" class="h4 text-white mb-0">Coaching</a>
-              </div>
-            </div>
-            <div class="training-content rounded-bottom p-4">
-              <a href="#">
-                <h4 class="text-white">TOEFL Coaching</h4>
-              </a>
-              <p class="text-white-50">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Autem, veritatis.
-              </p>
-              <!-- <a class="btn btn-warning rounded-pill text-white p-0" href="#"
-                  >Read More <i class="fa fa-arrow-right"></i
-                ></a> -->
-            </div>
-          </div>
-        </div>
-        <div
-          class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp"
-          data-wow-delay="0.5s">
-          <div class="training-item">
-            <div class="training-inner">
-              <img
-                src="{{ asset('assets/img/training-3.jpg') }}"
-                class="img-fluid w-100 rounded"
-                alt="Image" />
-              <div class="training-title-name">
-                <a href="#" class="h4 text-white mb-0">PTE</a>
-                <a href="#" class="h4 text-white mb-0">Coaching</a>
-              </div>
-            </div>
-            <div class="training-content rounded-bottom p-4">
-              <a href="#">
-                <h4 class="text-white">PTE Coaching</h4>
-              </a>
-              <p class="text-white-50">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Autem, veritatis.
-              </p>
-              <!-- <a class="btn btn-warning rounded-pill text-white p-0" href="#"
-                  >Read More <i class="fa fa-arrow-right"></i
-                ></a> -->
-            </div>
-          </div>
-        </div>
-        <div
-          class="col-lg-6 col-lg-6 col-xl-3 wow fadeInUp"
-          data-wow-delay="0.7s">
-          <div class="training-item">
-            <div class="training-inner">
-              <img
-                src="{{ asset('assets/img/training-4.jpg') }}"
-                class="img-fluid w-100 rounded"
-                alt="Image" />
-              <div class="training-title-name">
-                <a href="#" class="h4 text-white mb-0">OET</a>
-                <a href="#" class="h4 text-white mb-0">Coaching</a>
-              </div>
-            </div>
-            <div class="training-content rounded-bottom p-4">
-              <a href="#">
-                <h4 class="text-white">OET Coaching</h4>
-              </a>
-              <p class="text-white-50">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Autem, veritatis.
-              </p>
-              <!-- <a class="btn btn-warning rounded-pill text-white p-0" href="#"
-                  >Read More <i class="fa fa-arrow-right"></i
-                ></a> -->
-            </div>
-          </div>
-        </div>
-        <div class="col-12 text-center">
-          <a
-            class="btn btn-primary border-warning rounded-pill py-3 px-5 wow fadeInUp"
-            data-wow-delay="0.1s"
-            href="#">View More</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Training End -->
 
-  <!-- Features Start -->
-  <!-- <div class="container-fluid features overflow-hidden py-5">
-      <div class="container">
-        <div
-          class="section-title text-center mb-5 wow fadeInUp"
-          data-wow-delay="0.1s"
-        >
-          <div class="sub-style">
-            <h5 class="sub-title text-primary px-3">Why Choose Us</h5>
-          </div>
-          <h1 class="display-5 mb-4">
-            Offer Tailor Made Services That Our Client Requires
-          </h1>
-          <p class="mb-0">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-            deleniti amet at atque sequi quibusdam cumque itaque repudiandae
-            temporibus, eius nam mollitia voluptas maxime veniam necessitatibus
-            saepe in ab? Repellat!
-          </p>
-        </div>
-        <div class="row g-4 justify-content-center text-center">
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.1s"
-          >
-            <div class="feature-item text-center p-4">
-              <div class="feature-icon p-3 mb-4">
-                <i class="fas fa-dollar-sign fa-4x text-primary"></i>
-              </div>
-              <div class="feature-content d-flex flex-column">
-                <h5 class="mb-3">Cost-Effective</h5>
-                <p class="mb-3">
-                  Dolor, sit amet consectetur adipisicing elit. Soluta inventore
-                  cum accusamus,
-                </p>
-                <a class="btn btn-warning rounded-pill" href="#"
-                  >Read More<i class="fas fa-arrow-right ms-2"></i
-                ></a>
+        <!-- Tarif Tiket -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/office-2.jpg') }}" class="img-fluid w-100 rounded-top" alt="Tarif">
+            </div>
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-warning bg-white rounded-circle me-3">
+                    <i class="fa fa-ticket-alt text-warning fa-2x"></i>
+                  </div>
+                  <h5 class="mb-0">Tarif Tiket</h5>
+                </div>
+                <p class="mb-4">Informasi lengkap tarif bus AKAP dan AKDP berbagai tujuan</p>
+                <a href="{{ url('/tarif_tiket') }}" class="btn btn-warning rounded-pill px-4 py-2">
+                  Lihat Tarif <i class="fa fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.3s"
-          >
-            <div class="feature-item text-center p-4">
-              <div class="feature-icon p-3 mb-4">
-                <i class="fab fa-cc-visa fa-4x text-primary"></i>
-              </div>
-              <div class="feature-content d-flex flex-column">
-                <h5 class="mb-3">Visa Assistance</h5>
-                <p class="mb-3">
-                  Dolor, sit amet consectetur adipisicing elit. Soluta inventore
-                  cum accusamus,
-                </p>
-                <a class="btn btn-warning rounded-pill" href="#"
-                  >Read More<i class="fas fa-arrow-right ms-2"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.5s"
-          >
-            <div class="feature-item text-center p-4">
-              <div class="feature-icon p-3 mb-4">
-                <i class="fas fa-atlas fa-4x text-primary"></i>
-              </div>
-              <div class="feature-content d-flex flex-column">
-                <h5 class="mb-3">Faster Processing</h5>
-                <p class="mb-3">
-                  Dolor, sit amet consectetur adipisicing elit. Soluta inventore
-                  cum accusamus,
-                </p>
-                <a class="btn btn-warning rounded-pill" href="#"
-                  >Read More<i class="fas fa-arrow-right ms-2"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.7s"
-          >
-            <div class="feature-item text-center p-4">
-              <div class="feature-icon p-3 mb-4">
-                <i class="fas fa-users fa-4x text-primary"></i>
-              </div>
-              <div class="feature-content d-flex flex-column">
-                <h5 class="mb-3">Direct Interviews</h5>
-                <p class="mb-3">
-                  Dolor, sit amet consectetur adipisicing elit. Soluta inventore
-                  cum accusamus,
-                </p>
-                <a class="btn btn-warning rounded-pill" href="#"
-                  >Read More<i class="fas fa-arrow-right ms-2"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <a
-              class="btn btn-primary border-warning rounded-pill py-3 px-5 wow fadeInUp"
-              data-wow-delay="0.1s"
-              href="#"
-              >More Features</a
-            >
           </div>
         </div>
-      </div>
-    </div> -->
-  <!-- Features End -->
 
-  <!-- Counter Facts Start -->
-  <!-- <div class="container-fluid counter-facts py-5">
-      <div class="container py-5">
-        <div class="row g-4">
-          <div
-            class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.1s"
-          >
-            <div class="counter">
-              <div class="counter-icon">
-                <i class="fas fa-passport"></i>
-              </div>
-              <div class="counter-content">
-                <h3>Visa Categories</h3>
-                <div class="d-flex align-items-center justify-content-center">
-                  <span class="counter-value" data-toggle="counter-up">31</span>
-                  <h4
-                    class="text-warning mb-0"
-                    style="font-weight: 600; font-size: 25px"
-                  >
-                    +
-                  </h4>
-                </div>
-              </div>
+        <!-- Daftar PO -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/office-3.jpg') }}" class="img-fluid w-100 rounded-top" alt="PO Bus">
             </div>
-          </div>
-          <div
-            class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.3s"
-          >
-            <div class="counter">
-              <div class="counter-icon">
-                <i class="fas fa-users"></i>
-              </div>
-              <div class="counter-content">
-                <h3>Team Members</h3>
-                <div class="d-flex align-items-center justify-content-center">
-                  <span class="counter-value" data-toggle="counter-up"
-                    >377</span
-                  >
-                  <h4
-                    class="text-warning mb-0"
-                    style="font-weight: 600; font-size: 25px"
-                  >
-                    +
-                  </h4>
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-primary bg-white rounded-circle me-3">
+                    <i class="fa fa-bus text-primary fa-2x"></i>
+                  </div>
+                  <h5 class="mb-0">Daftar PO Bus</h5>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.5s"
-          >
-            <div class="counter">
-              <div class="counter-icon">
-                <i class="fas fa-user-check"></i>
-              </div>
-              <div class="counter-content">
-                <h3>Visa Process</h3>
-                <div class="d-flex align-items-center justify-content-center">
-                  <span class="counter-value" data-toggle="counter-up"
-                    >4.9</span
-                  >
-                  <h4
-                    class="text-warning mb-0"
-                    style="font-weight: 600; font-size: 25px"
-                  >
-                    K
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-12 col-sm-6 col-md-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.7s"
-          >
-            <div class="counter">
-              <div class="counter-icon">
-                <i class="fas fa-handshake"></i>
-              </div>
-              <div class="counter-content">
-                <h3>Success Rates</h3>
-                <div class="d-flex align-items-center justify-content-center">
-                  <span class="counter-value" data-toggle="counter-up">98</span>
-                  <h4
-                    class="text-warning mb-0"
-                    style="font-weight: 600; font-size: 25px"
-                  >
-                    %
-                  </h4>
-                </div>
+                <p class="mb-4">Perusahaan Otobus yang beroperasi di Terminal BMD Cilacap</p>
+                <a href="{{ url('/daftar_po') }}" class="btn btn-primary rounded-pill px-4 py-2">
+                  Lihat Daftar <i class="fa fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div> -->
-  <!-- Counter Facts End -->
 
-  <!-- Services Start -->
-  <!-- <div class="container-fluid service overflow-hidden pt-5">
-      <div class="container py-5">
-        <div
-          class="section-title text-center mb-5 wow fadeInUp"
-          data-wow-delay="0.1s"
-        >
-          <div class="sub-style">
-            <h5 class="sub-title text-primary px-3">Visa Categories</h5>
-          </div>
-          <h1 class="display-5 mb-4">Enabling Your Immigration Successfully</h1>
-          <p class="mb-0">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-            deleniti amet at atque sequi quibusdam cumque itaque repudiandae
-            temporibus, eius nam mollitia voluptas maxime veniam necessitatibus
-            saepe in ab? Repellat!
-          </p>
-        </div>
-        <div class="row g-4">
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-1.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Job Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
-                  </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Job Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <!-- Survei Kepuasan -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/office-4.jpg') }}" class="img-fluid w-100 rounded-top" alt="SKM">
             </div>
-          </div>
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-2.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Business Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-warning bg-white rounded-circle me-3">
+                    <i class="fa fa-chart-line text-warning fa-2x"></i>
                   </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Business Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill text-white py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
+                  <h5 class="mb-0">Survei Kepuasan</h5>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-3.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Diplometic Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
-                  </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Diplometic Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill text-white py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-1.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Students Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
-                  </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Students Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill text-white py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-2.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Residence Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
-                  </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Residence Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill text-white py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="service-item">
-              <div class="service-inner">
-                <div class="service-img">
-                  <img
-                    src="img/service-3.jpg"
-                    class="img-fluid w-100 rounded"
-                    alt="Image"
-                  />
-                </div>
-                <div class="service-title">
-                  <div class="service-title-name">
-                    <div class="bg-primary text-center rounded p-3 mx-5 mb-4">
-                      <a href="#" class="h4 text-white mb-0">Tourist Visa</a>
-                    </div>
-                    <a
-                      class="btn bg-light text-warning rounded-pill py-3 px-5 mb-4"
-                      href="#"
-                      >Explore More</a
-                    >
-                  </div>
-                  <div class="service-content pb-4">
-                    <a href="#"
-                      ><h4 class="text-white mb-4 py-3">Tourist Visa</h4></a
-                    >
-                    <div class="px-4">
-                      <p class="mb-4">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Mollitia fugit dolores nesciunt adipisci obcaecati
-                        veritatis cum, ratione aspernatur autem velit.
-                      </p>
-                      <a
-                        class="btn btn-primary border-warning rounded-pill text-white py-3 px-5"
-                        href="#"
-                        >Explore More</a
-                      >
-                    </div>
-                  </div>
-                </div>
+                <p class="mb-4">Berikan penilaian Anda untuk meningkatkan layanan kami</p>
+                <a href="{{ url('/hasil_skm') }}" class="btn btn-warning rounded-pill px-4 py-2">
+                  Isi Survei <i class="fa fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div> -->
-  <!-- Services End -->
 
-  <!-- Countries We Offer Start -->
-  <!-- <div class="container-fluid country overflow-hidden py-5">
-      <div class="container">
-        <div
-          class="section-title text-center wow fadeInUp"
-          data-wow-delay="0.1s"
-          style="margin-bottom: 70px"
-        >
-          <div class="sub-style">
-            <h5 class="sub-title text-primary px-3">COUNTRIES WE OFFER</h5>
-          </div>
-          <h1 class="display-5 mb-4">
-            Immigration & visa services following Countries
-          </h1>
-          <p class="mb-0">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-            deleniti amet at atque sequi quibusdam cumque itaque repudiandae
-            temporibus, eius nam mollitia voluptas maxime veniam necessitatibus
-            saepe in ab? Repellat!
-          </p>
-        </div>
-        <div class="row g-4 text-center">
-          <div
-            class="col-lg-6 col-xl-3 mb-5 mb-xl-0 wow fadeInUp"
-            data-wow-delay="0.1s"
-          >
-            <div class="country-item">
-              <div class="rounded overflow-hidden">
-                <img
-                  src="img/country-1.jpg"
-                  class="img-fluid w-100 rounded"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-flag">
-                <img
-                  src="img/brazil.jpg"
-                  class="img-fluid rounded-circle"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-name">
-                <a href="#" class="text-white fs-4">Brazil</a>
+        <!-- Layanan Pengaduan -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/ruang_rapat.jpeg') }}" class="img-fluid w-100 rounded-top" alt="Pengaduan">
+            </div>
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-primary bg-white rounded-circle me-3">
+                    <i class="fa fa-comments text-primary fa-2x"></i>
+                  </div>
+                  <h5 class="mb-0">Layanan Pengaduan</h5>
+                </div>
+                <p class="mb-4">Sampaikan kritik, saran, atau keluhan Anda kepada kami</p>
+                <a href="{{ url('/layanan_pengaduan') }}" class="btn btn-primary rounded-pill px-4 py-2">
+                  Kirim Pengaduan <i class="fa fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
-          </div>
-          <div
-            class="col-lg-6 col-xl-3 mb-5 mb-xl-0 wow fadeInUp"
-            data-wow-delay="0.3s"
-          >
-            <div class="country-item">
-              <div class="rounded overflow-hidden">
-                <img
-                  src="img/country-2.jpg"
-                  class="img-fluid w-100 rounded"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-flag">
-                <img
-                  src="img/india.jpg"
-                  class="img-fluid rounded-circle"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-name">
-                <a href="#" class="text-white fs-4">india</a>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-lg-6 col-xl-3 mb-5 mb-xl-0 wow fadeInUp"
-            data-wow-delay="0.5s"
-          >
-            <div class="country-item">
-              <div class="rounded overflow-hidden">
-                <img
-                  src="img/country-3.jpg"
-                  class="img-fluid w-100 rounded"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-flag">
-                <img
-                  src="img/usa.jpg"
-                  class="img-fluid rounded-circle"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-name">
-                <a href="#" class="text-white fs-4">New York</a>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-lg-6 col-xl-3 mb-5 mb-xl-0 wow fadeInUp"
-            data-wow-delay="0.7s"
-          >
-            <div class="country-item">
-              <div class="rounded overflow-hidden">
-                <img
-                  src="img/country-4.jpg"
-                  class="img-fluid w-100 rounded"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-flag">
-                <img
-                  src="img/italy.jpg"
-                  class="img-fluid rounded-circle"
-                  alt="Image"
-                />
-              </div>
-              <div class="country-name">
-                <a href="#" class="text-white fs-4">Italy</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <a
-              class="btn btn-primary border-warning rounded-pill py-3 px-5 wow fadeInUp"
-              data-wow-delay="0.1s"
-              href="#"
-              >More Countries</a
-            >
           </div>
         </div>
-      </div>
-    </div> -->
-  <!-- Countries We Offer End -->
 
-  <!-- Testimonial Start -->
-  <div class="container-fluid testimonial overflow-hidden pb-5">
-    <div class="container py-5">
-      <div
-        class="section-title text-center mb-5 wow fadeInUp"
-        data-wow-delay="0.1s">
-        <div class="sub-style">
-          <h5 class="sub-title text-primary px-3">OUR CLIENTS RIVIEWS</h5>
-        </div>
-        <h1 class="display-5 mb-4">What Our Clients Say</h1>
-        <p class="mb-0">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-          deleniti amet at atque sequi quibusdam cumque itaque repudiandae
-          temporibus, eius nam mollitia voluptas maxime veniam necessitatibus
-          saepe in ab? Repellat!
-        </p>
-      </div>
-      <div
-        class="owl-carousel testimonial-carousel wow zoomInDown"
-        data-wow-delay="0.2s">
-        <div class="testimonial-item">
-          <div class="testimonial-content p-4 mb-5">
-            <p class="fs-5 mb-0">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitati eiusmod tempor
-              incididunt.
-            </p>
-            <div class="d-flex justify-content-end">
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
+        <!-- Denah Fasilitas -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="service-item rounded h-100">
+            <div class="service-img rounded-top">
+              <img src="{{ asset('assets/img/terminal-bus-cilacap-2.jpg') }}" class="img-fluid w-100 rounded-top" alt="Fasilitas">
             </div>
-          </div>
-          <div class="d-flex">
-            <div
-              class="rounded-circle me-4"
-              style="width: 100px; height: 100px">
-              <img
-                class="img-fluid rounded-circle"
-                src="{{ asset('assets/img/testimonial-1.jpg') }}"
-                alt="img" />
-            </div>
-            <div class="my-auto">
-              <h5>Person Name</h5>
-              <p class="mb-0">Profession</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-item">
-          <div class="testimonial-content p-4 mb-5">
-            <p class="fs-5 mb-0">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitati eiusmod tempor
-              incididunt.
-            </p>
-            <div class="d-flex justify-content-end">
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-            </div>
-          </div>
-          <div class="d-flex">
-            <div
-              class="rounded-circle me-4"
-              style="width: 100px; height: 100px">
-              <img
-                class="img-fluid rounded-circle"
-                src="{{ asset('assets/img/testimonial-2.jpg') }}"
-                alt="img" />
-            </div>
-            <div class="my-auto">
-              <h5>Person Name</h5>
-              <p class="mb-0">Profession</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-item">
-          <div class="testimonial-content p-4 mb-5">
-            <p class="fs-5 mb-0">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitati eiusmod tempor
-              incididunt.
-            </p>
-            <div class="d-flex justify-content-end">
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-              <i class="fas fa-star text-warning"></i>
-            </div>
-          </div>
-          <div class="d-flex">
-            <div
-              class="rounded-circle me-4"
-              style="width: 100px; height: 100px">
-              <img
-                class="img-fluid rounded-circle"
-                src="{{ asset('assets/img/testimonial-3.jpg') }}"
-                alt="img" />
-            </div>
-            <div class="my-auto">
-              <h5>Person Name</h5>
-              <p class="mb-0">Profession</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Testimonial End -->
-
-  <!-- Contact Start -->
-  <div class="container-fluid contact overflow-hidden pb-5">
-    <div class="container py-5">
-      <div class="office pt-5">
-        <div
-          class="section-title text-center mb-5 wow fadeInUp"
-          data-wow-delay="0.1s">
-          <div class="sub-style">
-            <h5 class="sub-title text-primary px-3">Worlwide Offices</h5>
-          </div>
-          <h1 class="display-5 mb-4">Explore Our Office Worldwide</h1>
-          <p class="mb-0">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-            deleniti amet at atque sequi quibusdam cumque itaque repudiandae
-            temporibus, eius nam mollitia voluptas maxime veniam
-            necessitatibus saepe in ab? Repellat!
-          </p>
-        </div>
-        <div class="row g-4 justify-content-center">
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.1s">
-            <div class="office-item p-4">
-              <div class="office-img mb-4">
-                <img
-                  src="{{ asset('assets/img/office-2.jpg') }}"
-                  class="img-fluid w-100 rounded"
-                  alt="" />
-              </div>
-              <div class="office-content d-flex flex-column">
-                <h4 class="mb-2">Australia</h4>
-                <a href="#" class="text-warning fs-5 mb-2">+123.456.7890</a>
-                <a href="#" class="text-muted fs-5 mb-2">travisa@example.com</a>
-                <p class="mb-0">
-                  123, First Floor, 123 St Roots Terrace, Los Angeles 90010
-                  Unitd States of America.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.3s">
-            <div class="office-item p-4">
-              <div class="office-img mb-4">
-                <img
-                  src="{{ asset('assets/img/office-1.jpg') }}"
-                  class="img-fluid w-100 rounded"
-                  alt="" />
-              </div>
-              <div class="office-content d-flex flex-column">
-                <h4 class="mb-2">Canada</h4>
-                <a href="#" class="text-warning fs-5 mb-2">(012) 0345 6789</a>
-                <a href="#" class="text-muted fs-5 mb-2">travisa@example.com</a>
-                <p class="mb-0">
-                  123, First Floor, 123 St Roots Terrace, Los Angeles 90010
-                  Unitd States of America.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.5s">
-            <div class="office-item p-4">
-              <div class="office-img mb-4">
-                <img
-                  src="{{ asset('assets/img/office-3.jpg') }}"
-                  class="img-fluid w-100 rounded"
-                  alt="" />
-              </div>
-              <div class="office-content d-flex flex-column">
-                <h4 class="mb-2">United Kingdom</h4>
-                <a href="#" class="text-warning fs-5 mb-2">01234.567.890</a>
-                <a href="#" class="text-muted fs-5 mb-2">travisa@example.com</a>
-                <p class="mb-0">
-                  123, First Floor, 123 St Roots Terrace, Los Angeles 90010
-                  Unitd States of America.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp"
-            data-wow-delay="0.7s">
-            <div class="office-item p-4">
-              <div class="office-img mb-4">
-                <img
-                  src="{{ asset('assets/img/office-4.jpg') }}"
-                  class="img-fluid w-100 rounded"
-                  alt="" />
-              </div>
-              <div class="office-content d-flex flex-column">
-                <h4 class="mb-2">India</h4>
-                <a href="#" class="text-warning fs-5 mb-2">+123.45.67890</a>
-                <a href="#" class="text-muted fs-5 mb-2">travisa@example.com</a>
-                <p class="mb-0">
-                  123, First Floor, 123 St Roots Terrace, Los Angeles 90010
-                  Unitd States of America.
-                </p>
+            <div class="service-content rounded-bottom bg-light p-4">
+              <div class="service-content-inner">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon p-3 border border-warning bg-white rounded-circle me-3">
+                    <i class="fa fa-map text-warning fa-2x"></i>
+                  </div>
+                  <h5 class="mb-0">Denah Fasilitas</h5>
+                </div>
+                <p class="mb-4">Lihat denah lengkap fasilitas yang tersedia di terminal</p>
+                <a href="{{ url('/fasilitas') }}" class="btn btn-warning rounded-pill px-4 py-2">
+                  Lihat Denah <i class="fa fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
           </div>
@@ -1250,9 +619,7 @@
       </div>
     </div>
   </div>
-  <!-- Contact End -->
+  <!-- Layanan End -->
 
-  <!-- Back to Top -->
-  <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
 </body>
 @endsection
