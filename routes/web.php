@@ -7,6 +7,7 @@ use App\Http\Controllers\KedatanganController;
 use App\Http\Controllers\DataProduksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PengaduanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,8 @@ Route::get('/layanan_pengaduan', function () {
     return view('landing_page.layanan_pengaduan');
 });
 
+Route::post('/pengaduan/store', [PengaduanController::class, 'store'])->name('pengaduan.store');
+
 Route::get('/kontak', function () {
     return view('landing_page.kontak');
 });
@@ -112,9 +115,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dataproduksi/laporan-harian', [DataProduksiController::class, 'laporanHarian'])->name('dataproduksi.laporan.harian');
         Route::get('/dataproduksi/rekap-bulanan', [DataProduksiController::class, 'rekapBulanan'])->name('dataproduksi.rekap.bulanan');
         Route::get('/dataproduksi/grafik', [DataProduksiController::class, 'grafik'])->name('dataproduksi.grafik');
+        Route::get('/dataproduksi/grafik-data', [DataProduksiController::class, 'grafikData'])->name('dataproduksi.grafik.data');
+        Route::get('/dataproduksi/preview', [DataProduksiController::class, 'preview'])->name('dataproduksi.preview');
         Route::post('/dataproduksi/export', [DataProduksiController::class, 'export'])->name('dataproduksi.export');
         Route::post('/dataproduksi/export-pdf', [DataProduksiController::class, 'exportPdf'])->name('dataproduksi.export.pdf');
         Route::post('/dataproduksi/export-laporan-pdf', [DataProduksiController::class, 'exportLaporanPdf'])->name('dataproduksi.export.laporan.pdf');
+        Route::post('/dataproduksi/export-rekap-pdf', [DataProduksiController::class, 'exportRekapPdf'])->name('dataproduksi.export.rekap.pdf');
     });
 
     // Route untuk Admin dan Pegawai (Keberangkatan & Kedatangan)

@@ -100,31 +100,40 @@ class DataMasterController extends Controller
     public function removeDuplicates()
     {
         try {
-            // Ambil semua no_kendaraan yang duplicate
+            // Ambil semua no_kendaraan yang duplicate (tidak null dan tidak kosong)
             $duplicates = DataMaster::select('no_kendaraan')
+                ->whereNotNull('no_kendaraan')
+                ->where('no_kendaraan', '!=', '')
                 ->groupBy('no_kendaraan')
                 ->havingRaw('COUNT(*) > 1')
                 ->pluck('no_kendaraan');
 
+            if ($duplicates->isEmpty()) {
+                return redirect()->route('datamaster.index')->with('info', 'Tidak ada data duplikat yang ditemukan.');
+            }
+
             $totalDeleted = 0;
 
             foreach ($duplicates as $noKendaraan) {
-                // Ambil semua data dengan no_kendaraan yang sama
+                // Ambil semua data dengan no_kendaraan yang sama, urutkan dari yang tertua
                 $records = DataMaster::where('no_kendaraan', $noKendaraan)
                     ->orderBy('created_at', 'asc')
+                    ->orderBy('id', 'asc')
                     ->get();
 
                 // Simpan yang pertama (paling lama), hapus sisanya
-                $records->skip(1)->each(function ($record) use (&$totalDeleted) {
-                    $record->delete();
-                    $totalDeleted++;
-                });
+                if ($records->count() > 1) {
+                    $records->skip(1)->each(function ($record) use (&$totalDeleted) {
+                        $record->delete();
+                        $totalDeleted++;
+                    });
+                }
             }
 
             if ($totalDeleted > 0) {
-                return redirect()->route('datamaster.index')->with('success', "Berhasil menghapus {$totalDeleted} data duplikat!");
+                return redirect()->route('datamaster.index')->with('success', "Berhasil menghapus {$totalDeleted} data duplikat dari " . $duplicates->count() . " No Kendaraan!");
             } else {
-                return redirect()->route('datamaster.index')->with('info', 'Tidak ada data duplikat yang ditemukan.');
+                return redirect()->route('datamaster.index')->with('info', 'Tidak ada data duplikat yang perlu dihapus.');
             }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

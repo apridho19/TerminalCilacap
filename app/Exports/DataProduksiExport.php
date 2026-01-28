@@ -13,17 +13,23 @@ class DataProduksiExport implements FromArray, WithHeadings, WithStyles, WithTit
 {
     protected $bulan;
     protected $tahun;
+    protected $provinsi;
+    protected $kabupaten;
+    protected $terminalTujuan;
 
-    public function __construct($bulan, $tahun)
+    public function __construct($bulan, $tahun, $provinsi = null, $kabupaten = null, $terminalTujuan = null)
     {
         $this->bulan = $bulan;
         $this->tahun = $tahun;
+        $this->provinsi = $provinsi;
+        $this->kabupaten = $kabupaten;
+        $this->terminalTujuan = $terminalTujuan;
     }
 
     public function array(): array
     {
         // Ambil semua data produksi berdasarkan bulan dan tahun
-        $allData = DataProduksi::with('dataMaster')
+        $query = DataProduksi::with('dataMaster')
             ->where(function ($query) {
                 $query->where(function ($q) {
                     $q->whereYear('bus_berangkat', $this->tahun)
@@ -32,9 +38,28 @@ class DataProduksiExport implements FromArray, WithHeadings, WithStyles, WithTit
                     $q->whereYear('bus_datang', $this->tahun)
                         ->whereMonth('bus_datang', $this->bulan);
                 });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+            });
+
+        // Terapkan filter jika ada
+        if ($this->provinsi) {
+            $query->whereHas('dataMaster', function ($q) {
+                $q->where('provinsi', $this->provinsi);
+            });
+        }
+
+        if ($this->kabupaten) {
+            $query->whereHas('dataMaster', function ($q) {
+                $q->where('kabupaten', $this->kabupaten);
+            });
+        }
+
+        if ($this->terminalTujuan) {
+            $query->whereHas('dataMaster', function ($q) {
+                $q->where('terminal_tujuan', $this->terminalTujuan);
+            });
+        }
+
+        $allData = $query->orderBy('created_at', 'desc')->get();
 
         // PENDEKATAN BARU: Group semua data berdasarkan no_kendaraan dulu
         $groupedByKendaraan = $allData->groupBy('no_kendaraan');

@@ -28,8 +28,8 @@
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalImport">
                                 <i class="fa fa-file-excel-o"></i> Import dari Excel
                             </button>
-                            <button type="button" class="btn btn-warning ml-2" onclick="confirmRemoveDuplicates()">
-                                <i class="fa fa-trash"></i> Hapus Data Duplikat
+                            <button type="button" class="btn btn-danger ml-2" id="btnRemoveDuplicates">
+                                <i class="fa fa-clone"></i> Hapus Data Duplikat
                             </button>
                         </div>
 
@@ -370,11 +370,33 @@
             }, 5000);
         })
 
-        function confirmRemoveDuplicates() {
-            if (confirm('Apakah Anda yakin ingin menghapus semua data duplikat berdasarkan No Kendaraan?\n\nData yang lebih baru akan dihapus, data yang lebih lama akan dipertahankan.')) {
-                document.getElementById('removeDuplicatesForm').submit();
-            }
-        }
+        $('#btnRemoveDuplicates').on('click', function() {
+            Swal.fire({
+                title: 'Hapus Data Duplikat?',
+                html: '<div style="text-align: left; padding: 10px;">' +
+                    '<p style="margin: 10px 0;"><i class="fa fa-info-circle" style="margin-right: 8px; color: #3085d6;"></i><strong>Kriteria:</strong> Berdasarkan No Kendaraan yang sama</p>' +
+                    '<p style="margin: 10px 0;"><i class="fa fa-check-circle" style="margin-right: 8px; color: #28a745;"></i><strong>Dipertahankan:</strong> Data yang lebih lama (pertama kali input)</p>' +
+                    '<p style="margin: 10px 0;"><i class="fa fa-trash" style="margin-right: 8px; color: #dc3545;"></i><strong>Dihapus:</strong> Data duplikat yang lebih baru</p>' +
+                    '</div>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fa fa-trash"></i> Ya, Hapus Duplikat',
+                cancelButtonText: '<i class="fa fa-times"></i> Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: '<i class="fa fa-cog fa-spin"></i> Memproses...',
+                        html: 'Sedang mencari dan menghapus data duplikat<br><small>Mohon tunggu sebentar...</small>',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false
+                    });
+                    document.getElementById('removeDuplicatesForm').submit();
+                }
+            });
+        });
     </script>
 
     <!-- Form untuk hapus duplicate (hidden) -->

@@ -14,6 +14,8 @@
     <link href="{{ asset('assets/vendors/jvectormap/jquery-jvectormap-2.0.3.css') }}" rel="stylesheet" />
     <!-- THEME STYLES-->
     <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
+    <!-- SWEETALERT2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet" />
     <!-- PAGE LEVEL STYLES-->
 </head>
 
@@ -40,6 +42,8 @@
     <script src="{{ asset('assets/vendors/jvectormap/jquery-jvectormap-us-aea-en.js') }}" type="text/javascript"></script>
     <!-- CORE SCRIPTS-->
     <script src="{{ asset('assets/js/app.min.js') }}" type="text/javascript"></script>
+    <!-- SWEETALERT2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="{{ asset('assets/js/scripts/dashboard_1_demo.js') }}" type="text/javascript"></script>
 </body>

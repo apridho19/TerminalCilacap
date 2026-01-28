@@ -25,19 +25,33 @@ class DashboardController extends Controller
             ->whereDate('bus_berangkat', $today)
             ->count();
 
-        // Kedatangan hari ini (termasuk yang berangkat kemarin tapi datang hari ini)
-        $kedatanganHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereDate('bus_datang', $today)
-            ->count();
+        // Kedatangan hari ini = sama dengan keberangkatan (setiap bus yang berangkat pasti sebelumnya datang)
+        $kedatanganHariIni = $keberangkatanHariIni;
 
         // Total penumpang hari ini
         $totalPenumpangBerangkat = DataProduksi::whereNotNull('waktu_berangkat')
             ->whereDate('bus_berangkat', $today)
             ->sum('jml_pnp_berangkat');
 
-        $totalPenumpangDatang = DataProduksi::whereNotNull('waktu_datang')
-            ->whereDate('bus_datang', $today)
-            ->sum('jml_pnp_datang');
+        // Ambil data penumpang datang dari pairing
+        $keberangkatanHariIniData = DataProduksi::whereNotNull('waktu_berangkat')
+            ->whereDate('bus_berangkat', $today)
+            ->get();
+
+        $totalPenumpangDatang = 0;
+        foreach ($keberangkatanHariIniData as $berangkat) {
+            // Cari kedatangan terdekat dengan no_kendaraan sama
+            $kedatangan = DataProduksi::where('no_kendaraan', $berangkat->no_kendaraan)
+                ->whereNotNull('waktu_datang')
+                ->whereNull('waktu_berangkat')
+                ->where('bus_datang', '<=', $berangkat->bus_berangkat)
+                ->orderBy('bus_datang', 'desc')
+                ->first();
+
+            if ($kedatangan) {
+                $totalPenumpangDatang += $kedatangan->jml_pnp_datang ?? 0;
+            }
+        }
 
         // Data keberangkatan terbaru hari ini
         $keberangkatanTerbaru = DataProduksi::with('dataMaster')
@@ -47,25 +61,46 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Data kedatangan terbaru hari ini
-        $kedatanganTerbaru = DataProduksi::with('dataMaster')
-            ->whereNotNull('waktu_datang')
-            ->whereDate('bus_datang', $today)
-            ->orderBy('waktu_datang', 'desc')
+        // Data kedatangan terbaru = ambil dari keberangkatan hari ini lalu cari data kedatangannya
+        $keberangkatanTerbaruData = DataProduksi::with('dataMaster')
+            ->whereNotNull('waktu_berangkat')
+            ->whereDate('bus_berangkat', $today)
+            ->orderBy('waktu_berangkat', 'desc')
             ->take(5)
             ->get();
+
+        $kedatanganTerbaru = [];
+        foreach ($keberangkatanTerbaruData as $berangkat) {
+            $kedatangan = DataProduksi::where('no_kendaraan', $berangkat->no_kendaraan)
+                ->whereNotNull('waktu_datang')
+                ->whereNull('waktu_berangkat')
+                ->where('bus_datang', '<=', $berangkat->bus_berangkat)
+                ->orderBy('bus_datang', 'desc')
+                ->first();
+
+            if ($kedatangan) {
+                $combined = (object)[
+                    'no_kendaraan' => $berangkat->no_kendaraan,
+                    'dataMaster' => $berangkat->dataMaster,
+                    'waktu_datang' => $kedatangan->waktu_datang,
+                    'jml_pnp_datang' => $kedatangan->jml_pnp_datang,
+                    'bus_datang' => $kedatangan->bus_datang,
+                ];
+                $kedatanganTerbaru[] = $combined;
+            }
+        }
 
         // Data untuk grafik - 7 hari terakhir
         $dataGrafik = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = date('Y-m-d', strtotime("-$i days"));
+            $dateBefore = date('Y-m-d', strtotime("-" . ($i + 1) . " days"));
             $dataGrafik['labels'][] = date('d/m', strtotime($date));
             $dataGrafik['keberangkatan'][] = DataProduksi::whereNotNull('waktu_berangkat')
                 ->whereDate('bus_berangkat', $date)
                 ->count();
-            $dataGrafik['kedatangan'][] = DataProduksi::whereNotNull('waktu_datang')
-                ->whereDate('bus_datang', $date)
-                ->count();
+            // Kedatangan = sama dengan keberangkatan (setiap bus yang berangkat pasti datang)
+            $dataGrafik['kedatangan'][] = $dataGrafik['keberangkatan'][count($dataGrafik['keberangkatan']) - 1];
         }
 
         // Data untuk pie chart - berdasarkan jenis trayek
