@@ -12,12 +12,12 @@ class DataMasterController extends Controller
     public function index()
     {
         $dataMaster = DataMaster::orderBy('created_at', 'desc')->paginate(10);
-        return view('sistem_informasi.datamaster', compact('dataMaster'));
+        return view('sistem_informasi.data_master.index', compact('dataMaster'));
     }
 
     public function create()
     {
-        return view('sistem_informasi.create_datamaster');
+        return view('sistem_informasi.data_master.create');
     }
 
     public function store(Request $request)
@@ -35,12 +35,12 @@ class DataMasterController extends Controller
 
         DataMaster::create($request->all());
 
-        return redirect()->route('datamaster.index')->with('success', 'Data Master created successfully.');
+        return redirect()->route('datamaster.index')->with('success', 'Data Master berhasil ditambahkan!');
     }
 
     public function edit(DataMaster $dataMaster)
     {
-        return view('sistem_informasi.edit_datamaster', compact('dataMaster'));
+        return view('sistem_informasi.data_master.edit', compact('dataMaster'));
     }
 
     public function update(Request $request, DataMaster $dataMaster)
@@ -49,23 +49,24 @@ class DataMasterController extends Controller
             'no_kendaraan' => 'required|max:10|unique:data_master,no_kendaraan,' . $dataMaster->id,
             'nama_po' => 'required|max:100',
             'jenis_trayek' => 'required|max:50',
-            'asal_tujuan' => 'required|nullable|max:100',
-            'data_trayek' => 'required|nullable|max:255',
-            'provinsi' => 'required|nullable|max:50',
-            'terminal_tujuan' => 'required|nullable|max:50',
-            'kabupaten' => 'required|nullable|max:50',
+            'asal_tujuan' => 'nullable|max:100',
+            'data_trayek' => 'nullable|max:255',
+            'provinsi' => 'nullable|max:50',
+            'terminal_tujuan' => 'nullable|max:50',
+            'kabupaten' => 'nullable|max:50',
         ]);
 
         $dataMaster->update($request->all());
 
-        return redirect()->route('datamaster.index')->with('success', 'Data Master updated successfully.');
+        return redirect()->route('datamaster.index')->with('success', 'Data Master berhasil diupdate!');
     }
 
     public function destroy(DataMaster $dataMaster)
     {
+        $noKendaraan = $dataMaster->no_kendaraan;
         $dataMaster->delete();
 
-        return redirect()->route('datamaster.index')->with('success', 'Data Master deleted successfully.');
+        return redirect()->route('datamaster.index')->with('success', "Data Master {$noKendaraan} berhasil dihapus!");
     }
 
     public function import(Request $request)

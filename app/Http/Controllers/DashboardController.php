@@ -25,8 +25,11 @@ class DashboardController extends Controller
             ->whereDate('bus_berangkat', $today)
             ->count();
 
-        // Kedatangan hari ini = sama dengan keberangkatan (setiap bus yang berangkat pasti sebelumnya datang)
-        $kedatanganHariIni = $keberangkatanHariIni;
+        // Kedatangan hari ini = hitung bus yang datang hari ini (bukan yang berangkat)
+        $kedatanganHariIni = DataProduksi::whereNotNull('waktu_datang')
+            ->whereNull('waktu_berangkat') // Hanya data kedatangan saja
+            ->whereDate('bus_datang', $today)
+            ->count();
 
         // Total penumpang hari ini
         $totalPenumpangBerangkat = DataProduksi::whereNotNull('waktu_berangkat')
@@ -99,8 +102,11 @@ class DashboardController extends Controller
             $dataGrafik['keberangkatan'][] = DataProduksi::whereNotNull('waktu_berangkat')
                 ->whereDate('bus_berangkat', $date)
                 ->count();
-            // Kedatangan = sama dengan keberangkatan (setiap bus yang berangkat pasti datang)
-            $dataGrafik['kedatangan'][] = $dataGrafik['keberangkatan'][count($dataGrafik['keberangkatan']) - 1];
+            // Kedatangan = hitung bus yang datang pada tanggal tersebut
+            $dataGrafik['kedatangan'][] = DataProduksi::whereNotNull('waktu_datang')
+                ->whereNull('waktu_berangkat')
+                ->whereDate('bus_datang', $date)
+                ->count();
         }
 
         // Data untuk pie chart - berdasarkan jenis trayek

@@ -107,7 +107,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Route khusus Admin
     Route::middleware(['role:admin'])->group(function () {
+        // Data Master CRUD
         Route::get('/datamaster', [DataMasterController::class, 'index'])->name('datamaster.index');
+        Route::get('/datamaster/create', [DataMasterController::class, 'create'])->name('datamaster.create');
+        Route::post('/datamaster', [DataMasterController::class, 'store'])->name('datamaster.store');
+        Route::get('/datamaster/{dataMaster}/edit', [DataMasterController::class, 'edit'])->name('datamaster.edit');
+        Route::put('/datamaster/{dataMaster}', [DataMasterController::class, 'update'])->name('datamaster.update');
+        Route::delete('/datamaster/{dataMaster}', [DataMasterController::class, 'destroy'])->name('datamaster.destroy');
         Route::post('/datamaster/import', [DataMasterController::class, 'import'])->name('datamaster.import');
         Route::post('/datamaster/remove-duplicates', [DataMasterController::class, 'removeDuplicates'])->name('datamaster.remove.duplicates');
 
