@@ -160,20 +160,32 @@ class DataProduksiController extends Controller
             ->whereDate('bus_berangkat', $today)
             ->count();
 
-        // Total bus datang hari ini (berdasarkan tanggal datang, termasuk yang berangkat kemarin)
-        $totalBusDatangHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereDate('bus_datang', $today)
-            ->count();
+        // Total bus datang hari ini = sama dengan bus berangkat (setiap bus yang berangkat pasti datang)
+        $totalBusDatangHariIni = $totalBusBerangkatHariIni;
 
         // Total penumpang berangkat hari ini
         $totalPenumpangBerangkatHariIni = DataProduksi::whereNotNull('waktu_berangkat')
             ->whereDate('bus_berangkat', $today)
             ->sum('jml_pnp_berangkat');
 
-        // Total penumpang datang hari ini
-        $totalPenumpangDatangHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereDate('bus_datang', $today)
-            ->sum('jml_pnp_datang');
+        // Total penumpang datang hari ini = dari pairing dengan keberangkatan hari ini
+        $keberangkatanData = DataProduksi::whereNotNull('waktu_berangkat')
+            ->whereDate('bus_berangkat', $today)
+            ->get();
+
+        $totalPenumpangDatangHariIni = 0;
+        foreach ($keberangkatanData as $berangkat) {
+            $kedatangan = DataProduksi::where('no_kendaraan', $berangkat->no_kendaraan)
+                ->whereNotNull('waktu_datang')
+                ->whereNull('waktu_berangkat')
+                ->where('bus_datang', '<=', $berangkat->bus_berangkat)
+                ->orderBy('bus_datang', 'desc')
+                ->first();
+
+            if ($kedatangan) {
+                $totalPenumpangDatangHariIni += $kedatangan->jml_pnp_datang ?? 0;
+            }
+        }
 
         // Implementasi pagination manual untuk array
         $page = $request->get('page', 1);
@@ -220,6 +232,9 @@ class DataProduksiController extends Controller
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $terminalTujuan = $request->terminal_tujuan;
 
         $bulanNama = [
             1 => 'Januari',
@@ -236,9 +251,91 @@ class DataProduksiController extends Controller
             12 => 'Desember'
         ];
 
-        $fileName = 'Data_Produksi_' . $bulanNama[$bulan] . '_' . $tahun . '.xlsx';
+        $fileName = 'Data_Produksi_' . $bulanNama[$bulan] . '_' . $tahun;
 
-        return Excel::download(new DataProduksiExport($bulan, $tahun), $fileName);
+        // Tambahkan filter ke nama file jika ada
+        if ($provinsi) {
+            $fileName .= '_' . str_replace(' ', '_', $provinsi);
+        }
+        if ($kabupaten) {
+            $fileName .= '_' . str_replace(' ', '_', $kabupaten);
+        }
+        if ($terminalTujuan) {
+            $fileName .= '_' . str_replace(' ', '_', $terminalTujuan);
+        }
+
+        $fileName .= '.xlsx';
+
+        return Excel::download(new DataProduksiExport($bulan, $tahun, $provinsi, $kabupaten, $terminalTujuan), $fileName);
+    }
+
+    public function preview(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $terminalTujuan = $request->terminal_tujuan;
+
+        // Query data dengan filter
+        $query = DataProduksi::with('dataMaster')
+            ->where(function ($query) use ($bulan, $tahun) {
+                $query->where(function ($q) use ($bulan, $tahun) {
+                    $q->whereYear('bus_berangkat', $tahun)
+                        ->whereMonth('bus_berangkat', $bulan);
+                })->orWhere(function ($q) use ($bulan, $tahun) {
+                    $q->whereYear('bus_datang', $tahun)
+                        ->whereMonth('bus_datang', $bulan);
+                });
+            });
+
+        // Terapkan filter jika ada
+        if ($provinsi) {
+            $query->whereHas('dataMaster', function ($q) use ($provinsi) {
+                $q->where('provinsi', $provinsi);
+            });
+        }
+
+        if ($kabupaten) {
+            $query->whereHas('dataMaster', function ($q) use ($kabupaten) {
+                $q->where('kabupaten', $kabupaten);
+            });
+        }
+
+        if ($terminalTujuan) {
+            $query->whereHas('dataMaster', function ($q) use ($terminalTujuan) {
+                $q->where('terminal_tujuan', $terminalTujuan);
+            });
+        }
+
+        $data = $query->orderBy('created_at', 'desc')->take(50)->get();
+        $total = $query->count();
+
+        // Format data untuk preview
+        $previewData = [];
+        foreach ($data as $item) {
+            $tanggal = '-';
+            if ($item->bus_berangkat) {
+                $tanggal = \Carbon\Carbon::parse($item->bus_berangkat)->format('d-m-Y');
+            } elseif ($item->bus_datang) {
+                $tanggal = \Carbon\Carbon::parse($item->bus_datang)->format('d-m-Y');
+            }
+
+            $previewData[] = [
+                'no_kendaraan' => $item->no_kendaraan,
+                'nama_po' => $item->dataMaster->nama_po ?? '-',
+                'provinsi' => $item->dataMaster->provinsi ?? '-',
+                'kabupaten' => $item->dataMaster->kabupaten ?? '-',
+                'terminal_tujuan' => $item->dataMaster->terminal_tujuan ?? '-',
+                'tanggal' => $tanggal,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $previewData,
+            'total' => $total
+        ]);
     }
 
     public function exportPdf(Request $request)
@@ -250,6 +347,9 @@ class DataProduksiController extends Controller
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $terminalTujuan = $request->terminal_tujuan;
 
         $bulanNama = [
             1 => 'Januari',
@@ -266,8 +366,8 @@ class DataProduksiController extends Controller
             12 => 'Desember'
         ];
 
-        // Ambil data dengan logika yang sama
-        $allData = DataProduksi::with('dataMaster')
+        // Ambil data dengan logika yang sama dan filter
+        $query = DataProduksi::with('dataMaster')
             ->where(function ($query) use ($bulan, $tahun) {
                 $query->where(function ($q) use ($bulan, $tahun) {
                     $q->whereYear('bus_berangkat', $tahun)
@@ -276,9 +376,28 @@ class DataProduksiController extends Controller
                     $q->whereYear('bus_datang', $tahun)
                         ->whereMonth('bus_datang', $bulan);
                 });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+            });
+
+        // Terapkan filter jika ada
+        if ($provinsi) {
+            $query->whereHas('dataMaster', function ($q) use ($provinsi) {
+                $q->where('provinsi', $provinsi);
+            });
+        }
+
+        if ($kabupaten) {
+            $query->whereHas('dataMaster', function ($q) use ($kabupaten) {
+                $q->where('kabupaten', $kabupaten);
+            });
+        }
+
+        if ($terminalTujuan) {
+            $query->whereHas('dataMaster', function ($q) use ($terminalTujuan) {
+                $q->where('terminal_tujuan', $terminalTujuan);
+            });
+        }
+
+        $allData = $query->orderBy('created_at', 'desc')->get();
 
         // Group dan pairing data (sama seperti di index)
         $groupedByKendaraan = $allData->groupBy('no_kendaraan');
@@ -358,13 +477,29 @@ class DataProduksiController extends Controller
             'dataProduksi' => $dataProduksi,
             'bulan' => $bulanNama[$bulan],
             'tahun' => $tahun,
-            'tanggal_cetak' => date('d-m-Y H:i')
+            'tanggal_cetak' => date('d-m-Y H:i'),
+            'filter_provinsi' => $provinsi,
+            'filter_kabupaten' => $kabupaten,
+            'filter_terminal' => $terminalTujuan
         ];
 
         $pdf = Pdf::loadView('sistem_informasi.data_produksi.pdf', $data)
             ->setPaper('a4', 'landscape');
 
-        $fileName = 'Data_Produksi_' . $bulanNama[$bulan] . '_' . $tahun . '.pdf';
+        $fileName = 'Data_Produksi_' . $bulanNama[$bulan] . '_' . $tahun;
+
+        // Tambahkan filter ke nama file jika ada
+        if ($provinsi) {
+            $fileName .= '_' . str_replace(' ', '_', $provinsi);
+        }
+        if ($kabupaten) {
+            $fileName .= '_' . str_replace(' ', '_', $kabupaten);
+        }
+        if ($terminalTujuan) {
+            $fileName .= '_' . str_replace(' ', '_', $terminalTujuan);
+        }
+
+        $fileName .= '.pdf';
 
         return $pdf->download($fileName);
     }
@@ -373,10 +508,145 @@ class DataProduksiController extends Controller
     {
         $tahun = $request->input('tahun', date('Y'));
 
-        // Method ini belum diimplementasikan dengan struktur tabel yang benar
-        // Struktur tabel data_produksi menggunakan bus_berangkat, bus_datang, jml_pnp_berangkat, jml_pnp_datang
+        $rekapData = [];
+        $totals = [
+            'akap' => [
+                'bis_datang' => 0,
+                'penumpang_datang' => 0,
+                'bis_berangkat' => 0,
+                'penumpang_berangkat' => 0
+            ],
+            'akdp' => [
+                'bis_datang' => 0,
+                'penumpang_datang' => 0,
+                'bis_berangkat' => 0,
+                'penumpang_berangkat' => 0
+            ]
+        ];
 
-        return view('sistem_informasi.data_produksi.rekap_bulanan', compact('tahun'));
+        // Loop untuk setiap bulan
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+
+            // Data AKAP
+            $akapData = DataProduksi::with('dataMaster')
+                ->whereHas('dataMaster', function ($q) {
+                    $q->where('jenis_trayek', 'AKAP');
+                })
+                ->where(function ($query) use ($tahun, $bulan) {
+                    $query->whereYear('bus_berangkat', $tahun)
+                        ->whereMonth('bus_berangkat', $bulan)
+                        ->orWhere(function ($q) use ($tahun, $bulan) {
+                            $q->whereYear('bus_datang', $tahun)
+                                ->whereMonth('bus_datang', $bulan);
+                        });
+                })
+                ->get();
+
+            // Data AKDP
+            $akdpData = DataProduksi::with('dataMaster')
+                ->whereHas('dataMaster', function ($q) {
+                    $q->where('jenis_trayek', 'AKDP');
+                })
+                ->where(function ($query) use ($tahun, $bulan) {
+                    $query->whereYear('bus_berangkat', $tahun)
+                        ->whereMonth('bus_berangkat', $bulan)
+                        ->orWhere(function ($q) use ($tahun, $bulan) {
+                            $q->whereYear('bus_datang', $tahun)
+                                ->whereMonth('bus_datang', $bulan);
+                        });
+                })
+                ->get();
+
+            $akap = [
+                'bis_datang' => 0,
+                'penumpang_datang' => 0,
+                'bis_berangkat' => 0,
+                'penumpang_berangkat' => 0
+            ];
+
+            foreach ($akapData as $item) {
+                if (
+                    $item->bus_berangkat && date('Y', strtotime($item->bus_berangkat)) == $tahun &&
+                    date('m', strtotime($item->bus_berangkat)) == $bulan
+                ) {
+                    $akap['bis_berangkat']++;
+                    $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                    // Bis yang berangkat = bis yang datang
+                    $akap['bis_datang']++;
+
+                    // Cari data kedatangan untuk bus ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
+                }
+            }
+
+            $akdp = [
+                'bis_datang' => 0,
+                'penumpang_datang' => 0,
+                'bis_berangkat' => 0,
+                'penumpang_berangkat' => 0
+            ];
+
+            foreach ($akdpData as $item) {
+                if (
+                    $item->bus_berangkat && date('Y', strtotime($item->bus_berangkat)) == $tahun &&
+                    date('m', strtotime($item->bus_berangkat)) == $bulan
+                ) {
+                    $akdp['bis_berangkat']++;
+                    $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                    // Bis yang berangkat = bis yang datang
+                    $akdp['bis_datang']++;
+
+                    // Cari data kedatangan untuk bus ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
+                }
+            }
+
+            // Tambahkan ke totals
+            foreach ($akap as $key => $value) {
+                $totals['akap'][$key] += $value;
+            }
+            foreach ($akdp as $key => $value) {
+                $totals['akdp'][$key] += $value;
+            }
+
+            $rekapData[] = [
+                'bulan' => $bulan,
+                'akap' => $akap,
+                'akdp' => $akdp
+            ];
+        }
+
+        // Jika request AJAX, return JSON
+        if ($request->ajax() || $request->input('ajax')) {
+            return response()->json([
+                'success' => true,
+                'data' => $rekapData,
+                'totals' => $totals
+            ]);
+        }
+
+        return view('sistem_informasi.data_produksi.rekap_bulanan', compact('tahun', 'rekapData', 'totals'));
     }
 
     public function grafik(Request $request)
@@ -454,15 +724,26 @@ class DataProduksiController extends Controller
             ];
 
             foreach ($akapData as $item) {
-                if ($item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date) {
-                    $akap['bis_datang']++;
-                    $akap['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akap['penumpang_turun'] += $item->jml_pnp_datang ?? 0; // Assuming turun = datang
-                }
                 if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
                     $akap['bis_berangkat']++;
                     $akap['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
-                    $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0; // Assuming berangkat = naik
+                    $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                    // Bis yang berangkat = bis yang datang
+                    $akap['bis_datang']++;
+
+                    // Cari data kedatangan untuk bus ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        $akap['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
             }
 
@@ -477,15 +758,26 @@ class DataProduksiController extends Controller
             ];
 
             foreach ($akdpData as $item) {
-                if ($item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date) {
-                    $akdp['bis_datang']++;
-                    $akdp['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akdp['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
-                }
                 if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
                     $akdp['bis_berangkat']++;
                     $akdp['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
                     $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                    // Bis yang berangkat = bis yang datang
+                    $akdp['bis_datang']++;
+
+                    // Cari data kedatangan untuk bus ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        $akdp['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
             }
 
@@ -514,142 +806,532 @@ class DataProduksiController extends Controller
 
     public function exportLaporanPdf(Request $request)
     {
+        try {
+            $bulan = $request->input('bulan', date('m'));
+            $tahun = $request->input('tahun', date('Y'));
+
+            // Validate bulan and tahun
+            if (!$bulan || !$tahun) {
+                return back()->with('error', 'Bulan dan tahun harus dipilih');
+            }
+
+            $bulanNama = [
+                1 => 'Januari',
+                2 => 'Februari',
+                3 => 'Maret',
+                4 => 'April',
+                5 => 'Mei',
+                6 => 'Juni',
+                7 => 'Juli',
+                8 => 'Agustus',
+                9 => 'September',
+                10 => 'Oktober',
+                11 => 'November',
+                12 => 'Desember'
+            ];
+
+            // Get the data same way as laporanHarian method
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+
+            $laporanData = [];
+            $totals = [
+                'akap' => [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'penumpang_turun' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_naik' => 0,
+                    'penumpang_berangkat' => 0
+                ],
+                'akdp' => [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'penumpang_turun' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_naik' => 0,
+                    'penumpang_berangkat' => 0
+                ]
+            ];
+
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
+                $tanggalFormatted = sprintf('%d-%d-%04d', $day, $bulan, $tahun);
+
+                $akapData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKAP');
+                    })
+                    ->where(function ($query) use ($date) {
+                        $query->whereDate('bus_berangkat', $date)
+                            ->orWhereDate('bus_datang', $date);
+                    })
+                    ->get();
+
+                $akdpData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKDP');
+                    })
+                    ->where(function ($query) use ($date) {
+                        $query->whereDate('bus_berangkat', $date)
+                            ->orWhereDate('bus_datang', $date);
+                    })
+                    ->get();
+
+                $akap = [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'penumpang_turun' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_naik' => 0,
+                    'penumpang_berangkat' => 0
+                ];
+
+                foreach ($akapData as $item) {
+                    if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
+                        $akap['bis_berangkat']++;
+                        $akap['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
+                        $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                        // Bis yang berangkat = bis yang datang
+                        $akap['bis_datang']++;
+
+                        // Cari data kedatangan untuk bus ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                            $akap['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
+                    }
+                }
+
+                $akdp = [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'penumpang_turun' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_naik' => 0,
+                    'penumpang_berangkat' => 0
+                ];
+
+                foreach ($akdpData as $item) {
+                    if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
+                        $akdp['bis_berangkat']++;
+                        $akdp['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
+                        $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                        // Bis yang berangkat = bis yang datang
+                        $akdp['bis_datang']++;
+
+                        // Cari data kedatangan untuk bus ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                            $akdp['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
+                    }
+                }
+
+                foreach ($akap as $key => $value) {
+                    $totals['akap'][$key] += $value;
+                }
+                foreach ($akdp as $key => $value) {
+                    $totals['akdp'][$key] += $value;
+                }
+
+                $laporanData[] = [
+                    'tanggal' => $tanggalFormatted,
+                    'akap' => $akap,
+                    'akdp' => $akdp
+                ];
+            }
+
+            $data = [
+                'laporanData' => $laporanData,
+                'totals' => $totals,
+                'bulan' => $bulanNama[(int)$bulan],
+                'tahun' => $tahun,
+                'tanggal_cetak' => date('d-m-Y H:i')
+            ];
+
+            $pdf = Pdf::loadView('sistem_informasi.data_produksi.laporan_pdf', $data)
+                ->setPaper('a4', 'landscape');
+
+            $fileName = 'Laporan_Produksi_Harian_' . $bulanNama[(int)$bulan] . '_' . $tahun . '.pdf';
+
+            return $pdf->download($fileName);
+        } catch (\Exception $e) {
+            \Log::error('Error export PDF: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengekspor PDF: ' . $e->getMessage());
+        }
+    }
+
+    public function exportRekapPdf(Request $request)
+    {
+        try {
+            $tahun = $request->input('tahun', date('Y'));
+
+            if (!$tahun) {
+                return back()->with('error', 'Tahun harus dipilih');
+            }
+
+            $rekapData = [];
+            $totals = [
+                'akap' => [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_berangkat' => 0
+                ],
+                'akdp' => [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_berangkat' => 0
+                ]
+            ];
+
+            for ($bulan = 1; $bulan <= 12; $bulan++) {
+                $akapData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKAP');
+                    })
+                    ->where(function ($query) use ($tahun, $bulan) {
+                        $query->whereYear('bus_berangkat', $tahun)
+                            ->whereMonth('bus_berangkat', $bulan)
+                            ->orWhere(function ($q) use ($tahun, $bulan) {
+                                $q->whereYear('bus_datang', $tahun)
+                                    ->whereMonth('bus_datang', $bulan);
+                            });
+                    })
+                    ->get();
+
+                $akdpData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKDP');
+                    })
+                    ->where(function ($query) use ($tahun, $bulan) {
+                        $query->whereYear('bus_berangkat', $tahun)
+                            ->whereMonth('bus_berangkat', $bulan)
+                            ->orWhere(function ($q) use ($tahun, $bulan) {
+                                $q->whereYear('bus_datang', $tahun)
+                                    ->whereMonth('bus_datang', $bulan);
+                            });
+                    })
+                    ->get();
+
+                $akap = [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_berangkat' => 0
+                ];
+
+                foreach ($akapData as $item) {
+                    if (
+                        $item->bus_berangkat && date('Y', strtotime($item->bus_berangkat)) == $tahun &&
+                        date('m', strtotime($item->bus_berangkat)) == $bulan
+                    ) {
+                        $akap['bis_berangkat']++;
+                        $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                        // Bis yang berangkat = bis yang datang
+                        $akap['bis_datang']++;
+
+                        // Cari data kedatangan untuk bus ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
+                    }
+                }
+
+                $akdp = [
+                    'bis_datang' => 0,
+                    'penumpang_datang' => 0,
+                    'bis_berangkat' => 0,
+                    'penumpang_berangkat' => 0
+                ];
+
+                foreach ($akdpData as $item) {
+                    if (
+                        $item->bus_berangkat && date('Y', strtotime($item->bus_berangkat)) == $tahun &&
+                        date('m', strtotime($item->bus_berangkat)) == $bulan
+                    ) {
+                        $akdp['bis_berangkat']++;
+                        $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+
+                        // Bis yang berangkat = bis yang datang
+                        $akdp['bis_datang']++;
+
+                        // Cari data kedatangan untuk bus ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
+                    }
+                }
+
+                foreach ($akap as $key => $value) {
+                    $totals['akap'][$key] += $value;
+                }
+                foreach ($akdp as $key => $value) {
+                    $totals['akdp'][$key] += $value;
+                }
+
+                $rekapData[] = [
+                    'bulan' => $bulan,
+                    'akap' => $akap,
+                    'akdp' => $akdp
+                ];
+            }
+
+            $data = [
+                'rekapData' => $rekapData,
+                'totals' => $totals,
+                'tahun' => $tahun,
+                'tanggal_cetak' => date('d-m-Y H:i')
+            ];
+
+            $pdf = Pdf::loadView('sistem_informasi.data_produksi.rekap_pdf', $data)
+                ->setPaper('a4', 'landscape');
+
+            $fileName = 'Rekap_Bulanan_Produksi_' . $tahun . '.pdf';
+
+            return $pdf->download($fileName);
+        } catch (\Exception $e) {
+            \Log::error('Error export PDF Rekap: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengekspor PDF: ' . $e->getMessage());
+        }
+    }
+
+    public function grafikData(Request $request)
+    {
         $bulan = $request->input('bulan', date('m'));
         $tahun = $request->input('tahun', date('Y'));
+        $jenisGrafik = $request->input('jenis', 'harian');
 
-        $bulanNama = [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember'
-        ];
+        if ($jenisGrafik === 'bulanan') {
+            // Data bulanan untuk satu tahun
+            $labels = [];
+            $akapBisDatang = [];
+            $akapPenumpangDatang = [];
+            $akdpBisDatang = [];
+            $akdpPenumpangDatang = [];
 
-        // Get the data same way as laporanHarian method
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+            $bulanNama = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
 
-        $laporanData = [];
-        $totals = [
-            'akap' => [
-                'bis_datang' => 0,
-                'penumpang_datang' => 0,
-                'penumpang_turun' => 0,
-                'bis_berangkat' => 0,
-                'penumpang_naik' => 0,
-                'penumpang_berangkat' => 0
-            ],
-            'akdp' => [
-                'bis_datang' => 0,
-                'penumpang_datang' => 0,
-                'penumpang_turun' => 0,
-                'bis_berangkat' => 0,
-                'penumpang_naik' => 0,
-                'penumpang_berangkat' => 0
-            ]
-        ];
+            for ($m = 1; $m <= 12; $m++) {
+                $labels[] = $bulanNama[$m - 1];
 
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
-            $tanggalFormatted = sprintf('%d-%d-%04d', $day, $bulan, $tahun);
+                // AKAP
+                $akapData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKAP');
+                    })
+                    ->whereNotNull('waktu_berangkat')
+                    ->where(function ($query) use ($tahun, $m) {
+                        $query->whereYear('bus_berangkat', $tahun)
+                            ->whereMonth('bus_berangkat', $m);
+                    })
+                    ->get();
 
-            $akapData = DataProduksi::with('dataMaster')
-                ->whereHas('dataMaster', function ($q) {
-                    $q->where('jenis_trayek', 'AKAP');
-                })
-                ->where(function ($query) use ($date) {
-                    $query->whereDate('bus_berangkat', $date)
-                        ->orWhereDate('bus_datang', $date);
-                })
-                ->get();
+                $akapBisDatang[] = $akapData->count();
 
-            $akdpData = DataProduksi::with('dataMaster')
-                ->whereHas('dataMaster', function ($q) {
-                    $q->where('jenis_trayek', 'AKDP');
-                })
-                ->where(function ($query) use ($date) {
-                    $query->whereDate('bus_berangkat', $date)
-                        ->orWhereDate('bus_datang', $date);
-                })
-                ->get();
-
-            $akap = [
-                'bis_datang' => 0,
-                'penumpang_datang' => 0,
-                'penumpang_turun' => 0,
-                'bis_berangkat' => 0,
-                'penumpang_naik' => 0,
-                'penumpang_berangkat' => 0
-            ];
-
-            foreach ($akapData as $item) {
-                if ($item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date) {
-                    $akap['bis_datang']++;
-                    $akap['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akap['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+                // Hitung penumpang datang dari pairing
+                $totalPenumpang = 0;
+                foreach ($akapData as $item) {
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+                    if ($kedatangan) {
+                        $totalPenumpang += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
-                if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
-                    $akap['bis_berangkat']++;
-                    $akap['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
-                    $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+                $akapPenumpangDatang[] = $totalPenumpang;
+
+                // AKDP
+                $akdpData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKDP');
+                    })
+                    ->whereNotNull('waktu_berangkat')
+                    ->where(function ($query) use ($tahun, $m) {
+                        $query->whereYear('bus_berangkat', $tahun)
+                            ->whereMonth('bus_berangkat', $m);
+                    })
+                    ->get();
+
+                $akdpBisDatang[] = $akdpData->count();
+
+                // Hitung penumpang datang dari pairing
+                $totalPenumpang = 0;
+                foreach ($akdpData as $item) {
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+                    if ($kedatangan) {
+                        $totalPenumpang += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
+                $akdpPenumpangDatang[] = $totalPenumpang;
             }
 
-            $akdp = [
-                'bis_datang' => 0,
-                'penumpang_datang' => 0,
-                'penumpang_turun' => 0,
-                'bis_berangkat' => 0,
-                'penumpang_naik' => 0,
-                'penumpang_berangkat' => 0
-            ];
+            return response()->json([
+                'success' => true,
+                'labels' => $labels,
+                'datasets' => [
+                    [
+                        'label' => 'AKAP - Bis Datang',
+                        'data' => $akapBisDatang,
+                        'borderColor' => 'rgb(54, 162, 235)',
+                        'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKAP - Penumpang',
+                        'data' => $akapPenumpangDatang,
+                        'borderColor' => 'rgb(75, 192, 192)',
+                        'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKDP - Bis Datang',
+                        'data' => $akdpBisDatang,
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKDP - Penumpang',
+                        'data' => $akdpPenumpangDatang,
+                        'borderColor' => 'rgb(255, 159, 64)',
+                        'backgroundColor' => 'rgba(255, 159, 64, 0.2)',
+                    ]
+                ]
+            ]);
+        } else {
+            // Data harian untuk satu bulan
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+            $labels = [];
+            $akapBisDatang = [];
+            $akapPenumpangDatang = [];
+            $akdpBisDatang = [];
+            $akdpPenumpangDatang = [];
 
-            foreach ($akdpData as $item) {
-                if ($item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date) {
-                    $akdp['bis_datang']++;
-                    $akdp['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akdp['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $labels[] = $day;
+                $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
+
+                // AKAP
+                $akapData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKAP');
+                    })
+                    ->whereNotNull('waktu_berangkat')
+                    ->whereDate('bus_berangkat', $date)
+                    ->get();
+
+                $akapBisDatang[] = $akapData->count();
+
+                // Hitung penumpang datang dari pairing
+                $totalPenumpang = 0;
+                foreach ($akapData as $item) {
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+                    if ($kedatangan) {
+                        $totalPenumpang += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
-                if ($item->bus_berangkat && date('Y-m-d', strtotime($item->bus_berangkat)) === $date) {
-                    $akdp['bis_berangkat']++;
-                    $akdp['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
-                    $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
+                $akapPenumpangDatang[] = $totalPenumpang;
+
+                // AKDP
+                $akdpData = DataProduksi::with('dataMaster')
+                    ->whereHas('dataMaster', function ($q) {
+                        $q->where('jenis_trayek', 'AKDP');
+                    })
+                    ->whereNotNull('waktu_berangkat')
+                    ->whereDate('bus_berangkat', $date)
+                    ->get();
+
+                $akdpBisDatang[] = $akdpData->count();
+
+                // Hitung penumpang datang dari pairing
+                $totalPenumpang = 0;
+                foreach ($akdpData as $item) {
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+                    if ($kedatangan) {
+                        $totalPenumpang += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
+                $akdpPenumpangDatang[] = $totalPenumpang;
             }
 
-            foreach ($akap as $key => $value) {
-                $totals['akap'][$key] += $value;
-            }
-            foreach ($akdp as $key => $value) {
-                $totals['akdp'][$key] += $value;
-            }
-
-            $laporanData[] = [
-                'tanggal' => $tanggalFormatted,
-                'akap' => $akap,
-                'akdp' => $akdp
-            ];
+            return response()->json([
+                'success' => true,
+                'labels' => $labels,
+                'datasets' => [
+                    [
+                        'label' => 'AKAP - Bis Datang',
+                        'data' => $akapBisDatang,
+                        'borderColor' => 'rgb(54, 162, 235)',
+                        'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKAP - Penumpang',
+                        'data' => $akapPenumpangDatang,
+                        'borderColor' => 'rgb(75, 192, 192)',
+                        'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKDP - Bis Datang',
+                        'data' => $akdpBisDatang,
+                        'borderColor' => 'rgb(255, 99, 132)',
+                        'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
+                    ],
+                    [
+                        'label' => 'AKDP - Penumpang',
+                        'data' => $akdpPenumpangDatang,
+                        'borderColor' => 'rgb(255, 159, 64)',
+                        'backgroundColor' => 'rgba(255, 159, 64, 0.2)',
+                    ]
+                ]
+            ]);
         }
-
-        $data = [
-            'laporanData' => $laporanData,
-            'totals' => $totals,
-            'bulan' => $bulanNama[$bulan],
-            'tahun' => $tahun,
-            'tanggal_cetak' => date('d-m-Y H:i')
-        ];
-
-        $pdf = Pdf::loadView('sistem_informasi.data_produksi.laporan_pdf', $data)
-            ->setPaper('a4', 'landscape');
-
-        $fileName = 'Laporan_Produksi_Harian_' . $bulanNama[$bulan] . '_' . $tahun . '.pdf';
-
-        return $pdf->download($fileName);
     }
 }

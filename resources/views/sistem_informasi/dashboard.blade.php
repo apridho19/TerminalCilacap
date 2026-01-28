@@ -94,7 +94,7 @@
                                 <div class="ibox-title">Kedatangan Terbaru Hari Ini</div>
                             </div>
                             <div class="ibox-body">
-                                @if($kedatanganTerbaru->count() > 0)
+                                @if(count($kedatanganTerbaru) > 0)
                                 <ul class="list-group list-group-full">
                                     @foreach($kedatanganTerbaru as $kedatangan)
                                     <li class="list-group-item">

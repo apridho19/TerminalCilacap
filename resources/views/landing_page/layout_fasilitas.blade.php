@@ -51,7 +51,7 @@
     </div>
     <!-- Modal Search End -->
 
-      <!-- Header Start -->
+    <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
         <div class="container text-center py-5" style="max-width: 900px;">
             <h3 class="text-white display-3 mb-4 wow fadeInDown" data-wow-delay="0.1s">Fasilitas</h1>
@@ -90,7 +90,7 @@
                     <div class="text-center">
 
                         <img
-                            src="img/layout_fasilitas.jpg"
+                            src="{{ asset('assets/img/layout-fasilitas.png') }}"
                             class="img-fluid w-100 rounded shadow-lg"
                             alt="Layout Fasilitas Terminal BMD Cilacap" />
                         <h4 class="mt-4 mb-4 text-primary">

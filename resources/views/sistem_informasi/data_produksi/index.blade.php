@@ -31,6 +31,16 @@
                             <i class="fa fa-file-text-o"></i> Laporan Harian
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab-rekap-bulanan" role="tab" aria-selected="false">
+                            <i class="fa fa-calendar"></i> Rekap Bulanan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab-grafik" role="tab" aria-selected="false">
+                            <i class="fa fa-bar-chart"></i> Grafik Produksi
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Tab Content -->
@@ -260,18 +270,18 @@
                                     <div class="col-md-3">
                                         <label for="pilih_bulan" class="font-strong">Pilih Bulan:</label>
                                         <select class="form-control" id="pilih_bulan">
-                                            <option value="1">Januari</option>
-                                            <option value="2">Februari</option>
-                                            <option value="3">Maret</option>
-                                            <option value="4">April</option>
-                                            <option value="5">Mei</option>
-                                            <option value="6">Juni</option>
-                                            <option value="7">Juli</option>
-                                            <option value="8">Agustus</option>
-                                            <option value="9">September</option>
-                                            <option value="10">Oktober</option>
-                                            <option value="11">November</option>
-                                            <option value="12">Desember</option>
+                                            <option value="1" {{ date('m') == '01' ? 'selected' : '' }}>Januari</option>
+                                            <option value="2" {{ date('m') == '02' ? 'selected' : '' }}>Februari</option>
+                                            <option value="3" {{ date('m') == '03' ? 'selected' : '' }}>Maret</option>
+                                            <option value="4" {{ date('m') == '04' ? 'selected' : '' }}>April</option>
+                                            <option value="5" {{ date('m') == '05' ? 'selected' : '' }}>Mei</option>
+                                            <option value="6" {{ date('m') == '06' ? 'selected' : '' }}>Juni</option>
+                                            <option value="7" {{ date('m') == '07' ? 'selected' : '' }}>Juli</option>
+                                            <option value="8" {{ date('m') == '08' ? 'selected' : '' }}>Agustus</option>
+                                            <option value="9" {{ date('m') == '09' ? 'selected' : '' }}>September</option>
+                                            <option value="10" {{ date('m') == '10' ? 'selected' : '' }}>Oktober</option>
+                                            <option value="11" {{ date('m') == '11' ? 'selected' : '' }}>November</option>
+                                            <option value="12" {{ date('m') == '12' ? 'selected' : '' }}>Desember</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -353,8 +363,198 @@
                             </div>
                         </div>
                     </div>
+                    <!-- END Tab Laporan Harian -->
+
+                    <!-- Tab Rekap Bulanan -->
+                    <div class="tab-pane fade" id="tab-rekap-bulanan" role="tabpanel">
+                        <div class="ibox mt-3">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Rekap Bulanan - Tahun <span id="tahun_rekap_display">{{ date('Y') }}</span></div>
+                                <div class="ibox-tools">
+                                    <button type="button" class="btn btn-danger btn-sm" id="btnExportPdfRekap">
+                                        <i class="fa fa-file-pdf-o"></i> Export ke PDF
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="ibox-body">
+                                <!-- Filter Tahun -->
+                                <div class="row mb-4">
+                                    <div class="col-md-3">
+                                        <label for="tahun_rekap" class="font-strong">Pilih Tahun:</label>
+                                        <select class="form-control" id="tahun_rekap" name="tahun_rekap">
+                                            @for($year = date('Y'); $year >= 2020; $year--)
+                                            <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="button" class="btn btn-primary" id="btnLoadRekap">
+                                            <i class="fa fa-refresh"></i> Tampilkan
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Table Rekap Bulanan -->
+                                <div class="table-responsive" id="rekapTableContainer">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" rowspan="2">BULAN</th>
+                                                <th class="text-center" colspan="4">AKAP</th>
+                                                <th class="text-center" colspan="4">AKDP</th>
+                                            </tr>
+                                            <tr>
+                                                <!-- AKAP -->
+                                                <th class="text-center">Bis Datang</th>
+                                                <th class="text-center">Pnp Datang</th>
+                                                <th class="text-center">Bis Berangkat</th>
+                                                <th class="text-center">Pnp Berangkat</th>
+                                                <!-- AKDP -->
+                                                <th class="text-center">Bis Datang</th>
+                                                <th class="text-center">Pnp Datang</th>
+                                                <th class="text-center">Bis Berangkat</th>
+                                                <th class="text-center">Pnp Berangkat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rekapTableBody">
+                                            <tr>
+                                                <td colspan="9" class="text-center">Klik "Tampilkan" untuk memuat data</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot id="rekapTableFooter">
+                                            <tr class="bg-dark text-white font-strong">
+                                                <td class="text-center">TOTAL</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <!-- Keterangan -->
+                                <div class="mt-3">
+                                    <strong>Keterangan:</strong><br>
+                                    <span class="badge badge-info">AKAP</span> = Antar Kota Antar Provinsi<br>
+                                    <span class="badge badge-success">AKDP</span> = Antar Kota Dalam Provinsi<br>
+                                    <span class="badge badge-secondary">Pnp</span> = Penumpang
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Tab Rekap Bulanan -->
+
+                    <!-- Tab Grafik Produksi -->
+                    <div class="tab-pane fade" id="tab-grafik" role="tabpanel">
+                        <!-- Filter Card -->
+                        <div class="ibox mt-3">
+                            <div class="ibox-head">
+                                <div class="ibox-title">Filter Data</div>
+                            </div>
+                            <div class="ibox-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="jenis_grafik" class="font-strong">Jenis Grafik:</label>
+                                            <select class="form-control" id="jenis_grafik">
+                                                <option value="harian">Data Harian (per Hari)</option>
+                                                <option value="bulanan">Data Bulanan (per Bulan)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" id="bulan_filter_grafik">
+                                        <div class="form-group">
+                                            <label for="bulan_grafik" class="font-strong">Pilih Bulan:</label>
+                                            <select class="form-control" id="bulan_grafik">
+                                                @for($m = 1; $m <= 12; $m++)
+                                                    <option value="{{ $m }}" {{ $m == date('m') ? 'selected' : '' }}>
+                                                    {{ ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][$m] }}
+                                                    </option>
+                                                    @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="tahun_grafik" class="font-strong">Pilih Tahun:</label>
+                                            <select class="form-control" id="tahun_grafik">
+                                                @for($year = date('Y'); $year >= 2020; $year--)
+                                                <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="button" class="btn btn-primary" id="btnLoadGrafik">
+                                            <i class="fa fa-bar-chart"></i> Tampilkan Grafik
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grafik Card -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox">
+                                    <div class="ibox-head">
+                                        <div class="ibox-title">Grafik Bis dan Penumpang</div>
+                                    </div>
+                                    <div class="ibox-body">
+                                        <canvas id="grafikProduksi" height="80"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistik Cards -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="ibox bg-info color-white widget-stat">
+                                    <div class="ibox-body">
+                                        <h2 class="m-b-5 font-strong" id="stat_akap_bis">0</h2>
+                                        <div class="m-b-5">Total Bis AKAP</div>
+                                        <i class="ti-truck widget-stat-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="ibox bg-success color-white widget-stat">
+                                    <div class="ibox-body">
+                                        <h2 class="m-b-5 font-strong" id="stat_akap_pnp">0</h2>
+                                        <div class="m-b-5">Total Penumpang AKAP</div>
+                                        <i class="ti-user widget-stat-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="ibox bg-warning color-white widget-stat">
+                                    <div class="ibox-body">
+                                        <h2 class="m-b-5 font-strong" id="stat_akdp_bis">0</h2>
+                                        <div class="m-b-5">Total Bis AKDP</div>
+                                        <i class="ti-truck widget-stat-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="ibox bg-danger color-white widget-stat">
+                                    <div class="ibox-body">
+                                        <h2 class="m-b-5 font-strong" id="stat_akdp_pnp">0</h2>
+                                        <div class="m-b-5">Total Penumpang AKDP</div>
+                                        <i class="ti-user widget-stat-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- END Tab Laporan Harian -->
+                <!-- END Tab Grafik Produksi -->
+
             </div>
             <!-- END TAB CONTENT -->
         </div>
@@ -365,7 +565,7 @@
 
     <!-- Modal Export Excel -->
     <div class="modal fade" id="modalExport" tabindex="-1" role="dialog" aria-labelledby="modalExportLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalExportLabel">
@@ -375,39 +575,122 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('dataproduksi.export') }}" method="POST">
+                <form action="{{ route('dataproduksi.export') }}" method="POST" id="formExport">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="bulan" class="font-strong">Pilih Bulan <span class="text-danger">*</span></label>
-                            <select class="form-control" id="bulan" name="bulan" required>
-                                <option value="">-- Pilih Bulan --</option>
-                                <option value="1">Januari</option>
-                                <option value="2">Februari</option>
-                                <option value="3">Maret</option>
-                                <option value="4">April</option>
-                                <option value="5">Mei</option>
-                                <option value="6">Juni</option>
-                                <option value="7">Juli</option>
-                                <option value="8">Agustus</option>
-                                <option value="9">September</option>
-                                <option value="10">Oktober</option>
-                                <option value="11">November</option>
-                                <option value="12">Desember</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="bulan_export" class="font-strong">Pilih Bulan <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="bulan_export" name="bulan" required>
+                                        <option value="">-- Pilih Bulan --</option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tahun_export" class="font-strong">Pilih Tahun <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="tahun_export" name="tahun" required>
+                                        <option value="">-- Pilih Tahun --</option>
+                                        @for($year = date('Y'); $year >= 2020; $year--)
+                                        <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tahun" class="font-strong">Pilih Tahun <span class="text-danger">*</span></label>
-                            <select class="form-control" id="tahun" name="tahun" required>
-                                <option value="">-- Pilih Tahun --</option>
-                                @for($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
+
+                        <hr>
+                        <h6 class="font-strong mb-3"><i class="fa fa-filter"></i> Filter Export (Opsional)</h6>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="provinsi_export" class="font-strong">Provinsi</label>
+                                    <select class="form-control" id="provinsi_export" name="provinsi">
+                                        <option value="">-- Semua Provinsi --</option>
+                                        @foreach($provinsiList as $prov)
+                                        <option value="{{ $prov }}">{{ $prov }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="kabupaten_export" class="font-strong">Kabupaten</label>
+                                    <select class="form-control" id="kabupaten_export" name="kabupaten">
+                                        <option value="">-- Semua Kabupaten --</option>
+                                        @foreach($kabupatenList as $kab)
+                                        <option value="{{ $kab }}">{{ $kab }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="terminal_tujuan_export" class="font-strong">Terminal Tujuan</label>
+                                    <select class="form-control" id="terminal_tujuan_export" name="terminal_tujuan">
+                                        <option value="">-- Semua Terminal --</option>
+                                        @foreach($terminalTujuanList as $tt)
+                                        <option value="{{ $tt }}">{{ $tt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="alert alert-info">
-                            <i class="fa fa-info-circle"></i>
-                            Data yang akan diexport adalah data berdasarkan bulan dan tahun yang dipilih.
+
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-info btn-sm" id="btnPreview">
+                                <i class="fa fa-eye"></i> Preview Data
+                            </button>
+                        </div>
+
+                        <div id="previewContainer" class="mt-3" style="display: none;">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="fa fa-eye"></i> Preview Data yang akan diexport</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="previewLoading" class="text-center py-4">
+                                        <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                        <p class="mt-2">Memuat preview...</p>
+                                    </div>
+                                    <div id="previewContent" style="display: none;">
+                                        <div class="alert alert-info">
+                                            <strong>Total Data: <span id="previewTotal">0</span></strong>
+                                        </div>
+                                        <div style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-sm table-bordered">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No Kendaraan</th>
+                                                        <th>Nama PO</th>
+                                                        <th>Provinsi</th>
+                                                        <th>Kabupaten</th>
+                                                        <th>Terminal Tujuan</th>
+                                                        <th>Tanggal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="previewTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -425,7 +708,7 @@
 
     <!-- Modal Export PDF -->
     <div class="modal fade" id="modalExportPdf" tabindex="-1" role="dialog" aria-labelledby="modalExportPdfLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalExportPdfLabel">
@@ -435,39 +718,122 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('dataproduksi.export.pdf') }}" method="POST">
+                <form action="{{ route('dataproduksi.export.pdf') }}" method="POST" id="formExportPdf">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="bulan_pdf" class="font-strong">Pilih Bulan <span class="text-danger">*</span></label>
-                            <select class="form-control" id="bulan_pdf" name="bulan" required>
-                                <option value="">-- Pilih Bulan --</option>
-                                <option value="1">Januari</option>
-                                <option value="2">Februari</option>
-                                <option value="3">Maret</option>
-                                <option value="4">April</option>
-                                <option value="5">Mei</option>
-                                <option value="6">Juni</option>
-                                <option value="7">Juli</option>
-                                <option value="8">Agustus</option>
-                                <option value="9">September</option>
-                                <option value="10">Oktober</option>
-                                <option value="11">November</option>
-                                <option value="12">Desember</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="bulan_pdf" class="font-strong">Pilih Bulan <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="bulan_pdf" name="bulan" required>
+                                        <option value="">-- Pilih Bulan --</option>
+                                        <option value="1">Januari</option>
+                                        <option value="2">Februari</option>
+                                        <option value="3">Maret</option>
+                                        <option value="4">April</option>
+                                        <option value="5">Mei</option>
+                                        <option value="6">Juni</option>
+                                        <option value="7">Juli</option>
+                                        <option value="8">Agustus</option>
+                                        <option value="9">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tahun_pdf" class="font-strong">Pilih Tahun <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="tahun_pdf" name="tahun" required>
+                                        <option value="">-- Pilih Tahun --</option>
+                                        @for($year = date('Y'); $year >= 2020; $year--)
+                                        <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="tahun_pdf" class="font-strong">Pilih Tahun <span class="text-danger">*</span></label>
-                            <select class="form-control" id="tahun_pdf" name="tahun" required>
-                                <option value="">-- Pilih Tahun --</option>
-                                @for($year = date('Y'); $year >= 2020; $year--)
-                                <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
+
+                        <hr>
+                        <h6 class="font-strong mb-3"><i class="fa fa-filter"></i> Filter Export (Opsional)</h6>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="provinsi_pdf" class="font-strong">Provinsi</label>
+                                    <select class="form-control" id="provinsi_pdf" name="provinsi">
+                                        <option value="">-- Semua Provinsi --</option>
+                                        @foreach($provinsiList as $prov)
+                                        <option value="{{ $prov }}">{{ $prov }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="kabupaten_pdf" class="font-strong">Kabupaten</label>
+                                    <select class="form-control" id="kabupaten_pdf" name="kabupaten">
+                                        <option value="">-- Semua Kabupaten --</option>
+                                        @foreach($kabupatenList as $kab)
+                                        <option value="{{ $kab }}">{{ $kab }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="terminal_tujuan_pdf" class="font-strong">Terminal Tujuan</label>
+                                    <select class="form-control" id="terminal_tujuan_pdf" name="terminal_tujuan">
+                                        <option value="">-- Semua Terminal --</option>
+                                        @foreach($terminalTujuanList as $tt)
+                                        <option value="{{ $tt }}">{{ $tt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="alert alert-info">
-                            <i class="fa fa-info-circle"></i>
-                            Data yang akan diexport adalah data berdasarkan bulan dan tahun yang dipilih dalam format PDF Landscape.
+
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-info btn-sm" id="btnPreviewPdf">
+                                <i class="fa fa-eye"></i> Preview Data
+                            </button>
+                        </div>
+
+                        <div id="previewContainerPdf" class="mt-3" style="display: none;">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="fa fa-eye"></i> Preview Data yang akan diexport</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="previewLoadingPdf" class="text-center py-4">
+                                        <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                        <p class="mt-2">Memuat preview...</p>
+                                    </div>
+                                    <div id="previewContentPdf" style="display: none;">
+                                        <div class="alert alert-info">
+                                            <strong>Total Data: <span id="previewTotalPdf">0</span></strong>
+                                        </div>
+                                        <div style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-sm table-bordered">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No Kendaraan</th>
+                                                        <th>Nama PO</th>
+                                                        <th>Provinsi</th>
+                                                        <th>Kabupaten</th>
+                                                        <th>Terminal Tujuan</th>
+                                                        <th>Tanggal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="previewTableBodyPdf">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -731,32 +1097,93 @@
                 var bulan = $('#pilih_bulan').val();
                 var tahun = $('#pilih_tahun').val();
 
-                // Create form and submit
-                var form = $('<form>', {
-                    'method': 'POST',
-                    'action': '{{ route("dataproduksi.export.laporan.pdf") }}'
+                if (!bulan || !tahun) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian',
+                        text: 'Silakan pilih bulan dan tahun terlebih dahulu!',
+                        confirmButtonColor: '#3085d6'
+                    });
+                    return;
+                }
+
+                // Get bulan name
+                var bulanNama = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                ];
+
+                // Show confirmation
+                Swal.fire({
+                    title: 'Export Laporan ke PDF?',
+                    html: '<div style="text-align: left; padding: 10px;">' +
+                        '<p style="margin: 5px 0;"><i class="fa fa-calendar" style="margin-right: 8px; color: #3085d6;"></i><strong>Bulan:</strong> ' + bulanNama[parseInt(bulan)] + '</p>' +
+                        '<p style="margin: 5px 0;"><i class="fa fa-calendar-o" style="margin-right: 8px; color: #3085d6;"></i><strong>Tahun:</strong> ' + tahun + '</p>' +
+                        '<p style="margin: 5px 0;"><i class="fa fa-file-pdf-o" style="margin-right: 8px; color: #d33;"></i><strong>Format:</strong> PDF Landscape A4</p>' +
+                        '</div>',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="fa fa-download"></i> Ya, Download PDF',
+                    cancelButtonText: '<i class="fa fa-times"></i> Batal',
+                    customClass: {
+                        popup: 'animated fadeInDown'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: '<i class="fa fa-cog fa-spin"></i> Memproses...',
+                            html: 'Sedang membuat file PDF<br><small>Mohon tunggu sebentar...</small>',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Create form and submit
+                        var form = $('<form>', {
+                            'method': 'POST',
+                            'action': '{{ route("dataproduksi.export.laporan.pdf") }}',
+                            'target': '_blank'
+                        });
+
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_token',
+                            'value': '{{ csrf_token() }}'
+                        }));
+
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': 'bulan',
+                            'value': bulan
+                        }));
+
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': 'tahun',
+                            'value': tahun
+                        }));
+
+                        $('body').append(form);
+                        form.submit();
+
+                        // Close loading after a delay and show success
+                        setTimeout(function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'File PDF sedang diunduh...',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            form.remove();
+                        }, 1500);
+                    }
                 });
-
-                form.append($('<input>', {
-                    'type': 'hidden',
-                    'name': '_token',
-                    'value': '{{ csrf_token() }}'
-                }));
-
-                form.append($('<input>', {
-                    'type': 'hidden',
-                    'name': 'bulan',
-                    'value': bulan
-                }));
-
-                form.append($('<input>', {
-                    'type': 'hidden',
-                    'name': 'tahun',
-                    'value': tahun
-                }));
-
-                $('body').append(form);
-                form.submit();
             });
 
             // Function to load laporan harian
@@ -833,6 +1260,430 @@
 
                 $('#laporanHarianFooter').html(footerHtml);
             }
+
+            // ==================== REKAP BULANAN FUNCTIONS ====================
+            $('#btnLoadRekap').on('click', function() {
+                loadRekapBulanan();
+            });
+
+            function loadRekapBulanan() {
+                var tahun = $('#tahun_rekap').val();
+                $('#tahun_rekap_display').text(tahun);
+
+                Swal.fire({
+                    title: 'Memuat Data...',
+                    html: 'Sedang memproses rekap bulanan',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '{{ route("dataproduksi.rekap.bulanan") }}',
+                    method: 'GET',
+                    data: {
+                        tahun: tahun,
+                        ajax: true
+                    },
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            var tableBody = '';
+                            var namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                            ];
+
+                            $.each(response.data, function(index, item) {
+                                tableBody += '<tr>';
+                                tableBody += '<td class="text-center font-strong">' + namaBulan[item.bulan - 1] + '</td>';
+                                // AKAP
+                                tableBody += '<td class="text-center">' + item.akap.bis_datang.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akap.penumpang_datang.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akap.bis_berangkat.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akap.penumpang_berangkat.toLocaleString() + '</td>';
+                                // AKDP
+                                tableBody += '<td class="text-center">' + item.akdp.bis_datang.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akdp.penumpang_datang.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akdp.bis_berangkat.toLocaleString() + '</td>';
+                                tableBody += '<td class="text-center">' + item.akdp.penumpang_berangkat.toLocaleString() + '</td>';
+                                tableBody += '</tr>';
+                            });
+
+                            $('#rekapTableBody').html(tableBody);
+
+                            // Update footer totals
+                            var footerHtml = '<tr class="bg-dark text-white font-strong">';
+                            footerHtml += '<td class="text-center">TOTAL</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akap.bis_datang.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akap.penumpang_datang.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akap.bis_berangkat.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akap.penumpang_berangkat.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akdp.bis_datang.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akdp.penumpang_datang.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akdp.bis_berangkat.toLocaleString() + '</td>';
+                            footerHtml += '<td class="text-center">' + response.totals.akdp.penumpang_berangkat.toLocaleString() + '</td>';
+                            footerHtml += '</tr>';
+
+                            $('#rekapTableFooter').html(footerHtml);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal memuat data rekap bulanan'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memuat data'
+                        });
+                    }
+                });
+            }
+
+            $('#btnExportPdfRekap').on('click', function() {
+                var tahun = $('#tahun_rekap').val();
+
+                Swal.fire({
+                    title: 'Export Rekap Bulanan ke PDF?',
+                    html: '<div style="text-align: left; padding: 10px;">' +
+                        '<p style="margin: 5px 0;"><i class="fa fa-calendar" style="margin-right: 8px; color: #3085d6;"></i><strong>Tahun:</strong> ' + tahun + '</p>' +
+                        '<p style="margin: 5px 0;"><i class="fa fa-file-pdf-o" style="margin-right: 8px; color: #d33;"></i><strong>Format:</strong> PDF Landscape A4</p>' +
+                        '</div>',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="fa fa-download"></i> Ya, Download PDF',
+                    cancelButtonText: '<i class="fa fa-times"></i> Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: '<i class="fa fa-cog fa-spin"></i> Memproses...',
+                            html: 'Sedang membuat file PDF<br><small>Mohon tunggu sebentar...</small>',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false
+                        });
+
+                        var form = $('<form>', {
+                            'method': 'POST',
+                            'action': '{{ route("dataproduksi.export.rekap.pdf") }}',
+                            'target': '_blank'
+                        });
+
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': '_token',
+                            'value': '{{ csrf_token() }}'
+                        }));
+
+                        form.append($('<input>', {
+                            'type': 'hidden',
+                            'name': 'tahun',
+                            'value': tahun
+                        }));
+
+                        $('body').append(form);
+                        form.submit();
+
+                        setTimeout(function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'File PDF sedang diunduh...',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            form.remove();
+                        }, 1500);
+                    }
+                });
+            });
+
+            // ==================== GRAFIK PRODUKSI FUNCTIONS ====================
+            let myChart = null;
+
+            $('#jenis_grafik').on('change', function() {
+                if ($(this).val() === 'bulanan') {
+                    $('#bulan_filter_grafik').hide();
+                } else {
+                    $('#bulan_filter_grafik').show();
+                }
+            });
+
+            $('#btnLoadGrafik').on('click', function() {
+                loadGrafik();
+            });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                if ($(e.target).attr('href') === '#tab-grafik' && !myChart) {
+                    loadGrafik();
+                }
+            });
+
+            function loadGrafik() {
+                var jenisGrafik = $('#jenis_grafik').val();
+                var bulan = $('#bulan_grafik').val();
+                var tahun = $('#tahun_grafik').val();
+
+                Swal.fire({
+                    title: 'Memuat Data...',
+                    html: 'Sedang memproses grafik',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '{{ route("dataproduksi.grafik.data") }}',
+                    method: 'GET',
+                    data: {
+                        jenis: jenisGrafik,
+                        bulan: bulan,
+                        tahun: tahun
+                    },
+                    success: function(response) {
+                        Swal.close();
+
+                        if (response.success) {
+                            if (myChart) {
+                                myChart.destroy();
+                            }
+
+                            var ctx = document.getElementById('grafikProduksi').getContext('2d');
+                            myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: response.labels,
+                                    datasets: response.datasets
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: jenisGrafik === 'bulanan' ?
+                                                'Grafik Produksi Bulanan Tahun ' + tahun : 'Grafik Produksi Harian'
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+
+                            updateStatistics(response.datasets);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal memuat data grafik'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memuat data'
+                        });
+                    }
+                });
+            }
+
+            function updateStatistics(datasets) {
+                var akapBis = datasets[0].data.reduce((a, b) => a + b, 0);
+                var akapPnp = datasets[1].data.reduce((a, b) => a + b, 0);
+                var akdpBis = datasets[2].data.reduce((a, b) => a + b, 0);
+                var akdpPnp = datasets[3].data.reduce((a, b) => a + b, 0);
+
+                $('#stat_akap_bis').text(akapBis.toLocaleString());
+                $('#stat_akap_pnp').text(akapPnp.toLocaleString());
+                $('#stat_akdp_bis').text(akdpBis.toLocaleString());
+                $('#stat_akdp_pnp').text(akdpPnp.toLocaleString());
+            }
+
+            // ==================== PREVIEW EXPORT FUNCTIONS ====================
+            $('#btnPreview').on('click', function() {
+                var bulan = $('#bulan_export').val();
+                var tahun = $('#tahun_export').val();
+                var provinsi = $('#provinsi_export').val();
+                var kabupaten = $('#kabupaten_export').val();
+                var terminal_tujuan = $('#terminal_tujuan_export').val();
+
+                if (!bulan || !tahun) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian',
+                        text: 'Silakan pilih bulan dan tahun terlebih dahulu'
+                    });
+                    return;
+                }
+
+                $('#previewContainer').show();
+                $('#previewLoading').show();
+                $('#previewContent').hide();
+
+                $.ajax({
+                    url: '{{ route("dataproduksi.preview") }}',
+                    method: 'GET',
+                    data: {
+                        bulan: bulan,
+                        tahun: tahun,
+                        provinsi: provinsi,
+                        kabupaten: kabupaten,
+                        terminal_tujuan: terminal_tujuan
+                    },
+                    success: function(response) {
+                        $('#previewLoading').hide();
+
+                        if (response.success) {
+                            $('#previewTotal').text(response.total);
+
+                            var tbody = $('#previewTableBody');
+                            tbody.empty();
+
+                            if (response.data.length > 0) {
+                                $.each(response.data, function(index, item) {
+                                    var row = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td>' + item.no_kendaraan + '</td>' +
+                                        '<td>' + (item.nama_po || '-') + '</td>' +
+                                        '<td>' + (item.provinsi || '-') + '</td>' +
+                                        '<td>' + (item.kabupaten || '-') + '</td>' +
+                                        '<td>' + (item.terminal_tujuan || '-') + '</td>' +
+                                        '<td>' + item.tanggal + '</td>' +
+                                        '</tr>';
+                                    tbody.append(row);
+                                });
+                            } else {
+                                tbody.append('<tr><td colspan="7" class="text-center">Tidak ada data</td></tr>');
+                            }
+
+                            $('#previewContent').show();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal memuat preview data'
+                            });
+                        }
+                    },
+                    error: function() {
+                        $('#previewLoading').hide();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memuat preview'
+                        });
+                    }
+                });
+            });
+
+            // Reset preview saat modal ditutup
+            $('#modalExport').on('hidden.bs.modal', function() {
+                $('#previewContainer').hide();
+                $('#previewContent').hide();
+                $('#previewTableBody').empty();
+            });
+
+            // ==================== PREVIEW EXPORT PDF FUNCTIONS ====================
+            $('#btnPreviewPdf').on('click', function() {
+                var bulan = $('#bulan_pdf').val();
+                var tahun = $('#tahun_pdf').val();
+                var provinsi = $('#provinsi_pdf').val();
+                var kabupaten = $('#kabupaten_pdf').val();
+                var terminal_tujuan = $('#terminal_tujuan_pdf').val();
+
+                if (!bulan || !tahun) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian',
+                        text: 'Silakan pilih bulan dan tahun terlebih dahulu'
+                    });
+                    return;
+                }
+
+                $('#previewContainerPdf').show();
+                $('#previewLoadingPdf').show();
+                $('#previewContentPdf').hide();
+
+                $.ajax({
+                    url: '{{ route("dataproduksi.preview") }}',
+                    method: 'GET',
+                    data: {
+                        bulan: bulan,
+                        tahun: tahun,
+                        provinsi: provinsi,
+                        kabupaten: kabupaten,
+                        terminal_tujuan: terminal_tujuan
+                    },
+                    success: function(response) {
+                        $('#previewLoadingPdf').hide();
+
+                        if (response.success) {
+                            $('#previewTotalPdf').text(response.total);
+
+                            var tbody = $('#previewTableBodyPdf');
+                            tbody.empty();
+
+                            if (response.data.length > 0) {
+                                $.each(response.data, function(index, item) {
+                                    var row = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td>' + item.no_kendaraan + '</td>' +
+                                        '<td>' + (item.nama_po || '-') + '</td>' +
+                                        '<td>' + (item.provinsi || '-') + '</td>' +
+                                        '<td>' + (item.kabupaten || '-') + '</td>' +
+                                        '<td>' + (item.terminal_tujuan || '-') + '</td>' +
+                                        '<td>' + item.tanggal + '</td>' +
+                                        '</tr>';
+                                    tbody.append(row);
+                                });
+                            } else {
+                                tbody.append('<tr><td colspan="7" class="text-center">Tidak ada data</td></tr>');
+                            }
+
+                            $('#previewContentPdf').show();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal memuat preview data'
+                            });
+                        }
+                    },
+                    error: function() {
+                        $('#previewLoadingPdf').hide();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memuat preview'
+                        });
+                    }
+                });
+            });
+
+            // Reset preview PDF saat modal ditutup
+            $('#modalExportPdf').on('hidden.bs.modal', function() {
+                $('#previewContainerPdf').hide();
+                $('#previewContentPdf').hide();
+                $('#previewTableBodyPdf').empty();
+            });
         })
     </script>
 </body>

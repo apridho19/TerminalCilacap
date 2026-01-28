@@ -29,19 +29,8 @@
 
                 @if(Auth::user()->role === 'admin')
                 <li>
-                    <a href="javascript:;"><i class="sidebar-item-icon fa fa-bar-chart"></i>
-                        <span class="nav-label">Data Produksi</span><i class="fa fa-angle-left arrow"></i></a>
-                    <ul class="nav-2-level collapse">
-                        <li>
-                            <a class="{{ request()->is('dataproduksi') ? 'active' : '' }}" href="{{ url('/dataproduksi') }}">Data Harian</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('dataproduksi/rekap-bulanan') ? 'active' : '' }}" href="{{ url('/dataproduksi/rekap-bulanan') }}">Rekap Bulanan</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('dataproduksi/grafik') ? 'active' : '' }}" href="{{ url('/dataproduksi/grafik') }}">Grafik Produksi</a>
-                        </li>
-                    </ul>
+                    <a class="{{ request()->is('dataproduksi*') ? 'active' : '' }}" href="{{ url('/dataproduksi') }}"><i class="sidebar-item-icon fa fa-bar-chart"></i>
+                        <span class="nav-label">Data Produksi</span></a>
                 </li>
                 <li>
                     <a class="{{ request()->is('datamaster*') ? 'active' : '' }}" href="{{ url('/datamaster') }}"><i class="sidebar-item-icon fa fa-table"></i>

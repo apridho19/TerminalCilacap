@@ -39,7 +39,7 @@
                         <a href="{{ url('/maklumat') }}" class="dropdown-item {{ Request::is('maklumat') ? 'active' : '' }}">Maklumat</a>
                         <a href="{{ url('/tarif_tiket') }}" class="dropdown-item {{ Request::is('tarif_tiket') ? 'active' : '' }}">Tarif Tiket</a>
                         <a href="{{ url('/daftar_po') }}" class="dropdown-item {{ Request::is('daftar_po') ? 'active' : '' }}">Daftar PO BUS</a>
-                        <a href="{{ url('/hasil_skm') }}" class="dropdown-item {{ Request::is('hasil_skm') ? 'active' : '' }}">Hasil SKM</a>
+                        <a href="{{ url('/hasil_skm') }}" class="dropdown-item {{ Request::is('hasil_skm') ? 'active' : '' }}">Survei Kepuasan Masyarakat</a>
                         <a href="{{ url('/layanan_pengaduan') }}" class="dropdown-item {{ Request::is('layanan_pengaduan') ? 'active' : '' }}">Layanan Pengaduan</a>
                     </div>
                 </div>
