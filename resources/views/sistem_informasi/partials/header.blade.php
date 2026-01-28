@@ -17,20 +17,10 @@
                 <li>
                     <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
                 </li>
-                <li>
-                    <form class="navbar-search" action="javascript:;">
-                        <div class="rel">
-                            <span class="search-icon"><i class="ti-search"></i></span>
-                            <input class="form-control" placeholder="Search here...">
-                        </div>
-                    </form>
-                </li>
             </ul>
             <!-- END TOP-LEFT TOOLBAR-->
             <!-- START TOP-RIGHT TOOLBAR-->
             <ul class="nav navbar-toolbar">
-             
-              
                 <li class="dropdown dropdown-user">
                     <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
                         <img src="{{ asset('assets/img/admin-avatar.png') }}" />
