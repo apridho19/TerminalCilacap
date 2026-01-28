@@ -1,3 +1,15 @@
+<style>
+    .page-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;      /* setinggi layar */
+    overflow-y: auto;   /* kalau menu banyak, sidebar saja yang scroll */
+    z-index: 1000;
+}
+
+</style>
+
 <div>
     <!-- START SIDEBAR-->
     <nav class="page-sidebar" id="sidebar">
