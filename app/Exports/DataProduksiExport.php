@@ -13,14 +13,16 @@ class DataProduksiExport implements FromArray, WithHeadings, WithStyles, WithTit
 {
     protected $bulan;
     protected $tahun;
+    protected $jenisTrayek;
     protected $provinsi;
     protected $kabupaten;
     protected $terminalTujuan;
 
-    public function __construct($bulan, $tahun, $provinsi = null, $kabupaten = null, $terminalTujuan = null)
+    public function __construct($bulan, $tahun, $jenisTrayek = null, $provinsi = null, $kabupaten = null, $terminalTujuan = null)
     {
         $this->bulan = $bulan;
         $this->tahun = $tahun;
+        $this->jenisTrayek = $jenisTrayek;
         $this->provinsi = $provinsi;
         $this->kabupaten = $kabupaten;
         $this->terminalTujuan = $terminalTujuan;
@@ -39,6 +41,13 @@ class DataProduksiExport implements FromArray, WithHeadings, WithStyles, WithTit
                         ->whereMonth('bus_datang', $this->bulan);
                 });
             });
+
+        // Terapkan filter jenis trayek jika ada
+        if ($this->jenisTrayek) {
+            $query->whereHas('dataMaster', function ($q) {
+                $q->where('jenis_trayek', $this->jenisTrayek);
+            });
+        }
 
         // Terapkan filter jika ada
         if ($this->provinsi) {

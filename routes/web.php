@@ -133,8 +133,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/keberangkatan', [KeberangkatanController::class, 'index'])->name('keberangkatan.index');
     Route::get('/keberangkatan/create', [KeberangkatanController::class, 'create'])->name('keberangkatan.create');
     Route::post('/keberangkatan', [KeberangkatanController::class, 'store'])->name('keberangkatan.store');
+    Route::get('/keberangkatan/{id}/edit', [KeberangkatanController::class, 'edit'])->name('keberangkatan.edit');
+    Route::put('/keberangkatan/{id}', [KeberangkatanController::class, 'update'])->name('keberangkatan.update');
+    Route::delete('/keberangkatan/{id}', [KeberangkatanController::class, 'destroy'])->name('keberangkatan.destroy');
 
     Route::get('/kedatangan', [KedatanganController::class, 'index'])->name('kedatangan.index');
     Route::get('/kedatangan/create', [KedatanganController::class, 'create'])->name('kedatangan.create');
     Route::post('/kedatangan', [KedatanganController::class, 'store'])->name('kedatangan.store');
+    Route::get('/kedatangan/{id}/edit', [KedatanganController::class, 'edit'])->name('kedatangan.edit');
+    Route::put('/kedatangan/{id}', [KedatanganController::class, 'update'])->name('kedatangan.update');
+    Route::delete('/kedatangan/{id}', [KedatanganController::class, 'destroy'])->name('kedatangan.destroy');
 });

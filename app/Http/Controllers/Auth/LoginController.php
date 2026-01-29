@@ -41,7 +41,10 @@ class LoginController extends Controller
             'password' => $request->password,
         ];
 
-        if (Auth::attempt($credentials)) {
+        // Cek apakah user centang "Ingat Saya"
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
             return redirect()->intended('/dashboard')->with('success', 'Login berhasil! Selamat datang ' . Auth::user()->name);

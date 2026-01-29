@@ -25,11 +25,9 @@ class DashboardController extends Controller
             ->whereDate('bus_berangkat', $today)
             ->count();
 
-        // Kedatangan hari ini = hitung bus yang datang hari ini (bukan yang berangkat)
-        $kedatanganHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereNull('waktu_berangkat') // Hanya data kedatangan saja
-            ->whereDate('bus_datang', $today)
-            ->count();
+        // Kedatangan hari ini = sama dengan keberangkatan hari ini
+        // Karena setiap keberangkatan pasti di-pair dengan kedatangan sebelumnya
+        $kedatanganHariIni = $keberangkatanHariIni;
 
         // Total penumpang hari ini
         $totalPenumpangBerangkat = DataProduksi::whereNotNull('waktu_berangkat')
@@ -99,14 +97,12 @@ class DashboardController extends Controller
             $date = date('Y-m-d', strtotime("-$i days"));
             $dateBefore = date('Y-m-d', strtotime("-" . ($i + 1) . " days"));
             $dataGrafik['labels'][] = date('d/m', strtotime($date));
-            $dataGrafik['keberangkatan'][] = DataProduksi::whereNotNull('waktu_berangkat')
+            $keberangkatanCount = DataProduksi::whereNotNull('waktu_berangkat')
                 ->whereDate('bus_berangkat', $date)
                 ->count();
-            // Kedatangan = hitung bus yang datang pada tanggal tersebut
-            $dataGrafik['kedatangan'][] = DataProduksi::whereNotNull('waktu_datang')
-                ->whereNull('waktu_berangkat')
-                ->whereDate('bus_datang', $date)
-                ->count();
+            $dataGrafik['keberangkatan'][] = $keberangkatanCount;
+            // Kedatangan = sama dengan keberangkatan (pairing system)
+            $dataGrafik['kedatangan'][] = $keberangkatanCount;
         }
 
         // Data untuk pie chart - berdasarkan jenis trayek

@@ -154,32 +154,44 @@ class DataProduksiController extends Controller
 
         // Hitung total bus berangkat dan datang per hari
         $today = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
 
         // Total bus berangkat hari ini (berdasarkan tanggal berangkat)
         $totalBusBerangkatHariIni = DataProduksi::whereNotNull('waktu_berangkat')
             ->whereDate('bus_berangkat', $today)
             ->count();
 
-        // Total bus datang hari ini = hitung bus yang datang hari ini (bukan yang berangkat)
-        $totalBusDatangHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereNull('waktu_berangkat') // Hanya data kedatangan saja
-            ->whereDate('bus_datang', $today)
-            ->count();
+        // Total bus datang hari ini = sama dengan bus berangkat hari ini
+        // Karena setiap keberangkatan pasti di-pair dengan kedatangan sebelumnya
+        $totalBusDatangHariIni = $totalBusBerangkatHariIni;
 
         // Total penumpang berangkat hari ini
         $totalPenumpangBerangkatHariIni = DataProduksi::whereNotNull('waktu_berangkat')
             ->whereDate('bus_berangkat', $today)
             ->sum('jml_pnp_berangkat');
 
-        // Total penumpang datang hari ini = dari data kedatangan hari ini
-        $totalPenumpangDatangHariIni = DataProduksi::whereNotNull('waktu_datang')
-            ->whereNull('waktu_berangkat')
-            ->whereDate('bus_datang', $today)
-            ->sum('jml_pnp_datang');
+        // Total penumpang datang hari ini = ambil dari kedatangan yang di-pair dengan keberangkatan hari ini
+        $keberangkatanHariIni = DataProduksi::whereNotNull('waktu_berangkat')
+            ->whereDate('bus_berangkat', $today)
+            ->get();
+
+        $totalPenumpangDatangHariIni = 0;
+        foreach ($keberangkatanHariIni as $berangkat) {
+            $kedatangan = DataProduksi::where('no_kendaraan', $berangkat->no_kendaraan)
+                ->whereNotNull('waktu_datang')
+                ->whereNull('waktu_berangkat')
+                ->where('bus_datang', '<=', $berangkat->bus_berangkat)
+                ->orderBy('bus_datang', 'desc')
+                ->first();
+
+            if ($kedatangan) {
+                $totalPenumpangDatangHariIni += $kedatangan->jml_pnp_datang ?? 0;
+            }
+        }
 
         // Implementasi pagination manual untuk array
         $page = $request->get('page', 1);
-        $perPage = 15;
+        $perPage = 30;
         $offset = ($page - 1) * $perPage;
 
         $dataProduksiCollection = collect($dataProduksi);
@@ -222,6 +234,7 @@ class DataProduksiController extends Controller
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $jenisTrayek = $request->jenis_trayek;
         $provinsi = $request->provinsi;
         $kabupaten = $request->kabupaten;
         $terminalTujuan = $request->terminal_tujuan;
@@ -244,6 +257,9 @@ class DataProduksiController extends Controller
         $fileName = 'Data_Produksi_' . $bulanNama[$bulan] . '_' . $tahun;
 
         // Tambahkan filter ke nama file jika ada
+        if ($jenisTrayek) {
+            $fileName .= '_' . $jenisTrayek;
+        }
         if ($provinsi) {
             $fileName .= '_' . str_replace(' ', '_', $provinsi);
         }
@@ -256,13 +272,14 @@ class DataProduksiController extends Controller
 
         $fileName .= '.xlsx';
 
-        return Excel::download(new DataProduksiExport($bulan, $tahun, $provinsi, $kabupaten, $terminalTujuan), $fileName);
+        return Excel::download(new DataProduksiExport($bulan, $tahun, $jenisTrayek, $provinsi, $kabupaten, $terminalTujuan), $fileName);
     }
 
     public function preview(Request $request)
     {
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $jenisTrayek = $request->jenis_trayek;
         $provinsi = $request->provinsi;
         $kabupaten = $request->kabupaten;
         $terminalTujuan = $request->terminal_tujuan;
@@ -278,6 +295,13 @@ class DataProduksiController extends Controller
                         ->whereMonth('bus_datang', $bulan);
                 });
             });
+
+        // Terapkan filter jenis trayek jika ada
+        if ($jenisTrayek) {
+            $query->whereHas('dataMaster', function ($q) use ($jenisTrayek) {
+                $q->where('jenis_trayek', $jenisTrayek);
+            });
+        }
 
         // Terapkan filter jika ada
         if ($provinsi) {
@@ -337,6 +361,7 @@ class DataProduksiController extends Controller
 
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $jenisTrayek = $request->jenis_trayek;
         $provinsi = $request->provinsi;
         $kabupaten = $request->kabupaten;
         $terminalTujuan = $request->terminal_tujuan;
@@ -367,6 +392,13 @@ class DataProduksiController extends Controller
                         ->whereMonth('bus_datang', $bulan);
                 });
             });
+
+        // Terapkan filter jenis trayek jika ada
+        if ($jenisTrayek) {
+            $query->whereHas('dataMaster', function ($q) use ($jenisTrayek) {
+                $q->where('jenis_trayek', $jenisTrayek);
+            });
+        }
 
         // Terapkan filter jika ada
         if ($provinsi) {
@@ -671,6 +703,7 @@ class DataProduksiController extends Controller
         // Loop through each day of the month
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
+            $yesterday = date('Y-m-d', strtotime($date . ' -1 day'));
             $tanggalFormatted = sprintf('%d-%d-%04d', $day, $bulan, $tahun);
 
             // Get AKAP data (jenis_trayek = 'AKAP')
@@ -678,16 +711,22 @@ class DataProduksiController extends Controller
                 ->whereHas('dataMaster', function ($q) {
                     $q->where('jenis_trayek', 'AKAP');
                 })
-                ->where(function ($query) use ($date) {
+                ->where(function ($query) use ($date, $yesterday) {
                     $query->where(function ($q) use ($date) {
                         // Data keberangkatan
                         $q->whereNotNull('waktu_berangkat')
                             ->whereDate('bus_berangkat', $date);
-                    })->orWhere(function ($q) use ($date) {
-                        // Data kedatangan
+                    })->orWhere(function ($q) use ($date, $yesterday) {
+                        // Data kedatangan: hari ini + kemarin malam (setelah jam 18:00)
                         $q->whereNotNull('waktu_datang')
                             ->whereNull('waktu_berangkat')
-                            ->whereDate('bus_datang', $date);
+                            ->where(function ($subQ) use ($date, $yesterday) {
+                                $subQ->whereDate('bus_datang', $date)
+                                    ->orWhere(function ($nightQ) use ($yesterday) {
+                                        $nightQ->whereDate('bus_datang', $yesterday)
+                                            ->whereTime('waktu_datang', '>=', '18:00:00');
+                                    });
+                            });
                     });
                 })
                 ->get();
@@ -697,16 +736,22 @@ class DataProduksiController extends Controller
                 ->whereHas('dataMaster', function ($q) {
                     $q->where('jenis_trayek', 'AKDP');
                 })
-                ->where(function ($query) use ($date) {
+                ->where(function ($query) use ($date, $yesterday) {
                     $query->where(function ($q) use ($date) {
                         // Data keberangkatan
                         $q->whereNotNull('waktu_berangkat')
                             ->whereDate('bus_berangkat', $date);
-                    })->orWhere(function ($q) use ($date) {
-                        // Data kedatangan
+                    })->orWhere(function ($q) use ($date, $yesterday) {
+                        // Data kedatangan: hari ini + kemarin malam (setelah jam 18:00)
                         $q->whereNotNull('waktu_datang')
                             ->whereNull('waktu_berangkat')
-                            ->whereDate('bus_datang', $date);
+                            ->where(function ($subQ) use ($date, $yesterday) {
+                                $subQ->whereDate('bus_datang', $date)
+                                    ->orWhere(function ($nightQ) use ($yesterday) {
+                                        $nightQ->whereDate('bus_datang', $yesterday)
+                                            ->whereTime('waktu_datang', '>=', '18:00:00');
+                                    });
+                            });
                     });
                 })
                 ->get();
@@ -727,16 +772,20 @@ class DataProduksiController extends Controller
                     $akap['bis_berangkat']++;
                     $akap['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
                     $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
-                }
 
-                // Hitung kedatangan (data yang punya waktu_datang)
-                if (
-                    $item->waktu_datang && !$item->waktu_berangkat &&
-                    $item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date
-                ) {
-                    $akap['bis_datang']++;
-                    $akap['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akap['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+                    // Hitung kedatangan yang di-pair dengan keberangkatan ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akap['bis_datang']++;
+                        $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        $akap['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
             }
 
@@ -756,16 +805,20 @@ class DataProduksiController extends Controller
                     $akdp['bis_berangkat']++;
                     $akdp['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
                     $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
-                }
 
-                // Hitung kedatangan (data yang punya waktu_datang)
-                if (
-                    $item->waktu_datang && !$item->waktu_berangkat &&
-                    $item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date
-                ) {
-                    $akdp['bis_datang']++;
-                    $akdp['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                    $akdp['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+                    // Hitung kedatangan yang di-pair dengan keberangkatan ini
+                    $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                        ->whereNotNull('waktu_datang')
+                        ->whereNull('waktu_berangkat')
+                        ->where('bus_datang', '<=', $item->bus_berangkat)
+                        ->orderBy('bus_datang', 'desc')
+                        ->first();
+
+                    if ($kedatangan) {
+                        $akdp['bis_datang']++;
+                        $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                        $akdp['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                    }
                 }
             }
 
@@ -843,22 +896,29 @@ class DataProduksiController extends Controller
 
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
+                $yesterday = date('Y-m-d', strtotime($date . ' -1 day'));
                 $tanggalFormatted = sprintf('%d-%d-%04d', $day, $bulan, $tahun);
 
                 $akapData = DataProduksi::with('dataMaster')
                     ->whereHas('dataMaster', function ($q) {
                         $q->where('jenis_trayek', 'AKAP');
                     })
-                    ->where(function ($query) use ($date) {
+                    ->where(function ($query) use ($date, $yesterday) {
                         $query->where(function ($q) use ($date) {
                             // Data keberangkatan
                             $q->whereNotNull('waktu_berangkat')
                                 ->whereDate('bus_berangkat', $date);
-                        })->orWhere(function ($q) use ($date) {
-                            // Data kedatangan
+                        })->orWhere(function ($q) use ($date, $yesterday) {
+                            // Data kedatangan (hari ini + kemarin malam setelah 18:00)
                             $q->whereNotNull('waktu_datang')
                                 ->whereNull('waktu_berangkat')
-                                ->whereDate('bus_datang', $date);
+                                ->where(function ($subQ) use ($date, $yesterday) {
+                                    $subQ->whereDate('bus_datang', $date)
+                                        ->orWhere(function ($nightQ) use ($yesterday) {
+                                            $nightQ->whereDate('bus_datang', $yesterday)
+                                                ->whereTime('waktu_datang', '>=', '18:00:00');
+                                        });
+                                });
                         });
                     })
                     ->get();
@@ -867,16 +927,22 @@ class DataProduksiController extends Controller
                     ->whereHas('dataMaster', function ($q) {
                         $q->where('jenis_trayek', 'AKDP');
                     })
-                    ->where(function ($query) use ($date) {
+                    ->where(function ($query) use ($date, $yesterday) {
                         $query->where(function ($q) use ($date) {
                             // Data keberangkatan
                             $q->whereNotNull('waktu_berangkat')
                                 ->whereDate('bus_berangkat', $date);
-                        })->orWhere(function ($q) use ($date) {
-                            // Data kedatangan
+                        })->orWhere(function ($q) use ($date, $yesterday) {
+                            // Data kedatangan (hari ini + kemarin malam setelah 18:00)
                             $q->whereNotNull('waktu_datang')
                                 ->whereNull('waktu_berangkat')
-                                ->whereDate('bus_datang', $date);
+                                ->where(function ($subQ) use ($date, $yesterday) {
+                                    $subQ->whereDate('bus_datang', $date)
+                                        ->orWhere(function ($nightQ) use ($yesterday) {
+                                            $nightQ->whereDate('bus_datang', $yesterday)
+                                                ->whereTime('waktu_datang', '>=', '18:00:00');
+                                        });
+                                });
                         });
                     })
                     ->get();
@@ -896,16 +962,20 @@ class DataProduksiController extends Controller
                         $akap['bis_berangkat']++;
                         $akap['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
                         $akap['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
-                    }
 
-                    // Hitung kedatangan (data yang punya waktu_datang)
-                    if (
-                        $item->waktu_datang && !$item->waktu_berangkat &&
-                        $item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date
-                    ) {
-                        $akap['bis_datang']++;
-                        $akap['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                        $akap['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+                        // Hitung kedatangan yang di-pair dengan keberangkatan ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akap['bis_datang']++;
+                            $akap['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                            $akap['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
                     }
                 }
 
@@ -924,16 +994,20 @@ class DataProduksiController extends Controller
                         $akdp['bis_berangkat']++;
                         $akdp['penumpang_naik'] += $item->jml_pnp_berangkat ?? 0;
                         $akdp['penumpang_berangkat'] += $item->jml_pnp_berangkat ?? 0;
-                    }
 
-                    // Hitung kedatangan (data yang punya waktu_datang)
-                    if (
-                        $item->waktu_datang && !$item->waktu_berangkat &&
-                        $item->bus_datang && date('Y-m-d', strtotime($item->bus_datang)) === $date
-                    ) {
-                        $akdp['bis_datang']++;
-                        $akdp['penumpang_datang'] += $item->jml_pnp_datang ?? 0;
-                        $akdp['penumpang_turun'] += $item->jml_pnp_datang ?? 0;
+                        // Hitung kedatangan yang di-pair dengan keberangkatan ini
+                        $kedatangan = DataProduksi::where('no_kendaraan', $item->no_kendaraan)
+                            ->whereNotNull('waktu_datang')
+                            ->whereNull('waktu_berangkat')
+                            ->where('bus_datang', '<=', $item->bus_berangkat)
+                            ->orderBy('bus_datang', 'desc')
+                            ->first();
+
+                        if ($kedatangan) {
+                            $akdp['bis_datang']++;
+                            $akdp['penumpang_datang'] += $kedatangan->jml_pnp_datang ?? 0;
+                            $akdp['penumpang_turun'] += $kedatangan->jml_pnp_datang ?? 0;
+                        }
                     }
                 }
 

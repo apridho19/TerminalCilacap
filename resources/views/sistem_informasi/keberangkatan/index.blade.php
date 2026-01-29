@@ -48,32 +48,52 @@
                     </div>
                     @endif
 
-                    <table id="example-table" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center">No</th>
-                                <th class="text-center">Nama PO</th>
-                                <th class="text-center">No Kendaraan</th>
-                                <th class="text-center">Asal - Tujuan</th>
-                                <th class="text-center">Jumlah Penumpang</th>
-                                <th class="text-center">Waktu Berangkat</th>
-                                <th class="text-center">Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($dataProduksi as $index => $produksi)
-                            <tr>
-                                <td class="text-center">{{ ($dataProduksi->currentPage() - 1) * $dataProduksi->perPage() + $loop->iteration }}</td>
-                                <td>{{ $produksi->dataMaster->nama_po ?? '-' }}</td>
-                                <td class="text-center">{{ $produksi->no_kendaraan }}</td>
-                                <td>{{ $produksi->dataMaster->asal_tujuan ?? '-' }}</td>
-                                <td class="text-center">{{ $produksi->jml_pnp_berangkat }}</td>
-                                <td class="text-center">{{ $produksi->waktu_berangkat ? \Carbon\Carbon::parse($produksi->waktu_berangkat)->format('H:i') : '-' }}</td>
-                                <td class="text-center">{{ $produksi->bus_berangkat ? \Carbon\Carbon::parse($produksi->bus_berangkat)->format('d-m-Y') : '-' }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table id="example-table" class="table table-striped table-bordered" style="width: 100%; white-space: nowrap;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="min-width: 50px;">No</th>
+                                    <th class="text-center" style="min-width: 150px;">Nama PO</th>
+                                    <th class="text-center" style="min-width: 120px;">No Kendaraan</th>
+                                    <th class="text-center" style="min-width: 200px;">Asal - Tujuan</th>
+                                    <th class="text-center" style="min-width: 120px;">Jumlah Penumpang</th>
+                                    <th class="text-center" style="min-width: 120px;">Waktu Berangkat</th>
+                                    <th class="text-center" style="min-width: 120px;">Tanggal</th>
+                                    <th class="text-center" style="min-width: 120px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($dataProduksi as $index => $produksi)
+                                <tr>
+                                    <td class="text-center">{{ ($dataProduksi->currentPage() - 1) * $dataProduksi->perPage() + $loop->iteration }}</td>
+                                    <td>{{ $produksi->dataMaster->nama_po ?? '-' }}</td>
+                                    <td class="text-center">{{ $produksi->no_kendaraan }}</td>
+                                    <td>{{ $produksi->dataMaster->asal_tujuan ?? '-' }}</td>
+                                    <td class="text-center">{{ $produksi->jml_pnp_berangkat }}</td>
+                                    <td class="text-center">{{ $produksi->waktu_berangkat ? \Carbon\Carbon::parse($produksi->waktu_berangkat)->format('H:i') : '-' }}</td>
+                                    <td class="text-center">{{ $produksi->bus_berangkat ? \Carbon\Carbon::parse($produksi->bus_berangkat)->format('d-m-Y') : '-' }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('keberangkatan.edit', $produksi->id) }}"
+                                            class="btn btn-warning btn-sm mr-1"
+                                            title="Edit Data"
+                                            style="min-width: 32px;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        @if(auth()->user()->role !== 'pegawai')
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete('{{ $produksi->id }}', '{{ $produksi->no_kendaraan }}')"
+                                            title="Hapus Data"
+                                            style="min-width: 32px;">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- Pagination Links -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
@@ -118,34 +138,34 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_nama_po" class="font-strong">Nama PO</label>
-                                <input type="text" class="form-control" id="display_nama_po" readonly style="background-color: #e9ecef;">
+                                <label for="nama_po" class="font-strong">Nama PO</label>
+                                <input type="text" class="form-control" id="nama_po" name="nama_po" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_jenis_trayek" class="font-strong">Jenis Trayek</label>
-                                <input type="text" class="form-control" id="display_jenis_trayek" readonly style="background-color: #e9ecef;">
+                                <label for="jenis_trayek" class="font-strong">Jenis Trayek</label>
+                                <input type="text" class="form-control" id="jenis_trayek" name="jenis_trayek" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="display_trayek" class="font-strong">Trayek</label>
-                        <input type="text" class="form-control" id="display_trayek" readonly style="background-color: #e9ecef;">
+                        <label for="data_trayek" class="font-strong">Trayek</label>
+                        <input type="text" class="form-control" id="data_trayek" name="data_trayek" placeholder="Otomatis terisi" readonly>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_asal_tujuan" class="font-strong">Asal - Tujuan</label>
-                                <input type="text" class="form-control" id="display_asal_tujuan" readonly style="background-color: #e9ecef;">
+                                <label for="asal_tujuan" class="font-strong">Asal - Tujuan</label>
+                                <input type="text" class="form-control" id="asal_tujuan" name="asal_tujuan" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_provinsi" class="font-strong">Provinsi</label>
-                                <input type="text" class="form-control" id="display_provinsi" readonly style="background-color: #e9ecef;">
+                                <label for="provinsi" class="font-strong">Provinsi</label>
+                                <input type="text" class="form-control" id="provinsi" name="provinsi" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                     </div>
@@ -153,14 +173,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_terminal_tujuan" class="font-strong">Terminal Tujuan</label>
-                                <input type="text" class="form-control" id="display_terminal_tujuan" readonly style="background-color: #e9ecef;">
+                                <label for="terminal_tujuan" class="font-strong">Terminal Tujuan</label>
+                                <input type="text" class="form-control" id="terminal_tujuan" name="terminal_tujuan" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="display_kabupaten" class="font-strong">Kabupaten</label>
-                                <input type="text" class="form-control" id="display_kabupaten" readonly style="background-color: #e9ecef;">
+                                <label for="kabupaten" class="font-strong">Kabupaten</label>
+                                <input type="text" class="form-control" id="kabupaten" name="kabupaten" placeholder="Otomatis terisi" readonly>
                             </div>
                         </div>
                     </div>
@@ -173,7 +193,7 @@
                     </div>
                     <div class="form-group">
                         <label for="waktu_berangkat" class="font-strong">Waktu Berangkat <span class="text-danger">*</span></label>
-                        <input type="time" class="form-control" id="waktu_berangkat" name="waktu_berangkat" value="{{ old('waktu_berangkat') }}" required>
+                        <input type="time" class="form-control" id="waktu_berangkat" name="waktu_berangkat" value="{{ old('waktu_berangkat') }}" step="60" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -188,6 +208,12 @@
         </div>
     </div>
 </div>
+
+<!-- Form Delete (Hidden) -->
+<form id="deleteForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 
 <!-- BEGIN PAGA BACKDROPS-->
 <div class="sidenav-backdrop backdrop"></div>
@@ -240,27 +266,84 @@
 <script src="./assets/vendors/DataTables/datatables.min.js" type="text/javascript"></script>
 <!-- CORE SCRIPTS-->
 <script src="assets/js/app.min.js" type="text/javascript"></script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- PAGE LEVEL SCRIPTS-->
 <script type="text/javascript">
-    $(function() {
-        // DataTables dinonaktifkan karena menggunakan Laravel pagination
-        // $('#example-table').DataTable({
-        //     pageLength: 10,
-        // });
+    // Function untuk confirm delete (global)
+    function confirmDelete(id, noKendaraan) {
+        Swal.fire({
+            title: 'Hapus Data?',
+            html: `Apakah Anda yakin ingin menghapus data:<br>
+                   <strong>${noKendaraan}</strong>?<br><br>
+                   <small class="text-muted">Data yang dihapus tidak dapat dikembalikan</small>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa fa-trash"></i> Ya, Hapus',
+            cancelButtonText: '<i class="fa fa-times"></i> Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: '<i class="fa fa-cog fa-spin"></i> Menghapus...',
+                    html: 'Sedang menghapus data...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false
+                });
 
-        // Jika ada error validasi, buka modal kembali
-        @if($errors - > any())
+                const form = document.getElementById('deleteForm');
+                form.action = `/keberangkatan/${id}`;
+                form.submit();
+            }
+        });
+    }
+
+    $(function() {
+
+        /* ===============================
+           SWEETALERT SESSION
+        =============================== */
+        @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: @json(session('success')),
+            showConfirmButton: false,
+            timer: 2000
+        });
+        @endif
+
+        @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: @json(session('error')),
+            showConfirmButton: true
+        });
+        @endif
+
+        /* ===============================
+           VALIDATION ERROR
+        =============================== */
+        @if($errors->any())
         $('#modalTambahKeberangkatan').modal('show');
         @endif
 
-        // Auto hide alert setelah 5 detik
+        /* ===============================
+           AUTO HIDE ALERT
+        =============================== */
         setTimeout(function() {
             $('.alert').fadeOut('slow');
         }, 5000);
 
-        // Auto detect data master berdasarkan no_kendaraan
+        /* ===============================
+           AUTO DETECT KENDARAAN
+        =============================== */
         let typingTimer;
-        const doneTypingInterval = 500; // 0.5 detik setelah user berhenti mengetik
+        const doneTypingInterval = 500;
 
         $('#no_kendaraan').on('keyup', function() {
             clearTimeout(typingTimer);
@@ -271,8 +354,7 @@
                     checkKendaraan(noKendaraan);
                 }, doneTypingInterval);
             } else {
-                $('#info_kendaraan').html('').removeClass('text-success text-danger');
-                $('#data_master_id').val('');
+                resetKendaraan();
             }
         });
 
@@ -289,68 +371,56 @@
                         $('#data_master_id').val(response.data.id);
                         $('#info_kendaraan')
                             .html('<i class="fa fa-check-circle"></i> Kendaraan ditemukan')
-                            .removeClass('text-danger')
+                            .removeClass('text-danger text-warning')
                             .addClass('text-success');
 
-                        // Auto-fill semua field data master
-                        $('#display_nama_po').val(response.data.nama_po || '-');
-                        $('#display_jenis_trayek').val(response.data.jenis_trayek || '-');
-                        $('#display_trayek').val(response.data.data_trayek || '-');
-                        $('#display_asal_tujuan').val(response.data.asal_tujuan || '-');
-                        $('#display_provinsi').val(response.data.provinsi || '-');
-                        $('#display_terminal_tujuan').val(response.data.terminal_tujuan || '-');
-                        $('#display_kabupaten').val(response.data.kabupaten || '-');
+                        $('#nama_po').val(response.data.nama_po || '-');
+                        $('#jenis_trayek').val(response.data.jenis_trayek || '-');
+                        $('#data_trayek').val(response.data.data_trayek || '-');
+                        $('#asal_tujuan').val(response.data.asal_tujuan || '-');
+                        $('#provinsi').val(response.data.provinsi || '-');
+                        $('#terminal_tujuan').val(response.data.terminal_tujuan || '-');
+                        $('#kabupaten').val(response.data.kabupaten || '-');
                     } else {
-                        $('#data_master_id').val('');
-                        $('#info_kendaraan')
-                            .html('<i class="fa fa-exclamation-triangle"></i> ' + response.message)
-                            .removeClass('text-success')
-                            .addClass('text-danger');
-
-                        // Clear semua field
-                        $('#display_nama_po').val('');
-                        $('#display_jenis_trayek').val('');
-                        $('#display_trayek').val('');
-                        $('#display_asal_tujuan').val('');
-                        $('#display_provinsi').val('');
-                        $('#display_terminal_tujuan').val('');
-                        $('#display_kabupaten').val('');
+                        manualInput();
                     }
                 },
                 error: function() {
-                    $('#data_master_id').val('');
                     $('#info_kendaraan')
                         .html('<i class="fa fa-exclamation-triangle"></i> Terjadi kesalahan saat memeriksa data')
-                        .removeClass('text-success')
+                        .removeClass('text-success text-warning')
                         .addClass('text-danger');
-
-                    // Clear semua field
-                    $('#display_nama_po').val('');
-                    $('#display_jenis_trayek').val('');
-                    $('#display_trayek').val('');
-                    $('#display_asal_tujuan').val('');
-                    $('#display_provinsi').val('');
-                    $('#display_terminal_tujuan').val('');
-                    $('#display_kabupaten').val('');
+                    manualInput();
                 }
             });
         }
 
-        // Reset form saat modal ditutup
+        function resetKendaraan() {
+            $('#info_kendaraan').html('').removeClass('text-success text-danger text-warning');
+            $('#data_master_id').val('');
+        }
+
+        function manualInput() {
+            $('#data_master_id').val('');
+            $('#info_kendaraan')
+                .html('<i class="fa fa-exclamation-triangle"></i> Kendaraan tidak ditemukan, silakan isi manual')
+                .removeClass('text-success text-danger')
+                .addClass('text-warning');
+
+            $('#nama_po, #jenis_trayek, #data_trayek, #asal_tujuan, #provinsi, #terminal_tujuan, #kabupaten').val('');
+        }
+
+        /* ===============================
+           RESET MODAL
+        =============================== */
         $('#modalTambahKeberangkatan').on('hidden.bs.modal', function() {
             $('#formTambahKeberangkatan')[0].reset();
-            $('#info_kendaraan').html('').removeClass('text-success text-danger');
-            $('#data_master_id').val('');
-            $('#display_nama_po').val('');
-            $('#display_jenis_trayek').val('');
-            $('#display_trayek').val('');
-            $('#display_asal_tujuan').val('');
-            $('#display_provinsi').val('');
-            $('#display_terminal_tujuan').val('');
-            $('#display_kabupaten').val('');
+            resetKendaraan();
         });
-    })
+
+    });
 </script>
+
 </body>
 
 @endsection

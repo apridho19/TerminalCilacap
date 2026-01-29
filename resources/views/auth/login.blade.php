@@ -23,8 +23,11 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
-            url('{{ asset('assets/img/terminal-bus-cilacap-1.jpg') }}') center/cover no-repeat fixed;
+            background: linear-gradient(135deg,
+                rgba(102, 126, 234, 0.85) 0%,
+                rgba(118, 75, 162, 0.85) 100%),
+            url("{{ asset('assets/img/terminal-bus-cilacap-1.jpg') }}") center/cover no-repeat fixed;
+
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -33,6 +36,7 @@
             position: relative;
             overflow: hidden;
         }
+
 
         body::before {
             content: '';
@@ -169,7 +173,7 @@
             position: relative;
         }
 
-        .input-wrapper i {
+        .input-wrapper .input-icon {
             position: absolute;
             left: 15px;
             top: 50%;
@@ -177,9 +181,10 @@
             color: #999;
             font-size: 16px;
             z-index: 1;
+            pointer-events: none;
         }
 
-        .toggle-password {
+        .input-wrapper .toggle-password {
             position: absolute;
             right: 15px;
             top: 50%;
@@ -187,8 +192,9 @@
             color: #999;
             font-size: 16px;
             cursor: pointer;
-            z-index: 1;
+            z-index: 2;
             transition: color 0.3s ease;
+            pointer-events: auto;
         }
 
         .toggle-password:hover {
@@ -236,6 +242,12 @@
             height: 18px;
             margin-right: 8px;
             cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
         }
 
         .checkbox-wrapper label {
@@ -243,6 +255,7 @@
             color: #666;
             cursor: pointer;
             margin: 0;
+            user-select: none;
         }
 
         .btn-login {
@@ -388,7 +401,7 @@
                 <div class="form-group">
                     <label class="form-label">Username</label>
                     <div class="input-wrapper">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-user input-icon"></i>
                         <input class="form-control" type="text" name="username" placeholder="Masukkan username Anda"
                             value="{{ old('username') }}" autofocus required>
                     </div>
@@ -397,7 +410,7 @@
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="input-wrapper">
-                        <i class="fa fa-lock"></i>
+                        <i class="fa fa-lock input-icon"></i>
                         <input class="form-control has-toggle" type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
                         <i class="fa fa-eye-slash toggle-password" id="togglePassword"></i>
                     </div>
@@ -430,6 +443,29 @@
 
     <script type="text/javascript">
         $(function() {
+            // Load saved username if "Ingat Saya" was checked
+            if (localStorage.getItem('rememberMe') === 'true') {
+                const savedUsername = localStorage.getItem('savedUsername');
+                if (savedUsername) {
+                    $('input[name="username"]').val(savedUsername);
+                    $('#remember').prop('checked', true);
+                }
+            }
+
+            // Save/remove username based on "Ingat Saya" checkbox
+            $('#login-form').on('submit', function() {
+                if ($('#remember').is(':checked')) {
+                    const username = $('input[name="username"]').val();
+                    localStorage.setItem('rememberMe', 'true');
+                    localStorage.setItem('savedUsername', username);
+                } else {
+                    localStorage.removeItem('rememberMe');
+                    localStorage.removeItem('savedUsername');
+                }
+
+                $('.btn-login').html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+            });
+
             // Auto hide alert setelah 5 detik
             setTimeout(function() {
                 $('.alert').fadeOut('slow');
@@ -448,12 +484,6 @@
 
                 // Toggle icon
                 $(this).toggleClass('fa-eye-slash fa-eye');
-            });
-
-            // Form validation feedback
-            $('#login-form').on('submit', function() {
-                $('.btn-login').html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
-                $('.btn-login').prop('disabled', true);
             });
         });
     </script>

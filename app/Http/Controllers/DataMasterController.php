@@ -11,7 +11,7 @@ class DataMasterController extends Controller
 {
     public function index()
     {
-        $dataMaster = DataMaster::orderBy('created_at', 'desc')->paginate(10);
+        $dataMaster = DataMaster::orderBy('created_at', 'desc')->paginate(30);
         return view('sistem_informasi.data_master.index', compact('dataMaster'));
     }
 

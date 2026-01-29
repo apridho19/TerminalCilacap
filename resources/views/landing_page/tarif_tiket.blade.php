@@ -56,7 +56,7 @@
             <h3
                 class="text-white display-3 mb-4 wow fadeInDown"
                 data-wow-delay="0.1s">
-                Tarif Tiket Bus
+                Jadwal Keberangkatan Bus
             </h3>
         </div>
     </div>
@@ -69,11 +69,11 @@
                 class="section-title text-center mb-5 wow fadeInUp"
                 data-wow-delay="0.1s">
                 <div class="sub-style">
-                    <h5 class="sub-title text-primary px-3">Informasi Tarif</h5>
+                    <h5 class="sub-title text-primary px-3">Informasi Jadwal Keberangkatan</h5>
                 </div>
-                <h1 class="display-5 mb-4">Tarif Tiket Bus Terminal BMD Cilacap</h1>
+                <h1 class="display-5 mb-4">Jadwal Keberangkatan Bus Terminal BMD Cilacap</h1>
                 <p class="mb-0">
-                    Informasi lengkap mengenai tarif tiket bus dari Terminal BMD Cilacap
+                    Informasi lengkap mengenai jadwal keberangkatan dan tarif bus dari Terminal BMD Cilacap
                     ke berbagai tujuan di Provinsi Banten, DKI Jakarta, Jawa Barat, Jawa
                     Tengah, dan D.I. Yogyakarta
                 </p>
