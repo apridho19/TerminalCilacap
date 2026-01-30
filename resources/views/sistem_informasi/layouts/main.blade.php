@@ -16,6 +16,10 @@
     <link href="{{ asset('assets/css/main.min.css') }}" rel="stylesheet" />
     <!-- SWEETALERT2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet" />
+
+    <!-- JQUERY - LANGSUNG DARI CDN UNTUK MEMASTIKAN LOADED -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <!-- PAGE LEVEL STYLES-->
 </head>
 
@@ -29,8 +33,7 @@
     <!-- CONTENT -->
     @yield('content')
 
-    <!-- CORE PLUGINS -->
-    <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js') }}" type="text/javascript"></script>
+    <!-- CORE PLUGINS (jQuery sudah dimuat di head) -->
     <script src="{{ asset('assets/vendors/popper.js/dist/umd/popper.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/vendors/bootstrap/dist/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/vendors/metisMenu/dist/metisMenu.min.js') }}" type="text/javascript"></script>
@@ -46,6 +49,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <!-- PAGE LEVEL SCRIPTS-->
     <script src="{{ asset('assets/js/scripts/dashboard_1_demo.js') }}" type="text/javascript"></script>
+
+    <!-- PAGE SPECIFIC SCRIPTS -->
+    @stack('scripts')
 </body>
 
 </html>
