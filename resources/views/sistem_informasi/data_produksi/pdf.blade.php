@@ -11,9 +11,64 @@
             margin: 20px;
         }
 
+        .kop-surat {
+            border-bottom: 3px solid #000;
+            padding-bottom: 0px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .kop-surat table {
+            width: 100%;
+            border: none;
+        }
+
+        .kop-surat td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .kop-logo {
+            width: 100px;
+            text-align: center;
+        }
+
+        .kop-logo img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .kop-text {
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .kop-text h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .kop-text h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .kop-text p {
+            margin: 0;
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .header h2 {
@@ -79,9 +134,28 @@
 </head>
 
 <body>
+    <!-- Kop Surat -->
+    <div class="kop-surat">
+        <table>
+            <tr>
+                <td class="kop-logo">
+                    <img src="{{ public_path('assets/img/logo_terminal.png') }}" alt="Logo Terminal" style="width: 150px; height: 150px;">
+                </td>
+                <td class="kop-text">
+                    <h2>PEMERINTAH KABUPATEN CILACAP</h2>
+                    <h3>TERMINAL TIPE A BANGGA MBANGUN DESA CILACAP</h3>
+                    <p>Jl. Gatot Subroto No.102, Karang Lor, Gunungsimping, Kec. Cilacap Tengah, Kabupaten Cilacap, Jawa Tengah 53224</p>
+                    <p>Telp: (0282) 123456 | Email: gunungsimping.clp@gmail.com</p>
+                </td>
+                <td class="kop-logo">
+                    <img src="{{ public_path('assets/img/logo_kemenhub.png') }}" alt="Logo Kemenhub" style="width: 90px; height: 90px;">
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="header">
         <h2>LAPORAN DATA PRODUKSI BUS</h2>
-        <h2>TERMINAL CILACAP</h2>
         <p>Periode: {{ $bulan }} {{ $tahun }}</p>
     </div>
 

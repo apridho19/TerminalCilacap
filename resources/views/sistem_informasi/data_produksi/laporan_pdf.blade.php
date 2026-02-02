@@ -12,13 +12,68 @@
             padding: 15px;
         }
 
+        .kop-surat {
+            border-bottom: 3px solid #000;
+            padding-bottom: 0px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .kop-surat table {
+            width: 100%;
+            border: none;
+        }
+
+        .kop-surat td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .kop-logo {
+            width: 100px;
+            text-align: center;
+        }
+
+        .kop-logo img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .kop-text {
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .kop-text h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .kop-text h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .kop-text p {
+            margin: 0;
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
         .header {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .header h2 {
-            margin: 5px 0;
+            margin: 0;
             font-size: 16px;
         }
 
@@ -64,11 +119,30 @@
 </head>
 
 <body>
+    <!-- Kop Surat -->
+    <div class="kop-surat">
+        <table>
+            <tr>
+                <td class="kop-logo">
+                    <img src="{{ public_path('assets/img/logo_terminal.png') }}" alt="Logo Terminal" style="width: 150px; height: 150px;">
+                </td>
+                <td class="kop-text">
+                    <h2>PEMERINTAH KABUPATEN CILACAP</h2>
+                    <h3>TERMINAL TIPE A BANGGA MBANGUN DESA CILACAP</h3>
+                    <p>Jl. Gatot Subroto No.102, Karang Lor, Gunungsimping, Kec. Cilacap Tengah, Kabupaten Cilacap, Jawa Tengah 53224</p>
+                    <p>Telp: (0282) 123456 | Email: gunungsimping.clp@gmail.com</p>
+                </td>
+                <td class="kop-logo">
+                    <img src="{{ public_path('assets/img/logo_kemenhub.png') }}" alt="Logo Kemenhub" style="width: 90px; height: 90px;">
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="header">
-        <h2>Data Produksi Harian</h2>
-        <p>Terminal Penumpang Tipe B Cilacap</p>
+        <h2>LAPORAN DATA PRODUKSI HARIAN</h2>
         <p>Bulan: <strong>{{ $bulan }} {{ $tahun }}</strong></p>
-        <p>Tanggal Cetak: {{ $tanggal_cetak }}</p>
+        <!-- <p>Tanggal Cetak: {{ $tanggal_cetak }}</p> -->
     </div>
 
     <table>
@@ -80,19 +154,19 @@
             </tr>
             <tr>
                 <!-- AKAP -->
-                <th>B.D</th>
-                <th>P.D</th>
-                <th>P.T</th>
-                <th>B.B</th>
-                <th>P.N</th>
-                <th>P.B</th>
+                <th>Bus Datang</th>
+                <th>Pnp Datang</th>
+                <th>Pnp Turun</th>
+                <th>Bus Berangkat</th>
+                <th>Pnp Naik</th>
+                <th>Pnp Berangkat</th>
                 <!-- AKDP -->
-                <th>B.D</th>
-                <th>P.D</th>
-                <th>P.T</th>
-                <th>B.B</th>
-                <th>P.N</th>
-                <th>P.B</th>
+                <th>Bus Datang</th>
+                <th>Pnp Datang</th>
+                <th>Pnp Turun</th>
+                <th>Bus Berangkat</th>
+                <th>Pnp Naik</th>
+                <th>Pnp Berangkat</th>
             </tr>
         </thead>
         <tbody>
@@ -137,11 +211,11 @@
         </tfoot>
     </table>
 
-    <div class="keterangan">
+    <!-- <div class="keterangan">
         <strong>Keterangan:</strong><br>
         B.D (Bis Datang) | P.D (Penumpang Datang) | P.T (Penumpang Turun) |
         B.B (Bis Berangkat) | P.N (Penumpang Naik) | P.B (Penumpang Berangkat)
-    </div>
+    </div> -->
 </body>
 
 </html>

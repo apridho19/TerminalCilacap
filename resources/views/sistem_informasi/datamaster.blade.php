@@ -26,9 +26,9 @@
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalImport">
                                 <i class="fa fa-file-excel-o"></i> Import dari Excel
                             </button>
-                            <button type="button" class="btn btn-danger ml-2" id="btnRemoveDuplicates">
+                            <!-- <button type="button" class="btn btn-danger ml-2" id="btnRemoveDuplicates">
                                 <i class="fa fa-clone"></i> Hapus Data Duplikat
-                            </button>
+                            </button> -->
                         </div>
 
                         @if(session('success'))

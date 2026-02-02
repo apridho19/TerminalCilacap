@@ -308,19 +308,19 @@
                                         </tr>
                                         <tr>
                                             <!-- AKAP -->
-                                            <th class="text-center">B.D</th>
-                                            <th class="text-center">P.D</th>
-                                            <th class="text-center">P.T</th>
-                                            <th class="text-center">B.B</th>
-                                            <th class="text-center">P.N</th>
-                                            <th class="text-center">P.B</th>
+                                            <th class="text-center">Bus Datang</th>
+                                            <th class="text-center">Pnp Datang</th>
+                                            <th class="text-center">Pnp Turun</th>
+                                            <th class="text-center">Bus Berangkat</th>
+                                            <th class="text-center">Pnp Naik</th>
+                                            <th class="text-center">Pnp Berangkat</th>
                                             <!-- AKDP -->
-                                            <th class="text-center">B.D</th>
-                                            <th class="text-center">P.D</th>
-                                            <th class="text-center">P.T</th>
-                                            <th class="text-center">B.B</th>
-                                            <th class="text-center">P.N</th>
-                                            <th class="text-center">P.B</th>
+                                            <th class="text-center">Bus Datang</th>
+                                            <th class="text-center">Pnp Datang</th>
+                                            <th class="text-center">Pnp Turun</th>
+                                            <th class="text-center">Bus Berangkat</th>
+                                            <th class="text-center">Pnp Naik</th>
+                                            <th class="text-center">Pnp Berangkat</th>
                                         </tr>
                                     </thead>
                                     <tbody id="laporanHarianBody">
@@ -349,7 +349,7 @@
                             </div>
 
                             <!-- Keterangan -->
-                            <div class="mt-3">
+                            <!-- <div class="mt-3">
                                 <strong>Keterangan:</strong><br>
                                 B.D (Bis Datang)<br>
                                 P.D (Penumpang Datang)<br>
@@ -357,7 +357,7 @@
                                 B.B (Bis Berangkat)<br>
                                 P.N (Penumpang Naik)<br>
                                 P.B (Penumpang Berangkat)
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

@@ -193,68 +193,6 @@
             Dalam Provinsi (AKDP), dan satu lajur alternatif untuk angkutan
             kota.
           </p>
-    
-              <div class="col-12 col-sm-6 d-flex align-items-center">
-                <i class="fas fa-map-marked-alt fa-3x text-warning"></i>
-                <h5 class="ms-4">Best Immigration Resources</h5>
-              </div>
-              <div class="col-12 col-sm-6 d-flex align-items-center">
-                <i class="fas fa-passport fa-3x text-warning"></i>
-                <h5 class="ms-4">Return Visas Availabile</h5>
-              </div>
-              <div class="col-4 col-md-3">
-                <div class="bg-light text-center rounded p-3">
-                  <div class="mb-2">
-                    <i class="fas fa-ticket-alt fa-4x text-primary"></i>
-                  </div>
-                  <h1 class="display-5 fw-bold mb-2">34</h1>
-                  <p class="text-muted mb-0">Years of Experience</p>
-                </div>
-              </div>
-              <div class="col-8 col-md-9">
-                <div class="mb-5">
-                  <p class="text-primary h6 mb-3">
-                    <i class="fa fa-check-circle text-warning me-2"></i> Offer
-                    100 % Genuine Assistance
-                  </p>
-                  <p class="text-primary h6 mb-3">
-                    <i class="fa fa-check-circle text-warning me-2"></i> It’s
-                    Faster & Reliable Execution
-                  </p>
-                  <p class="text-primary h6 mb-3">
-                    <i class="fa fa-check-circle text-warning me-2"></i>
-                    Accurate & Expert Advice
-                  </p>
-                </div>
-                <div class="d-flex flex-wrap">
-                  <div
-                    id="phone-tada"
-                    class="d-flex align-items-center justify-content-center me-4"
-                  >
-                    <a
-                      href=""
-                      class="position-relative wow tada"
-                      data-wow-delay=".9s"
-                    >
-                      <i class="fa fa-phone-alt text-primary fa-3x"></i>
-                      <div class="position-absolute" style="top: 0; left: 25px">
-                        <span
-                          ><i class="fa fa-comment-dots text-warning"></i
-                        ></span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <span class="text-primary">Have any questions?</span>
-                    <span
-                      class="text-warning fw-bold fs-5"
-                      style="letter-spacing: 2px"
-                      >Free: +0123 456 7890</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div> -->
         </div>
       </div>
     </div>

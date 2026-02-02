@@ -7,7 +7,7 @@
                 <img
                     src="{{ asset('assets/img/logo_kemenhub.png') }}"
                     class="img-fluid"
-                    alt="logo" />     Terminal BMD Cilacap
+                    alt="logo" />     Terminal Bangga Mbangun Cilacap
             </h4> 
             <!-- <img src="img/logo.png" alt="Logo"> -->
         </a>
