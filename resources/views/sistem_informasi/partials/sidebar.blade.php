@@ -1,13 +1,41 @@
 <style>
     .page-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;      /* setinggi layar */
-    overflow-y: auto;   /* kalau menu banyak, sidebar saja yang scroll */
-    z-index: 1000;
-}
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+        background-color: #fff;
+    }
 
+    .sidebar-item-icon {
+        color: #333;
+    }
+
+    .nav-label {
+        color: #333;
+    }
+
+    .page-sidebar .side-menu li a:hover .sidebar-item-icon {
+        color: #fff;
+    }
+
+    .page-sidebar .side-menu li a:hover .nav-label {
+        color: #fff;
+    }
+
+    .page-sidebar .side-menu li a.active {
+        background-color: #3498db;
+    }
+
+    .page-sidebar .side-menu li a.active .sidebar-item-icon {
+        color: #fff;
+    }
+
+    .page-sidebar .side-menu li a.active .nav-label {
+        color: #fff;
+    }
 </style>
 
 <div>
@@ -19,8 +47,8 @@
                     <img src="{{ asset('assets/img/admin-avatar.png') }}" width="45px" />
                 </div>
                 <div class="admin-info">
-                    <div class="font-strong">{{ Auth::user()->name }}</div>
-                    <small>{{ ucfirst(Auth::user()->role) }}</small>
+                    <div class="font-strong" style="color: #333">{{ Auth::user()->name }}</div>
+                    <small style="color: #333">{{ ucfirst(Auth::user()->role) }}</small>
                 </div>
             </div>
             <ul class="side-menu metismenu">
@@ -29,7 +57,7 @@
                         <span class="nav-label">Dashboard</span>
                     </a>
                 </li>
-                <li class="heading">FEATURES</li>
+                <li class="heading" style="color: #333">FEATURES</li>
                 <li>
                     <a class="{{ request()->is('keberangkatan*') ? 'active' : '' }}" href="{{ url('/keberangkatan') }}"><i class="sidebar-item-icon fa fa-plane"></i>
                         <span class="nav-label">Keberangkatan</span></a>
