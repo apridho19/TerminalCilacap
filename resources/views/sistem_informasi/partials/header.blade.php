@@ -1,7 +1,7 @@
 <div>
     <!-- START HEADER-->
-    <header class="header">
-        <div class="page-brand">
+    <header class="header bg-primary">
+        <div class="page-brand" style="background-color: #217dbb;">
             <a class="link" href="{{ url('/dashboard') }}">
                 <span class="brand">
                     <!-- <img src="{{ asset('assets/img/logo_kemenhub.png') }}" alt="logo" style="max-height: 35px; margin-right: 8px;"> -->
@@ -15,14 +15,14 @@
             <!-- START TOP-LEFT TOOLBAR-->
             <ul class="nav navbar-toolbar">
                 <li>
-                    <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
+                    <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu" style="color: white;"></i></a>
                 </li>
             </ul>
             <!-- END TOP-LEFT TOOLBAR-->
             <!-- START TOP-RIGHT TOOLBAR-->
             <ul class="nav navbar-toolbar">
                 <li class="dropdown dropdown-user">
-                    <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle link text-white" data-toggle="dropdown">
                         <img src="{{ asset('assets/img/admin-avatar.png') }}" />
                         <span></span>{{ Auth::user()->name }}<i class="fa fa-angle-down m-l-5"></i></a>
                     <ul class="dropdown-menu dropdown-menu-right">

@@ -944,19 +944,21 @@
     }
 </style>
 
-<!-- CORE PLUGINS-->
-<script src="./assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="./assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
-<script src="./assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="./assets/vendors/metisMenu/dist/metisMenu.min.js" type="text/javascript"></script>
-<script src="./assets/vendors/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<!-- PAGE LEVEL PLUGINS-->
-<script src="./assets/vendors/DataTables/datatables.min.js" type="text/javascript"></script>
-<!-- CORE SCRIPTS-->
-<script src="assets/js/app.min.js" type="text/javascript"></script>
+<!-- BEGIN PAGA BACKDROPS-->
+<div class="sidenav-backdrop backdrop"></div>
+<div class="preloader-backdrop">
+    <div class="page-preloader">Loading</div>
+</div>
+<!-- END PAGA BACKDROPS-->
+
 <!-- PAGE LEVEL SCRIPTS-->
 <script type="text/javascript">
     $(function() {
+        console.log('✅ App started');
+        console.log('✅ Button #btnLoadData:', $('#btnLoadData').length > 0);
+        console.log('✅ Button #btnLoadRekap:', $('#btnLoadRekap').length > 0);
+        console.log('✅ Button #btnLoadGrafik:', $('#btnLoadGrafik').length > 0);
+
         // DataTables dinonaktifkan karena menggunakan Laravel pagination
         // $('#example-table').DataTable({
         //     pageLength: 10,
@@ -972,16 +974,31 @@
         var currentMonth = new Date().getMonth() + 1;
         $('#pilih_bulan').val(currentMonth);
 
-        // Load Data Button Handler
-        $('#btnLoadData').on('click', function() {
+        // Auto load laporan harian saat tab diklik
+        $(document).on('shown.bs.tab', 'a[data-toggle="tab"][href="#tab-laporan-harian"]', function() {
             var bulan = $('#pilih_bulan').val();
             var tahun = $('#pilih_tahun').val();
+            loadLaporanHarian(bulan, tahun);
+        });
+
+        // Load Data Button Handler - Using event delegation
+        $(document).on('click', '#btnLoadData', function() {
+            console.log('✅ Button Load Data CLICKED!');
+            console.log('Button element:', this);
+            var bulan = $('#pilih_bulan').val();
+            var tahun = $('#pilih_tahun').val();
+            console.log('Bulan:', bulan, 'Tahun:', tahun);
+
+            if (!bulan || !tahun) {
+                alert('Bulan atau Tahun belum dipilih!');
+                return;
+            }
 
             loadLaporanHarian(bulan, tahun);
         });
 
-        // Export PDF Laporan Handler
-        $('#btnExportPdfLaporan').on('click', function() {
+        // Export PDF Laporan Handler - Using event delegation
+        $(document).on('click', '#btnExportPdfLaporan', function() {
             var bulan = $('#pilih_bulan').val();
             var tahun = $('#pilih_tahun').val();
 
@@ -1076,8 +1093,13 @@
 
         // Function to load laporan harian
         function loadLaporanHarian(bulan, tahun) {
+            console.log('🔄 loadLaporanHarian called with bulan:', bulan, 'tahun:', tahun);
+            console.log('🔄 Target tbody element exists:', $('#laporanHarianBody').length > 0);
+            console.log('🔄 AJAX URL:', '{{ route("dataproduksi.laporan.harian") }}');
+
             // Show loading
             $('#laporanHarianBody').html('<tr><td colspan="13" class="text-center"><i class="fa fa-spinner fa-spin"></i> Memuat data...</td></tr>');
+            console.log('🔄 Loading indicator displayed');
 
             $.ajax({
                 url: '{{ route("dataproduksi.laporan.harian") }}',
@@ -1086,15 +1108,25 @@
                     bulan: bulan,
                     tahun: tahun
                 },
+                beforeSend: function() {
+                    console.log('🔄 AJAX request starting...');
+                },
                 success: function(response) {
+                    console.log('✅ Response received:', response);
                     if (response.success) {
+                        console.log('✅ Success! Data count:', response.data ? response.data.length : 0);
                         renderLaporanTable(response.data, response.totals);
                     } else {
+                        console.error('❌ Response success = false');
                         $('#laporanHarianBody').html('<tr><td colspan="13" class="text-center text-danger">Gagal memuat data</td></tr>');
                     }
                 },
-                error: function() {
-                    $('#laporanHarianBody').html('<tr><td colspan="13" class="text-center text-danger">Terjadi kesalahan saat memuat data</td></tr>');
+                error: function(xhr, status, error) {
+                    console.error('❌ AJAX Error:', status, error);
+                    console.error('❌ Response:', xhr.responseText);
+                    console.error('❌ Status Code:', xhr.status);
+                    alert('Error: ' + error + '\nStatus: ' + xhr.status + '\nCek console untuk detail');
+                    $('#laporanHarianBody').html('<tr><td colspan="13" class="text-center text-danger">Terjadi kesalahan saat memuat data. Cek console.</td></tr>');
                 }
             });
         }
@@ -1150,12 +1182,19 @@
         }
 
         // ==================== REKAP BULANAN FUNCTIONS ====================
-        $('#btnLoadRekap').on('click', function() {
+        // Auto load rekap bulanan saat tab diklik
+        $(document).on('shown.bs.tab', 'a[data-toggle="tab"][href="#tab-rekap-bulanan"]', function() {
+            loadRekapBulanan();
+        });
+
+        $(document).on('click', '#btnLoadRekap', function() {
+            console.log('Button Load Rekap clicked');
             loadRekapBulanan();
         });
 
         function loadRekapBulanan() {
             var tahun = $('#tahun_rekap').val();
+            console.log('loadRekapBulanan called with tahun:', tahun);
             $('#tahun_rekap_display').text(tahun);
 
             Swal.fire({
@@ -1234,7 +1273,7 @@
             });
         }
 
-        $('#btnExportPdfRekap').on('click', function() {
+        $(document).on('click', '#btnExportPdfRekap', function() {
             var tahun = $('#tahun_rekap').val();
 
             Swal.fire({
@@ -1297,7 +1336,7 @@
         // ==================== GRAFIK PRODUKSI FUNCTIONS ====================
         let myChart = null;
 
-        $('#jenis_grafik').on('change', function() {
+        $(document).on('change', '#jenis_grafik', function() {
             if ($(this).val() === 'bulanan') {
                 $('#bulan_filter_grafik').hide();
             } else {
@@ -1305,11 +1344,12 @@
             }
         });
 
-        $('#btnLoadGrafik').on('click', function() {
+        $(document).on('click', '#btnLoadGrafik', function() {
+            console.log('Button Load Grafik clicked');
             loadGrafik();
         });
 
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
             if ($(e.target).attr('href') === '#tab-grafik' && !myChart) {
                 loadGrafik();
             }
@@ -1319,6 +1359,7 @@
             var jenisGrafik = $('#jenis_grafik').val();
             var bulan = $('#bulan_grafik').val();
             var tahun = $('#tahun_grafik').val();
+            console.log('loadGrafik called with jenis:', jenisGrafik, 'bulan:', bulan, 'tahun:', tahun);
 
             Swal.fire({
                 title: 'Memuat Data...',
@@ -1406,7 +1447,7 @@
         }
 
         // ==================== PREVIEW EXPORT FUNCTIONS ====================
-        $('#btnPreview').on('click', function() {
+        $(document).on('click', '#btnPreview', function() {
             var bulan = $('#bulan_export').val();
             var tahun = $('#tahun_export').val();
             var jenis_trayek = $('#jenis_trayek_export').val();
@@ -1492,7 +1533,7 @@
         });
 
         // ==================== PREVIEW EXPORT PDF FUNCTIONS ====================
-        $('#btnPreviewPdf').on('click', function() {
+        $(document).on('click', '#btnPreviewPdf', function() {
             var bulan = $('#bulan_pdf').val();
             var tahun = $('#tahun_pdf').val();
             var jenis_trayek = $('#jenis_trayek_pdf').val();

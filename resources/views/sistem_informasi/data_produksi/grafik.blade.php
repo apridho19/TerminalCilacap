@@ -22,7 +22,7 @@
                     <div class="ibox-title">Filter Data</div>
                 </div>
                 <div class="ibox-body">
-                    <div class="row">
+                    <div class="row align-items-end">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="jenis_grafik" class="font-strong">Jenis Grafik:</label>
@@ -54,10 +54,12 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex align-items-end">
-                            <button type="button" class="btn btn-primary" id="btnLoadGrafik">
-                                <i class="fa fa-bar-chart"></i> Tampilkan Grafik
-                            </button>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-block" id="btnLoadGrafik">
+                                    <i class="fa fa-bar-chart"></i> Tampilkan Grafik
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,15 +124,24 @@
     </div>
 </div>
 
+<!-- BEGIN PAGA BACKDROPS-->
+<div class="sidenav-backdrop backdrop"></div>
+<div class="preloader-backdrop">
+    <div class="page-preloader">Loading</div>
+</div>
+<!-- END PAGA BACKDROPS-->
+
+@endsection
+
 <script>
     let myChart = null;
 
-    $(function() {
+    $(document).ready(function() {
         // Load grafik pertama kali
         loadGrafik();
 
         // Toggle bulan filter berdasarkan jenis grafik
-        $('#jenis_grafik').on('change', function() {
+        $(document).on('change', '#jenis_grafik', function() {
             if ($(this).val() === 'bulanan') {
                 $('#bulan_filter').hide();
             } else {
@@ -138,8 +149,8 @@
             }
         });
 
-        // Load grafik button
-        $('#btnLoadGrafik').on('click', function() {
+        // Load grafik button - Using event delegation
+        $(document).on('click', '#btnLoadGrafik', function() {
             loadGrafik();
         });
 
@@ -238,12 +249,3 @@
         }
     });
 </script>
-
-<!-- BEGIN PAGA BACKDROPS-->
-<div class="sidenav-backdrop backdrop"></div>
-<div class="preloader-backdrop">
-    <div class="page-preloader">Loading</div>
-</div>
-<!-- END PAGA BACKDROPS-->
-
-@endsection

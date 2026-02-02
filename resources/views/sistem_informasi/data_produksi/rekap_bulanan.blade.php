@@ -118,77 +118,78 @@
             <!-- END PAGE CONTENT-->
         </div>
     </div>
-
-    <script>
-        $(function() {
-            // Load Data Button Handler
-            $('#btnLoadRekap').on('click', function() {
-                var tahun = $('#tahun').val();
-                window.location.href = '{{ route("dataproduksi.rekap.bulanan") }}?tahun=' + tahun;
-            });
-
-            // Export PDF Handler
-            $('#btnExportPdfRekap').on('click', function() {
-                var tahun = $('#tahun').val();
-
-                Swal.fire({
-                    title: 'Export Rekap Bulanan ke PDF?',
-                    html: '<div style="text-align: left; padding: 10px;">' +
-                        '<p style="margin: 5px 0;"><i class="fa fa-calendar" style="margin-right: 8px; color: #3085d6;"></i><strong>Tahun:</strong> ' + tahun + '</p>' +
-                        '<p style="margin: 5px 0;"><i class="fa fa-file-pdf-o" style="margin-right: 8px; color: #d33;"></i><strong>Format:</strong> PDF Landscape A4</p>' +
-                        '</div>',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<i class="fa fa-download"></i> Ya, Download PDF',
-                    cancelButtonText: '<i class="fa fa-times"></i> Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: '<i class="fa fa-cog fa-spin"></i> Memproses...',
-                            html: 'Sedang membuat file PDF<br><small>Mohon tunggu sebentar...</small>',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showConfirmButton: false
-                        });
-
-                        var form = $('<form>', {
-                            'method': 'POST',
-                            'action': '{{ route("dataproduksi.export.rekap.pdf") }}',
-                            'target': '_blank'
-                        });
-
-                        form.append($('<input>', {
-                            'type': 'hidden',
-                            'name': '_token',
-                            'value': '{{ csrf_token() }}'
-                        }));
-
-                        form.append($('<input>', {
-                            'type': 'hidden',
-                            'name': 'tahun',
-                            'value': tahun
-                        }));
-
-                        $('body').append(form);
-                        form.submit();
-
-                        setTimeout(function() {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: 'File PDF sedang diunduh...',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-                            form.remove();
-                        }, 1500);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 @endsection
+
+<script>
+    $(document).ready(function() {
+        // Load Data Button Handler - Using event delegation
+        $(document).on('click', '#btnLoadRekap', function() {
+            var tahun = $('#tahun').val();
+            window.location.href = '{{ route("dataproduksi.rekap.bulanan") }}?tahun=' + tahun;
+        });
+
+        // Export PDF Handler - Using event delegation
+        $(document).on('click', '#btnExportPdfRekap', function() {
+            var tahun = $('#tahun').val();
+
+            Swal.fire({
+                title: 'Export Rekap Bulanan ke PDF?',
+                html: '<div style="text-align: left; padding: 10px;">' +
+                    '<p style="margin: 5px 0;"><i class="fa fa-calendar" style="margin-right: 8px; color: #3085d6;"></i><strong>Tahun:</strong> ' + tahun + '</p>' +
+                    '<p style="margin: 5px 0;"><i class="fa fa-file-pdf-o" style="margin-right: 8px; color: #d33;"></i><strong>Format:</strong> PDF Landscape A4</p>' +
+                    '</div>',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fa fa-download"></i> Ya, Download PDF',
+                cancelButtonText: '<i class="fa fa-times"></i> Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: '<i class="fa fa-cog fa-spin"></i> Memproses...',
+                        html: 'Sedang membuat file PDF<br><small>Mohon tunggu sebentar...</small>',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false
+                    });
+
+                    var form = $('<form>', {
+                        'method': 'POST',
+                        'action': '{{ route("dataproduksi.export.rekap.pdf") }}',
+                        'target': '_blank'
+                    });
+
+                    form.append($('<input>', {
+                        'type': 'hidden',
+                        'name': '_token',
+                        'value': '{{ csrf_token() }}'
+                    }));
+
+                    form.append($('<input>', {
+                        'type': 'hidden',
+                        'name': 'tahun',
+                        'value': tahun
+                    }));
+
+                    $('body').append(form);
+                    form.submit();
+
+                    setTimeout(function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'File PDF sedang diunduh...',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        form.remove();
+                    }, 1500);
+                }
+            });
+        });
+    });
+</script>
+</body>
