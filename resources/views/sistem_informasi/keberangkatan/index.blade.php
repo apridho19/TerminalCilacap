@@ -139,33 +139,33 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="nama_po" class="font-strong">Nama PO</label>
-                                <input type="text" class="form-control" id="nama_po" name="nama_po" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="nama_po" name="nama_po" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="jenis_trayek" class="font-strong">Jenis Trayek</label>
-                                <input type="text" class="form-control" id="jenis_trayek" name="jenis_trayek" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="jenis_trayek" name="jenis_trayek" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="data_trayek" class="font-strong">Trayek</label>
-                        <input type="text" class="form-control" id="data_trayek" name="data_trayek" placeholder="Otomatis terisi" readonly>
+                        <input type="text" class="form-control" id="data_trayek" name="data_trayek" placeholder="Otomatis terisi / isi manual">
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="asal_tujuan" class="font-strong">Asal - Tujuan</label>
-                                <input type="text" class="form-control" id="asal_tujuan" name="asal_tujuan" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="asal_tujuan" name="asal_tujuan" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="provinsi" class="font-strong">Provinsi</label>
-                                <input type="text" class="form-control" id="provinsi" name="provinsi" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="provinsi" name="provinsi" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                     </div>
@@ -174,13 +174,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="terminal_tujuan" class="font-strong">Terminal Tujuan</label>
-                                <input type="text" class="form-control" id="terminal_tujuan" name="terminal_tujuan" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="terminal_tujuan" name="terminal_tujuan" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="kabupaten" class="font-strong">Kabupaten</label>
-                                <input type="text" class="form-control" id="kabupaten" name="kabupaten" placeholder="Otomatis terisi" readonly>
+                                <input type="text" class="form-control" id="kabupaten" name="kabupaten" placeholder="Otomatis terisi / isi manual">
                             </div>
                         </div>
                     </div>
@@ -258,10 +258,9 @@
 
 <!-- SweetAlert2 CDN -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
- 
+
 <!-- PAGE LEVEL SCRIPTS-->
 <script type="text/javascript">
-    
     // Function untuk confirm delete (global)
     function confirmDelete(id, noKendaraan) {
         Swal.fire({
@@ -320,7 +319,7 @@
         /* ===============================
            VALIDATION ERROR
         =============================== */
-        @if($errors->any())
+        @if($errors-> any())
         $('#modalTambahKeberangkatan').modal('show');
         @endif
 
@@ -366,13 +365,14 @@
                             .removeClass('text-danger text-warning')
                             .addClass('text-success');
 
-                        $('#nama_po').val(response.data.nama_po || '-');
-                        $('#jenis_trayek').val(response.data.jenis_trayek || '-');
-                        $('#data_trayek').val(response.data.data_trayek || '-');
-                        $('#asal_tujuan').val(response.data.asal_tujuan || '-');
-                        $('#provinsi').val(response.data.provinsi || '-');
-                        $('#terminal_tujuan').val(response.data.terminal_tujuan || '-');
-                        $('#kabupaten').val(response.data.kabupaten || '-');
+                        // Isi field dan set readonly
+                        $('#nama_po').val(response.data.nama_po || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#jenis_trayek').val(response.data.jenis_trayek || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#data_trayek').val(response.data.data_trayek || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#asal_tujuan').val(response.data.asal_tujuan || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#provinsi').val(response.data.provinsi || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#terminal_tujuan').val(response.data.terminal_tujuan || '-').prop('readonly', true).css('background-color', '#e9ecef');
+                        $('#kabupaten').val(response.data.kabupaten || '-').prop('readonly', true).css('background-color', '#e9ecef');
                     } else {
                         manualInput();
                     }
@@ -399,7 +399,14 @@
                 .removeClass('text-success text-danger')
                 .addClass('text-warning');
 
-            $('#nama_po, #jenis_trayek, #data_trayek, #asal_tujuan, #provinsi, #terminal_tujuan, #kabupaten').val('');
+            // Kosongkan field dan hapus readonly agar bisa diisi manual
+            $('#nama_po').val('').prop('readonly', false).css('background-color', '');
+            $('#jenis_trayek').val('').prop('readonly', false).css('background-color', '');
+            $('#data_trayek').val('').prop('readonly', false).css('background-color', '');
+            $('#asal_tujuan').val('').prop('readonly', false).css('background-color', '');
+            $('#provinsi').val('').prop('readonly', false).css('background-color', '');
+            $('#terminal_tujuan').val('').prop('readonly', false).css('background-color', '');
+            $('#kabupaten').val('').prop('readonly', false).css('background-color', '');
         }
 
         /* ===============================

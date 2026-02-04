@@ -153,6 +153,10 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="tanggal" class="font-strong">Tanggal</label>
+                                                <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $tanggal ?? '' }}">
+                                            </div>
                                             <div class="col-md-4 mb-3 d-flex align-items-end">
                                                 <button type="submit" class="btn btn-primary mr-2">
                                                     <i class="fa fa-search"></i> Filter
