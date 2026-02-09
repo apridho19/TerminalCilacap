@@ -46,10 +46,10 @@
                 data-wow-delay="0.5s">
                 Jl. Gatot Subroto No.268, Gunungsimping, Kab. Cilacap
               </p>
-              <a
+              <!-- <a
                 class="btn btn-primary border-warning rounded-pill text-white py-3 px-5 wow fadeInUp"
                 data-wow-delay="0.7s"
-                href="#">Lihat Selengkapnya</a>
+                href="#">Lihat Selengkapnya</a> -->
             </div>
           </div>
         </div>
@@ -75,10 +75,10 @@
                 data-wow-delay="0.5s">
                 Jl. Gatot Subroto No.268, Gunungsimping, Kab. Cilacap
               </p>
-              <a
+              <!-- <a
                 class="btn btn-primary border-warning rounded-pill text-white py-3 px-5 wow fadeInUp"
                 data-wow-delay="0.7s"
-                href="#">Lihat Selengkapnya</a>
+                href="#">Lihat Selengkapnya</a> -->
             </div>
           </div>
         </div>
