@@ -83,7 +83,15 @@ class DataMasterController extends Controller
             $import = new DataMasterImport;
             Excel::import($import, $request->file('file'));
 
-            return redirect()->route('datamaster.index')->with('success', 'Data berhasil diimport dari Excel! (Data duplikat otomatis dilewati)');
+            $successCount = $import->getSuccessCount();
+            $skipCount = $import->getSkipCount();
+
+            $message = "Import selesai! {$successCount} data berhasil diimport";
+            if ($skipCount > 0) {
+                $message .= ", {$skipCount} data dilewati (kosong/duplikat)";
+            }
+
+            return redirect()->route('datamaster.index')->with('success', $message);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessages = [];
@@ -94,6 +102,8 @@ class DataMasterController extends Controller
 
             return redirect()->back()->with('error', 'Import gagal: ' . implode(' | ', $errorMessages));
         } catch (\Exception $e) {
+            \Log::error('Import Error: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }

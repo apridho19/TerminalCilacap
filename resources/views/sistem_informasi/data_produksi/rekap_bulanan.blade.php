@@ -55,14 +55,14 @@
                                     </tr>
                                     <tr>
                                         <!-- AKAP -->
-                                        <th class="text-center">Bis Datang</th>
+                                        <th class="text-center">Bus Datang</th>
                                         <th class="text-center">Pnp Datang</th>
-                                        <th class="text-center">Bis Berangkat</th>
+                                        <th class="text-center">Bus Berangkat</th>
                                         <th class="text-center">Pnp Berangkat</th>
                                         <!-- AKDP -->
-                                        <th class="text-center">Bis Datang</th>
+                                        <th class="text-center">Bus Datang</th>
                                         <th class="text-center">Pnp Datang</th>
-                                        <th class="text-center">Bis Berangkat</th>
+                                        <th class="text-center">Bus Berangkat</th>
                                         <th class="text-center">Pnp Berangkat</th>
                                     </tr>
                                 </thead>

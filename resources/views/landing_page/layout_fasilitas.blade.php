@@ -93,7 +93,7 @@
                             src="{{ asset('assets/img/layout-fasilitas.png') }}"
                             class="img-fluid w-100 rounded shadow-lg"
                             alt="Layout Fasilitas Terminal BMD Cilacap" />
-                        <h4 class="mt-4 mb-4 text-primary">
+                        <h4 class="mt-4 mb-2 text-primary">
                             Layout Terminal TTA BMD Cilacap
                         </h4>
                     </div>
@@ -104,8 +104,10 @@
     <!-- Layout Fasilitas End -->
 
     <!-- Training Start -->
-    <div class="container-fluid training overflow-hidden bg-light py-5">
-        <div class="container py-5">
+    <div class="container-fluid training overflow-hidden bg-light" style="padding-top: 0.5rem !important; padding-bottom: 3rem;">
+        <div class="container" style="padding-top: 0 !important; padding-bottom: 0 !important;">
+            <!-- Keterangan -->
+
             <div class="row g-3">
                 <div
                     class="col-lg-6 col-xl-4 wow fadeInUp"

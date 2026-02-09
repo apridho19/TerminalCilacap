@@ -103,7 +103,7 @@
                             </div>
 
                             <!-- Highlight Tarif -->
-                            <div class="row text-center mb-4">
+                            <!-- <div class="row text-center mb-4">
                                 <div class="col-6">
                                     <div class="border rounded p-2">
                                         <small class="text-muted d-block">Tarif Mulai</small>
@@ -116,7 +116,7 @@
                                         <strong class="text-primary">3 Operator</strong>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Tujuan Populer -->
                             <div class="mb-4">
@@ -162,7 +162,7 @@
                             </div>
 
                             <!-- Highlight Tarif -->
-                            <div class="row text-center mb-4">
+                            <!-- <div class="row text-center mb-4">
                                 <div class="col-6">
                                     <div class="border rounded p-2">
                                         <small class="text-muted d-block">Tarif Mulai</small>
@@ -175,7 +175,7 @@
                                         <strong class="text-primary">5 Operator</strong>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Tujuan Populer -->
                             <div class="mb-4">
@@ -221,7 +221,7 @@
                             </div>
 
                             <!-- Highlight Tarif -->
-                            <div class="row text-center mb-4">
+                            <!-- <div class="row text-center mb-4">
                                 <div class="col-6">
                                     <div class="border rounded p-2">
                                         <small class="text-muted d-block">Tarif Mulai</small>
@@ -234,7 +234,7 @@
                                         <strong class="text-primary">12 Operator</strong>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Tujuan Populer -->
                             <div class="mb-4">
@@ -280,7 +280,7 @@
                             </div>
 
                             <!-- Highlight Tarif -->
-                            <div class="row text-center mb-4">
+                            <!-- <div class="row text-center mb-4">
                                 <div class="col-6">
                                     <div class="border rounded p-2">
                                         <small class="text-muted d-block">Tarif Mulai</small>
@@ -293,7 +293,7 @@
                                         <strong class="text-primary">4 Operator</strong>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Tujuan Populer -->
                             <div class="mb-4">

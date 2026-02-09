@@ -57,7 +57,7 @@
                         <span class="nav-label">Dashboard</span>
                     </a>
                 </li>
-                <li class="heading" style="color: #333">FEATURES</li>
+                <!-- <li class="heading" style="color: #333">FEATURES</li> -->
                 <li>
                     <a class="{{ request()->is('keberangkatan*') ? 'active' : '' }}" href="{{ url('/keberangkatan') }}"><i class="sidebar-item-icon fa fa-plane"></i>
                         <span class="nav-label">Keberangkatan</span></a>

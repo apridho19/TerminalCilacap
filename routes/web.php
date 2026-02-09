@@ -8,6 +8,7 @@ use App\Http\Controllers\DataProduksiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\DataTrayekController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,8 @@ Route::get('/tarif_jatim', function () {
 Route::get('/tarif_jabar', function () {
     return view('landing_page.detail_tarif.tarif_jabar');
 });
+
+Route::get('/data_trayek', [DataTrayekController::class, 'index'])->name('data_trayek.index');
 
 
 

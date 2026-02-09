@@ -8,8 +8,12 @@
                     <a href=""><i class="fa fa-map-marker-alt me-2"></i> Jl. Gatot Subroto
                         No.268, Gunungsimping, Kab. Cilacap</a>
                     <a href=""><i class="fas fa-envelope me-2"></i> gunungsimping.clp@gmail.com </a>
-                    <a href=""><i class="fas fa-phone me-2"></i> +012 345 67890</a>
-                    <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +012 345 67890</a>
+
+                    
+                    <!-- <a href=""><i class="fas fa-phone me-2"></i> +012 345 67890</a>
+                    <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +012 345 67890</a> -->
+
+
                     <div class="d-flex align-items-center">
                         <i class="fas fa-share fa-2x text-warning me-2"></i>
                         <a class="btn mx-1" href="{{ url('https://www.facebook.com/ttabmdcilacap/') }}"><i class="fab fa-facebook-f"></i></a>

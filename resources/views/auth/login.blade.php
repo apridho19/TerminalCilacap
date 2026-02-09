@@ -419,7 +419,10 @@
                 <div class="remember-forgot">
                     <div class="checkbox-wrapper">
                         <input type="checkbox" name="remember" id="remember">
-                        <label for="remember">Ingat Saya</label>
+                        <label for="remember" title="Centang untuk menyimpan sesi login Anda lebih lama">
+                            Ingat Saya
+                            <i class="fa fa-info-circle" style="font-size: 12px; color: #6c757d; cursor: help;"></i>
+                        </label>
                     </div>
                 </div>
 
@@ -443,27 +446,40 @@
 
     <script type="text/javascript">
         $(function() {
-            // Load saved username if "Ingat Saya" was checked
+            // Load saved credentials if "Ingat Saya" was checked previously
             if (localStorage.getItem('rememberMe') === 'true') {
                 const savedUsername = localStorage.getItem('savedUsername');
                 if (savedUsername) {
                     $('input[name="username"]').val(savedUsername);
                     $('#remember').prop('checked', true);
+                    console.log('✓ Username tersimpan dimuat dari penyimpanan lokal');
                 }
             }
 
-            // Save/remove username based on "Ingat Saya" checkbox
+            // Handle Remember Me checkbox changes
+            $('#remember').on('change', function() {
+                if ($(this).is(':checked')) {
+                    console.log('✓ Fitur "Ingat Saya" diaktifkan - username akan disimpan');
+                } else {
+                    console.log('✗ Fitur "Ingat Saya" dinonaktifkan - username tidak akan disimpan');
+                }
+            });
+
+            // Save/remove credentials based on "Ingat Saya" checkbox on form submit
             $('#login-form').on('submit', function() {
                 if ($('#remember').is(':checked')) {
                     const username = $('input[name="username"]').val();
                     localStorage.setItem('rememberMe', 'true');
                     localStorage.setItem('savedUsername', username);
+                    console.log('✓ Username disimpan untuk login berikutnya');
                 } else {
                     localStorage.removeItem('rememberMe');
                     localStorage.removeItem('savedUsername');
+                    console.log('✗ Data tersimpan dihapus');
                 }
 
                 $('.btn-login').html('<i class="fa fa-spinner fa-spin"></i> Memproses...');
+                $('.btn-login').prop('disabled', true);
             });
 
             // Auto hide alert setelah 5 detik
