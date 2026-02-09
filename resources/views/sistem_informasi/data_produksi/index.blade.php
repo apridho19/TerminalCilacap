@@ -106,30 +106,37 @@
                                     <h5 class="card-title mb-3">
                                         <i class="fa fa-filter"></i> Filter Data
                                     </h5>
-                                    <form action="{{ route('dataproduksi.index') }}" method="GET" id="filterForm">
+                                    <form action="{{ route('dataproduksi.index') }}" method="GET" id="filterForm" autocomplete="off">
                                         <div class="row">
                                             <div class="col-md-4 mb-3">
                                                 <label for="jenis_trayek" class="font-strong">Jenis Trayek</label>
-                                                <select class="form-control" id="jenis_trayek" name="jenis_trayek">
+                                                <select class="form-control" name="jenis_trayek">
                                                     <option value="">-- Semua Jenis Trayek --</option>
-                                                    @foreach($jenisTrayekList as $jt)
-                                                    <option value="{{ $jt }}" {{ $jenisTrayek == $jt ? 'selected' : '' }}>{{ $jt }}</option>
+                                                    @foreach ($jenisTrayekList as $jt)
+                                                    <option value="{{ $jt }}" {{ request('jenis_trayek') == $jt ? 'selected' : '' }}>
+                                                        {{ $jt }}
+                                                    </option>
                                                     @endforeach
                                                 </select>
+
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="asal_tujuan" class="font-strong">Asal - Tujuan</label>
-                                                <select class="form-control" id="asal_tujuan" name="asal_tujuan">
+                                                <select class="form-control" name="asal_tujuan">
                                                     <option value="">-- Semua Asal Tujuan --</option>
-                                                    @foreach($asalTujuanList as $at)
-                                                    <option value="{{ $at }}" {{ $asalTujuan == $at ? 'selected' : '' }}>{{ $at }}</option>
+                                                    @foreach ($asalTujuanList as $at)
+                                                    <option value="{{ $at }}" {{ request('asal_tujuan') == $at ? 'selected' : '' }}>
+                                                        {{ $at }}
+                                                    </option>
                                                     @endforeach
                                                 </select>
+
                                             </div>
+
                                             <div class="col-md-4 mb-3">
                                                 <label for="provinsi" class="font-strong">Provinsi</label>
-                                                <select class="form-control" id="provinsi" name="provinsi">
-                                                    <option value="">-- Semua Provinsi --</option>
+                                                <select class="form-control" id="provinsi" name="provinsi" autocomplete="off">
+                                                    <option value="" {{ empty($provinsi) ? 'selected' : '' }}>-- Semua Provinsi --</option>
                                                     @foreach($provinsiList as $prov)
                                                     <option value="{{ $prov }}" {{ $provinsi == $prov ? 'selected' : '' }}>{{ $prov }}</option>
                                                     @endforeach
@@ -137,8 +144,8 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="terminal_tujuan" class="font-strong">Terminal Tujuan</label>
-                                                <select class="form-control" id="terminal_tujuan" name="terminal_tujuan">
-                                                    <option value="">-- Semua Terminal --</option>
+                                                <select class="form-control" id="terminal_tujuan" name="terminal_tujuan" autocomplete="off">
+                                                    <option value="" {{ empty($terminalTujuan) ? 'selected' : '' }}>-- Semua Terminal --</option>
                                                     @foreach($terminalTujuanList as $tt)
                                                     <option value="{{ $tt }}" {{ $terminalTujuan == $tt ? 'selected' : '' }}>{{ $tt }}</option>
                                                     @endforeach
@@ -146,8 +153,8 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="kabupaten" class="font-strong">Kabupaten</label>
-                                                <select class="form-control" id="kabupaten" name="kabupaten">
-                                                    <option value="">-- Semua Kabupaten --</option>
+                                                <select class="form-control" id="kabupaten" name="kabupaten" autocomplete="off">
+                                                    <option value="" {{ empty($kabupaten) ? 'selected' : '' }}>-- Semua Kabupaten --</option>
                                                     @foreach($kabupatenList as $kab)
                                                     <option value="{{ $kab }}" {{ $kabupaten == $kab ? 'selected' : '' }}>{{ $kab }}</option>
                                                     @endforeach
@@ -155,15 +162,15 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="tanggal" class="font-strong">Tanggal</label>
-                                                <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $tanggal ?? '' }}">
+                                                <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $tanggal ?? '' }}" placeholder="dd / mm / yyyy" autocomplete="off">
                                             </div>
                                             <div class="col-md-4 mb-3 d-flex align-items-end">
                                                 <button type="submit" class="btn btn-primary mr-2">
                                                     <i class="fa fa-search"></i> Filter
                                                 </button>
-                                                <a href="{{ route('dataproduksi.index') }}" class="btn btn-secondary">
+                                                <button type="button" id="btnResetFilter" class="btn btn-secondary">
                                                     <i class="fa fa-refresh"></i> Reset
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -250,6 +257,96 @@
                                     {{ $dataProduksiPaginated->appends(request()->query())->links() }}
                                 </div>
                             </div>
+
+                            <!-- Summary Cards - Hanya tampil saat ada filter -->
+                            @if($jenisTrayek || $asalTujuan || $provinsi || $terminalTujuan || $kabupaten || $tanggal)
+                            <div class="mt-4">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-0">
+                                        <div class="bg-light border-bottom px-4 py-3">
+                                            <h6 class="mb-0 font-weight-bold text-dark">
+                                                <i class="fa fa-chart-bar"></i> Ringkasan Data Berdasarkan Filter
+                                            </h6>
+                                        </div>
+                                        <div class="p-4">
+                                            <div class="row">
+                                                <!-- AKAP -->
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="border rounded p-3 h-100" style="border-left: 4px solid #5c6bc0 !important;">
+                                                        <div class="d-flex align-items-center mb-3">
+                                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 50px; height: 50px; background-color: #e8eaf6;">
+                                                                <i class="fa fa-bus fa-lg" style="color: #5c6bc0;"></i>
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="mb-0 font-weight-bold" style="color: #5c6bc0;">AKAP</h6>
+                                                                <small class="text-muted">Antar Kota Antar Provinsi</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row text-center">
+                                                            <div class="col-6 border-right">
+                                                                <h4 class="mb-0 font-weight-bold" style="color: #5c6bc0;">{{ $totalAkapBusBerangkat }}</h4>
+                                                                <small class="text-muted">Bus Berangkat</small>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <h4 class="mb-0 font-weight-bold" style="color: #5c6bc0;">{{ $totalAkapBusDatang }}</h4>
+                                                                <small class="text-muted">Bus Datang</small>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="my-3">
+                                                        <div class="row text-center">
+                                                            <div class="col-6 border-right">
+                                                                <h5 class="mb-0 font-weight-bold text-dark">{{ number_format($totalAkapPnpBerangkat) }}</h5>
+                                                                <small class="text-muted"><i class="fa fa-users"></i> Pnp Berangkat</small>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <h5 class="mb-0 font-weight-bold text-dark">{{ number_format($totalAkapPnpDatang) }}</h5>
+                                                                <small class="text-muted"><i class="fa fa-users"></i> Pnp Datang</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- AKDP -->
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="border rounded p-3 h-100" style="border-left: 4px solid #66bb6a !important;">
+                                                        <div class="d-flex align-items-center mb-3">
+                                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 50px; height: 50px; background-color: #e8f5e9;">
+                                                                <i class="fa fa-bus fa-lg" style="color: #66bb6a;"></i>
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="mb-0 font-weight-bold" style="color: #66bb6a;">AKDP</h6>
+                                                                <small class="text-muted">Antar Kota Dalam Provinsi</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row text-center">
+                                                            <div class="col-6 border-right">
+                                                                <h4 class="mb-0 font-weight-bold" style="color: #66bb6a;">{{ $totalAkdpBusBerangkat }}</h4>
+                                                                <small class="text-muted">Bus Berangkat</small>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <h4 class="mb-0 font-weight-bold" style="color: #66bb6a;">{{ $totalAkdpBusDatang }}</h4>
+                                                                <small class="text-muted">Bus Datang</small>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="my-3">
+                                                        <div class="row text-center">
+                                                            <div class="col-6 border-right">
+                                                                <h5 class="mb-0 font-weight-bold text-dark">{{ number_format($totalAkdpPnpBerangkat) }}</h5>
+                                                                <small class="text-muted"><i class="fa fa-users"></i> Pnp Berangkat</small>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <h5 class="mb-0 font-weight-bold text-dark">{{ number_format($totalAkdpPnpDatang) }}</h5>
+                                                                <small class="text-muted"><i class="fa fa-users"></i> Pnp Datang</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -962,6 +1059,40 @@
         console.log('✅ Button #btnLoadData:', $('#btnLoadData').length > 0);
         console.log('✅ Button #btnLoadRekap:', $('#btnLoadRekap').length > 0);
         console.log('✅ Button #btnLoadGrafik:', $('#btnLoadGrafik').length > 0);
+
+        // Reset Filter Handler - Force hard reload from server
+        $('#btnResetFilter').on('click', function(e) {
+            e.preventDefault();
+
+            // Gunakan location.replace untuk redirect tanpa menyimpan history
+            // Tambah timestamp untuk bypass cache
+            var cleanUrl = '{{ route("dataproduksi.index") }}?_reset=' + Date.now();
+            window.location.replace(cleanUrl);
+        });
+
+        // Force set default values saat page load tanpa filter
+        @if(empty($jenisTrayek) && empty($asalTujuan) && empty($provinsi) && empty($terminalTujuan) && empty($kabupaten) && empty($tanggal))
+        // Selalu force set ke default saat page load tanpa filter
+        $(document).ready(function() {
+            // Hapus parameter _reset dari URL jika ada
+            if (window.location.search.includes('_reset')) {
+                var cleanUrl = '{{ route("dataproduksi.index") }}';
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+
+            // Force set semua dropdown ke option pertama (index 0)
+            setTimeout(function() {
+                console.log('🔄 Setting default values...');
+                $('#jenis_trayek').prop('selectedIndex', 0);
+                $('#asal_tujuan').prop('selectedIndex', 0);
+                $('#provinsi').prop('selectedIndex', 0);
+                $('#terminal_tujuan').prop('selectedIndex', 0);
+                $('#kabupaten').prop('selectedIndex', 0);
+                $('#tanggal').val('');
+                console.log('✅ Default values applied');
+            }, 50);
+        });
+        @endif
 
         // DataTables dinonaktifkan karena menggunakan Laravel pagination
         // $('#example-table').DataTable({

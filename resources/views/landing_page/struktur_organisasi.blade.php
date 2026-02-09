@@ -56,14 +56,14 @@
 
                 <div class="col-lg-10 col-xl-8 text-center wow fadeInUp" data-wow-delay="0.1s">
                     <div class="mb-4">
-                        <img src="{{ asset('assets/img/struktur_organisasi.png') }}" class="img-fluid rounded shadow" alt="x">
+                        <img src="{{ asset('assets/img/Struktur-organisasi-terminal.png') }}" class="img-fluid rounded shadow" alt="x">
                     </div>
 
-                    <div class="bg-light rounded p-4">
+                    <!-- <div class="bg-light rounded p-4">
                         <p class="mb-0 text-justify">
                             Berdasarkan Peraturan Menteri Perhubungan Republik Indonesia Nomor PM 1 Tahun 2025 Tentang Perubahan Kedua atas Peraturan Menteri Perhubungan Nomor PM 6 Tahun 2023 tentang Organisasi dan Tata Kerja Balai Pengelola Transportasi Darat. Berikut adalah Struktur Organisasi Balai Pengelola Transportasi Darat Kelas I Jawa Tengah.
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

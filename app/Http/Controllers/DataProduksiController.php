@@ -15,13 +15,13 @@ class DataProduksiController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil nilai filter dari request
-        $jenisTrayek = $request->input('jenis_trayek');
-        $asalTujuan = $request->input('asal_tujuan');
-        $provinsi = $request->input('provinsi');
-        $terminalTujuan = $request->input('terminal_tujuan');
-        $kabupaten = $request->input('kabupaten');
-        $tanggal = $request->input('tanggal');
+        // Ambil nilai filter dari request (default ke null untuk menampilkan semua)
+        $jenisTrayek = $request->input('jenis_trayek', null);
+        $asalTujuan = $request->input('asal_tujuan', null);
+        $provinsi = $request->input('provinsi', null);
+        $terminalTujuan = $request->input('terminal_tujuan', null);
+        $kabupaten = $request->input('kabupaten', null);
+        $tanggal = $request->input('tanggal', null);
 
         // Query dengan filter (TANPA filter tanggal dulu)
         $query = DataProduksi::with('dataMaster');
@@ -239,6 +239,47 @@ class DataProduksiController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
+        // Hitung total berdasarkan jenis trayek AKAP dan AKDP dari data yang sudah difilter
+        $totalAkapBusBerangkat = 0;
+        $totalAkapBusDatang = 0;
+        $totalAkapPnpBerangkat = 0;
+        $totalAkapPnpDatang = 0;
+
+        $totalAkdpBusBerangkat = 0;
+        $totalAkdpBusDatang = 0;
+        $totalAkdpPnpBerangkat = 0;
+        $totalAkdpPnpDatang = 0;
+
+        foreach ($dataProduksiCollection as $item) {
+            $jenisTrayek = $item->dataMaster->jenis_trayek ?? null;
+
+            if ($jenisTrayek == 'AKAP') {
+                // Hitung bus dan penumpang berangkat
+                if ($item->waktu_berangkat) {
+                    $totalAkapBusBerangkat++;
+                    $totalAkapPnpBerangkat += $item->jml_pnp_berangkat ?? 0;
+
+                    // Jika data ini juga punya waktu datang (sudah di-pair), hitung sebagai bus datang juga
+                    if ($item->waktu_datang) {
+                        $totalAkapBusDatang++;
+                        $totalAkapPnpDatang += $item->jml_pnp_datang ?? 0;
+                    }
+                }
+            } elseif ($jenisTrayek == 'AKDP') {
+                // Hitung bus dan penumpang berangkat
+                if ($item->waktu_berangkat) {
+                    $totalAkdpBusBerangkat++;
+                    $totalAkdpPnpBerangkat += $item->jml_pnp_berangkat ?? 0;
+
+                    // Jika data ini juga punya waktu datang (sudah di-pair), hitung sebagai bus datang juga
+                    if ($item->waktu_datang) {
+                        $totalAkdpBusDatang++;
+                        $totalAkdpPnpDatang += $item->jml_pnp_datang ?? 0;
+                    }
+                }
+            }
+        }
+
         return view('sistem_informasi.data_produksi.index', compact(
             'dataProduksi',
             'dataProduksiPaginated',
@@ -256,7 +297,15 @@ class DataProduksiController extends Controller
             'totalBusBerangkatHariIni',
             'totalBusDatangHariIni',
             'totalPenumpangBerangkatHariIni',
-            'totalPenumpangDatangHariIni'
+            'totalPenumpangDatangHariIni',
+            'totalAkapBusBerangkat',
+            'totalAkapBusDatang',
+            'totalAkapPnpBerangkat',
+            'totalAkapPnpDatang',
+            'totalAkdpBusBerangkat',
+            'totalAkdpBusDatang',
+            'totalAkdpPnpBerangkat',
+            'totalAkdpPnpDatang'
         ));
     }
 
