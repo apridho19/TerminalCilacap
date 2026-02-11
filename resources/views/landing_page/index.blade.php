@@ -222,7 +222,7 @@
                 <a href="{{ url('/maklumat') }}" class="h4 text-white mb-0">Pelayanan</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/maklumat') }}">
                 <h4 class="text-white">Maklumat Pelayanan</h4>
               </a>
@@ -246,7 +246,7 @@
                 <a href="{{ url('/tarif_tiket') }}" class="h4 text-white mb-0">Tarif</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/tarif_tiket') }}">
                 <h4 class="text-white">Informasi Tarif Tiket</h4>
               </a>
@@ -270,7 +270,7 @@
                 <a href="{{ url('/daftar_po') }}" class="h4 text-white mb-0">PO Bus</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/daftar_po') }}">
                 <h4 class="text-white">Daftar PO Bus</h4>
               </a>
@@ -294,7 +294,7 @@
                 <a href="{{ url('/hasil_skm') }}" class="h4 text-white mb-0">SKM</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/hasil_skm') }}">
                 <h4 class="text-white">Survei Kepuasan Masyarakat</h4>
               </a>
@@ -318,7 +318,7 @@
                 <a href="{{ url('/layanan_pengaduan') }}" class="h4 text-white mb-0">Pengaduan</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/layanan_pengaduan') }}">
                 <h4 class="text-white">Layanan Pengaduan</h4>
               </a>
@@ -342,7 +342,7 @@
                 <a href="{{ url('/fasilitas') }}" class="h4 text-white mb-0">Fasilitas</a>
               </div>
             </div>
-            <div class="training-content bg-secondary rounded-bottom p-4">
+            <div class="training-content bg-primary rounded-bottom p-4">
               <a href="{{ url('/fasilitas') }}">
                 <h4 class="text-white">Denah & Fasilitas</h4>
               </a>

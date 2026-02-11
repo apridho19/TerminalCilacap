@@ -118,8 +118,8 @@
                                                     </option>
                                                     @endforeach
                                                 </select>
-
                                             </div>
+                                            
                                             <div class="col-md-4 mb-3">
                                                 <label for="asal_tujuan" class="font-strong">Asal - Tujuan</label>
                                                 <select class="form-control" name="asal_tujuan">
@@ -130,7 +130,6 @@
                                                     </option>
                                                     @endforeach
                                                 </select>
-
                                             </div>
 
                                             <div class="col-md-4 mb-3">
