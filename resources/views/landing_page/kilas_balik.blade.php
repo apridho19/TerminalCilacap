@@ -50,8 +50,19 @@
             <div class="row g-5">
                 <div class="col-xl-5 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="bg-light rounded">
-                        <img src="{{ asset('assets/img/about-2.png') }}" class="img-fluid w-100" style="margin-bottom: -7px;" alt="Image">
-                        <img src="{{ asset('assets/img/about-3.jpg') }}" class="img-fluid w-100 border-bottom border-5 border-primary" style="border-top-right-radius: 300px; border-top-left-radius: 300px;" alt="Image">
+                        <img
+                            src="{{ asset('assets/img/logo_terminal.png') }}"
+                            class="img-fluid w-100"
+                            style="margin-bottom: -100px"
+                            alt="Image" />
+                        <img
+                            src="{{ asset('assets/img/gedung_depan.jpg') }}"
+                            class="img-fluid w-100 border-bottom border-5 border-primary"
+                            style="
+                  border-top-right-radius: 300px;
+                  border-top-left-radius: 300px;
+                "
+                            alt="Image" />
                     </div>
                 </div>
                 <div class="col-xl-7 wow fadeInRight" data-wow-delay="0.3s">

@@ -54,24 +54,41 @@
             <div class="row g-5">
                 <div class="col-xl-5 wow fadeInLeft" data-wow-delay="0.1s">
                     <div class="bg-light rounded">
-                        <img src="{{ asset('assets/img/about-2.png') }}" class="img-fluid w-100" style="margin-bottom: -7px;" alt="Image">
-                        <img src="{{ asset('assets/img/about-3.jpg') }}" class="img-fluid w-100 border-bottom border-5 border-primary" style="border-top-right-radius: 300px; border-top-left-radius: 300px;" alt="Image">
+                        <img
+                            src="{{ asset('assets/img/logo_terminal.png') }}"
+                            class="img-fluid w-100"
+                            style="margin-bottom: -100px"
+                            alt="Image" />
+                        <img
+                            src="{{ asset('assets/img/gedung_depan.jpg') }}"
+                            class="img-fluid w-100 border-bottom border-5 border-primary"
+                            style="
+                  border-top-right-radius: 300px;
+                  border-top-left-radius: 300px;
+                "
+                            alt="Image" />
                     </div>
                 </div>
                 <div class="col-xl-7 wow fadeInRight" data-wow-delay="0.3s">
                     <h5 class="sub-title pe-3">Visi Misi</h5>
-                    <h1 class="display-5 mb-4">Tentang Kami - <br> Terminal Tipe A Bangga Mbangun Desa Cilacap </h1>
+                    <h1 class="display-5 mb-4">Terminal Tipe A Bangga Mbangun Desa Cilacap </h1>
                     <p class="mb-4">VISI
-                        <br><br>Pengelola Transportasi Darat Yang Handal, Berdaya Saing, Dan Memberikan Nilai Tambah Serta Terwujudnya Indonesia Maju Yang Berdaulat, Mandiri, Dan Berkepribadian, Berlandaskan Gotong-Royong.
+                        <br><br>Mewujudkan Terminal Tipe A Bangga Mbangun Desa Cilacap sebagai terminal yang bersih, aman, nyaman, dan berintegritas, berorientasi pada pelayanan publik yang profesional, humanis, serta adaptif terhadap perkembangan teknologi.
                         <br><br>
-                        Misi
+                        MISI
                         <br><br>
-                        Menciptakan sistem pelayanan transportasi darat yang aman, selamat, dan mampu menjangkau masyarakat dan wilayah Indonesia.
-                        Menciptakan dan mengorganisasikan transportasi darat, sungai, danau dan penyeberangan serta perkotaan yang berkualitas, berdaya saing dan berkelanjutan.
-                        Mendorong berkembangnya industri transportasi darat yang transparan dan akuntabel.
-                        Membangun prasarana dan sarana transportasi darat.
+                        1. Mewujudkan lingkungan terminal yang bersih dan tertata, melalui pengelolaan fasilitas yang berkelanjutan serta peningkatan kesadaran kebersihan bagi seluruh pengguna jasa terminal.
+                        <br>
+                        2. Menjamin keamanan dan keselamatan pengguna jasa, dengan penerapan standar operasional pelayanan, pengawasan terpadu, serta edukasi keselamatan berlalu lintas.
+                        <br>
+                        3. Memberikan pelayanan yang nyaman, ramah, dan inklusif, guna menciptakan pengalaman positif bagi masyarakat, pengemudi, dan seluruh pemangku kepentingan terminal.
+                        <br>
+                        4. Menegakkan nilai integritas, transparansi, dan akuntabilitas, dalam setiap aspek pengelolaan dan pelayanan terminal.
+                        <br>
+                        5. Mengembangkan sistem layanan berbasis teknologi informasi, untuk meningkatkan efektivitas, efisiensi, serta kemudahan akses informasi bagi masyarakat.
+                        <br>
+                        6. Mendukung pertumbuhan ekonomi masyarakat sekitar terminal, melalui penyediaan ruang usaha yang tertib, aman, dan berkeadilan.
                     </p>
-
                 </div>
             </div>
         </div>

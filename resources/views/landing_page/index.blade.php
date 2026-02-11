@@ -146,25 +146,10 @@
   <!-- About Start -->
   <div class="container-fluid py-5">
     <div class="container py-5">
-      <div class="row g-5">
-        <div class="col-xl-5 wow fadeInLeft" data-wow-delay="0.1s">
-          <div class="bg-light rounded">
-            <img
-              src="{{ asset('assets/img/logo_terminal.png') }}"
-              class="img-fluid w-100"
-              style="margin-bottom: -100px"
-              alt="Image" />
-            <img
-              src="{{ asset('assets/img/gedung_depan.jpg') }}"
-              class="img-fluid w-100 border-bottom border-5 border-primary"
-              style="
-                  border-top-right-radius: 300px;
-                  border-top-left-radius: 300px;
-                "
-              alt="Image" />
-          </div>
-        </div>
-        <div class="col-xl-7 wow fadeInRight" data-wow-delay="0.3s">
+      <div class="row g-5 align-items-center">
+
+        <!-- TEXT -->
+        <div class="col-xl-7 col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
           <h5 class="sub-title pe-3">Kilas Balik</h5>
           <h1 class="display-5 mb-4">
             Tentang Kami - <br />
@@ -174,24 +159,97 @@
           <p class="mb-4 text-justify">
             Terminal Tipe A Bangga Mbangun Desa yang terletak di Kabupaten
             Cilacap, merupakan salah satu terminal tipe A yang dikelola oleh
-            Balai Pengelola Transportasi Darat (BPTD) Jawa Tengah. Terminal
-            ini berfungsi sebagai pusat transportasi darat yang menghubungkan
+            Balai Pengelola Transportasi Darat (BPTD) Jawa Tengah. Terminal ini
+            berfungsi sebagai pusat transportasi darat yang menghubungkan
             berbagai kota dan daerah di Jawa Tengah dan sekitarnya.
             <br /><br />
             Asal usul nama terminal bermula dari nama gerakan yang tercantum
             pada Peraturan Bupati Cilacap Nomor 76 Tahun 2011, yakni mengenai
             pedoman pelaksanaan gerakan "Bangga Mbangun Desa". Terminal ini
             menerapkan konsep eco green building sesuai dengan PM Perhubungan
-            Nomor 132 Tahun 2015 Tentang Penyelenggaraan Terminal Penumpang
+            Nomor 132 Tahun 2015 tentang Penyelenggaraan Terminal Penumpang
             Angkutan Jalan.
             <br /><br />
-            Berbeda dengan pelayanan terdahulu, pada saat Pukul 20.00 WIB
-            terminal tampak mulai sepi. Akan tetapi, untuk saat ini Terminal
-            Tipe A Bangga Mbangun Desa (TTA BMD) telah melayani penumpang
-            setiap hari selama 24 jam.TTA BMD memiliki 9 (sembilan) lajur bus
-            Antar Kota Antar Provinsi (AKAP), 4 (empat) lajur bus Antar Kota
-            Dalam Provinsi (AKDP), dan satu lajur alternatif untuk angkutan
-            kota.
+            Saat ini, Terminal Tipe A Bangga Mbangun Desa (TTA BMD) melayani
+            penumpang selama 24 jam setiap hari. TTA BMD memiliki 9 (sembilan)
+            lajur bus Antar Kota Antar Provinsi (AKAP), 4 (empat) lajur bus
+            Antar Kota Dalam Provinsi (AKDP), serta satu lajur alternatif untuk
+            angkutan kota.
+          </p>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="col-xl-5 col-lg-6 wow fadeInRight" data-wow-delay="0.3s">
+          <div class="bg-light rounded position-relative">
+
+            <!-- Logo -->
+            <img
+              src="{{ asset('assets/img/logo_terminal.png') }}"
+              class="img-fluid w-100"
+              style="margin-bottom: -100px;"
+              alt="Logo Terminal" />
+
+            <!-- Gedung -->
+            <img
+              src="{{ asset('assets/img/gedung_depan.jpg') }}"
+              class="img-fluid w-100 border-bottom border-5 border-primary"
+              style="
+              border-top-right-radius: 300px;
+              border-top-left-radius: 300px;
+            "
+              alt="Gedung Terminal" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- About End -->
+
+
+  <!-- About Start -->
+  <div class="container-fluid py-5">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-xl-5 wow fadeInRight" data-wow-delay="0.1s">
+          <div class="bg-light rounded">
+            <img
+              src="{{ asset('assets/img/logo_terminal.png') }}"
+              class="img-fluid w-100"
+              style="margin-bottom: -100px"
+              alt="Image" />
+            <img
+              src="{{ asset('assets/img/profil-wasatpel.png') }}"
+              class="img-fluid w-100 border-bottom border-5 border-primary"
+              style="
+                  border-top-right-radius: 300px;
+                  border-top-left-radius: 300px;
+                "
+              alt="Image" />
+          </div>
+        </div>
+        <div class="col-xl-7 wow fadeInLeft" data-wow-delay="0.3s">
+          <h5 class="sub-title pe-3">Pengawas Satuan Pelayanan</h5>
+          <h1 class="display-5 mb-4">
+            WASATPEL<br />
+            Terminal Tipe A Bangga Mbangun Desa Cilacap
+          </h1>
+
+          <p class="mb-4 text-justify">
+            Sebagai Pengawas Satuan Pelayanan Terminal Tipe A Bangga Mbangun Desa Cilacap, saya memiliki harapan agar terminal ini senantiasa menjadi terminal yang bersih, aman, nyaman, serta menjunjung tinggi nilai integritas dalam setiap layanan yang diberikan kepada masyarakat.
+            <br /><br />
+            Terminal Tipe A BMD Cilacap tidak hanya kami posisikan sebagai fasilitas transportasi, tetapi juga sebagai pusat pelayanan publik yang informatif, edukatif, dan berorientasi pada keselamatan berlalu lintas, sekaligus berkontribusi dalam penguatan perekonomian masyarakat.
+            Dalam mendukung keterbukaan dan kemudahan akses informasi, kami menghadirkan website resmi Terminal Bangga Mbangun Desa Cilacap sebagai sarana digital yang memuat informasi layanan, jadwal keberangkatan, rute tujuan, serta berbagai aktivitas terminal yang dapat diakses oleh masyarakat secara luas.
+            Website ini juga menyediakan layanan pengaduan masyarakat sebagai bentuk komitmen kami dalam mendengar, merespons, dan menindaklanjuti setiap masukan demi peningkatan mutu pelayanan operasional terminal.
+            <br /><br />
+            Harapan kami, kehadiran website ini dapat terus berkembang dan menjadi media yang bermanfaat, transparan, serta mampu memperkuat kepercayaan masyarakat terhadap pelayanan Terminal Bangga Mbangun Desa Cilacap.
+            <br /><br />
+
+            Terima kasih. <br>
+            Salam Hangat,
+            <br />
+            WASATPEL Terminal Tipe A Bangga Mbangun Desa Cilacap <br /><br />
+            Sabarto, S.E.
           </p>
         </div>
       </div>

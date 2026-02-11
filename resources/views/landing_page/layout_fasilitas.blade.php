@@ -16,86 +16,46 @@
     </div>
     <!-- Spinner End -->
 
-
-    <!-- Modal Search Start -->
-    <div
-        class="modal fade"
-        id="searchModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content rounded-0">
-                <div class="modal-header">
-                    <h4 class="modal-title text-warning mb-0" id="exampleModalLabel">
-                        Search by keyword
-                    </h4>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex align-items-center">
-                    <div class="input-group w-75 mx-auto d-flex">
-                        <input
-                            type="search"
-                            class="form-control p-3"
-                            placeholder="keywords"
-                            aria-describedby="search-icon-1" />
-                        <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Search End -->
-
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb">
         <div class="container text-center py-5" style="max-width: 900px;">
-            <h3 class="text-white display-3 mb-4 wow fadeInDown" data-wow-delay="0.1s">Fasilitas</h1>
-                <!-- <ol class="breadcrumb justify-content-center text-white mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                    <li class="breadcrumb-item"><a href="index.html" class="text-white">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#" class="text-white">Pages</a></li>
-                    <li class="breadcrumb-item active text-warning">About</li>
-                </ol>     -->
+            <h3 class="text-white display-3 mb-4 wow fadeInDown" data-wow-delay="0.1s">Fasilitas Terminal</h3>
+            <p class="text-white-50 mb-0 wow fadeInDown" data-wow-delay="0.3s">
+            </p>
         </div>
     </div>
     <!-- Header End -->
 
-
     <!-- Layout Fasilitas Start -->
-    <div class="container-fluid training overflow-hidden bg-light py-5">
+    <div class="container-fluid bg-light py-5">
         <div class="container py-5">
-            <div
-                class="section-title text-center mb-5 wow fadeInUp"
-                data-wow-delay="0.1s">
+            <div class="section-title text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="sub-style">
                     <h5 class="sub-title text-primary px-3">Layout Terminal</h5>
                 </div>
-                <h1 class="display-5 mb-4">
-                    Denah Fasilitas Terminal TTA BMD Cilacap
-                </h1>
-                <p class="mb-0">
-                    Berikut adalah denah lengkap fasilitas Terminal Tipe A Bangga
-                    Mbangun Desa (BMD) Cilacap beserta keterangan setiap area dan
-                    fasilitas yang tersedia.
+                <h1 class="display-5 mb-4">Denah Fasilitas Terminal TTA BMD Cilacap</h1>
+                <p class="mb-0 text-muted" style="max-width: 800px; margin: 0 auto;">
+                    Berikut adalah denah lengkap fasilitas Terminal Tipe A Bangga Mbangun Desa (BMD) Cilacap
+                    beserta keterangan setiap area dan fasilitas yang tersedia untuk kenyamanan penumpang.
                 </p>
             </div>
 
             <!-- Layout Image Section -->
             <div class="row justify-content-center mb-5">
-                <div class="col-lg-10 col-xl-8 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="text-center">
-
-                        <img
-                            src="{{ asset('assets/img/layout-fasilitas.png') }}"
-                            class="img-fluid w-100 rounded shadow-lg"
-                            alt="Layout Fasilitas Terminal BMD Cilacap" />
-                        <h4 class="mt-4 mb-2 text-primary">
-                            Layout Terminal TTA BMD Cilacap
-                        </h4>
+                <div class="col-lg-10 col-xl-9 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="card border-0 shadow-lg layout-card">
+                        <div class="card-body p-4">
+                            <div class="layout-img-wrapper">
+                                <img
+                                    src="{{ asset('assets/img/layout-fasilitas.png') }}"
+                                    class="img-fluid w-100 rounded layout-img"
+                                    alt="Layout Fasilitas Terminal BMD Cilacap" />
+                            </div>
+                            <div class="text-center mt-4">
+                                <h4 class="text-primary mb-2">Layout Terminal TTA BMD Cilacap</h4>
+                                <p class="text-muted mb-0">Denah lengkap fasilitas yang tersedia di terminal</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,202 +63,416 @@
     </div>
     <!-- Layout Fasilitas End -->
 
-    <!-- Training Start -->
-    <div class="container-fluid training overflow-hidden bg-light" style="padding-top: 0.5rem !important; padding-bottom: 3rem;">
-        <div class="container" style="padding-top: 0 !important; padding-bottom: 0 !important;">
-            <!-- Keterangan -->
 
-            <div class="row g-3">
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.1s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+    <!-- Fasilitas Detail Start -->
+    <div class="container-fluid bg-white py-5">
+        <div class="container py-5">
+            <div class="section-title text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="sub-style">
+                    <h5 class="sub-title text-primary px-3">Detail Fasilitas</h5>
+                </div>
+                <h1 class="display-5 mb-4">Fasilitas Yang Tersedia</h1>
+            </div>
+
+            <div class="row g-4">
+                <!-- Gedung Utama -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/gedung_depan.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Gedung Utama"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Gedung</a>
-                                <a href="#" class="h4 text-white mb-0">Utama</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Gedung Utama</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">A</span>Gedung Utama</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">A</span>
+                                Gedung Utama
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Pusat operasional dan administrasi terminal
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.3s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Kantin Terminal -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/service-1.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Kantin Terminal"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Kantin</a>
-                                <a href="#" class="h4 text-white mb-0">Terminal</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Kantin Terminal</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">B</span>Kantin Terminal</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">B</span>
+                                Kantin Terminal
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Area kuliner untuk penumpang dan pengunjung
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.5s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Pintu Kedatangan -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/pintu_masuk_terminal.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Pintu Kedatangan"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Pintu</a>
-                                <a href="#" class="h4 text-white mb-0">Kedatangan</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Pintu Kedatangan</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">C</span>Pintu Kedatangan</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">C</span>
+                                Pintu Kedatangan
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Akses masuk untuk penumpang yang tiba
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.7s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Ruang Tunggu -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/training-1.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Ruang Tunggu"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Ruang</a>
-                                <a href="#" class="h4 text-white mb-0">Tunggu</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Ruang Tunggu</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">D</span>Ruang Tunggu Keberangkatan</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">D</span>
+                                Ruang Tunggu Keberangkatan
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Area nyaman untuk menunggu keberangkatan
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.1s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Masjid -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/service-2.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Masjid"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Mushola</a>
-                                <a href="#" class="h4 text-white mb-0">Terminal</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Masjid Terminal</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">E</span>Masjid</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">E</span>
+                                Masjid
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Tempat ibadah bagi penumpang muslim
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.3s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Parkir AKDP -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/terminal-bus-cilacap-1.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Parkir AKDP"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Parkir</a>
-                                <a href="#" class="h4 text-white mb-0">AKDP</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Parkir AKDP</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">F</span>Parkir Keberangkatan AKDP</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">F</span>
+                                Parkir Keberangkatan AKDP
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Area parkir bus Antar Kota Dalam Provinsi
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.5s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Parkir AKAP -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/terminal-bus-cilacap-2.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Parkir AKAP"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Parkir</a>
-                                <a href="#" class="h4 text-white mb-0">AKAP</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Parkir AKAP</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">G</span>Parkir Keberangkatan AKAP</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">G</span>
+                                Parkir Keberangkatan AKAP
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Area parkir bus Antar Kota Antar Provinsi
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="col-lg-6 col-xl-4 wow fadeInUp"
-                    data-wow-delay="0.7s">
-                    <div class="training-item h-100 rounded shadow-sm">
-                        <div class="training-inner">
+
+                <!-- Tempat Perlengkapan -->
+                <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="card border-0 shadow-sm h-100 overflow-hidden facility-card">
+                        <div class="position-relative facility-img-wrapper">
                             <img
                                 src="{{ asset('assets/img/terminal-bus-cilacap.jpg') }}"
-                                class="img-fluid w-100 rounded-top"
-                                alt="Image"
+                                class="card-img-top facility-img"
+                                alt="Area Parkir"
                                 style="height: 250px; object-fit: cover;" />
-                            <div class="training-title-name">
-                                <a href="#" class="h4 text-white mb-0">Area</a>
-                                <a href="#" class="h4 text-white mb-0">Parkir</a>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3"
+                                style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                <h5 class="text-white mb-0">Area Parkir</h5>
                             </div>
                         </div>
-                        <div class="training-content rounded-bottom p-4 bg-dark">
-                            <a href="#">
-                                <h5 class="text-white mb-3"><span class="badge bg-primary me-2">H</span>Tempat Perlengkapan</h5>
-                            </a>
+                        <div class="card-body bg-dark text-white">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">H</span>
+                                Tempat Perlengkapan
+                            </h5>
+                            <p class="card-text text-white-50 small mb-0">
+                                Area penyimpanan dan perlengkapan terminal
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 text-center">
-                    <a
-                        class="btn btn-primary border-warning rounded-pill py-3 px-5 wow fadeInUp"
-                        data-wow-delay="0.1s"
-                        href="{{ url('/') }}">Kembali ke Beranda</a>
-                </div>
             </div>
+        
         </div>
     </div>
-    <!-- Training End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
-
 
 </body>
+<style>
+    /* ===== Animasi Layout Card ===== */
+    .layout-card {
+        transition: all 0.4s ease;
+        cursor: pointer;
+    }
+
+    .layout-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .layout-img-wrapper {
+        overflow: hidden;
+        border-radius: 0.375rem;
+        position: relative;
+    }
+
+    .layout-img {
+        transition: transform 0.6s ease;
+    }
+
+    .layout-img:hover {
+        transform: scale(1.1);
+    }
+
+    /* Animasi Pulse pada Layout */
+    @keyframes pulse-shadow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7);
+        }
+
+        50% {
+            box-shadow: 0 0 0 15px rgba(13, 110, 253, 0);
+        }
+    }
+
+    .layout-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #0d6efd, #0dcaf0, #0d6efd);
+        border-radius: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+        animation: pulse-shadow 2s infinite;
+    }
+
+    .layout-card:hover::before {
+        opacity: 0.3;
+    }
+
+    /* ===== Animasi Facility Cards ===== */
+    .facility-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .facility-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+        z-index: 1;
+    }
+
+    .facility-card:hover::before {
+        left: 100%;
+    }
+
+    .facility-card:hover {
+        transform: translateY(-15px) scale(1.03);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Animasi untuk gambar fasilitas */
+    .facility-img-wrapper {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .facility-img {
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+    }
+
+    .facility-card:hover .facility-img {
+        transform: scale(1.15) rotate(2deg);
+    }
+
+    /* Card body styling */
+    .facility-card .card-body {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ===== Button Styling ===== */
+    .btn-primary {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(13, 110, 253, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(-1px);
+    }
+
+    /* ===== Back to Top Button ===== */
+    .back-to-top {
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(13, 110, 253, 0.5);
+    }
+
+    /* ===== Smooth Scroll Behavior ===== */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* ===== Loading Animation for Images ===== */
+    .facility-img,
+    .layout-img {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* ===== Responsive Adjustments ===== */
+    @media (max-width: 768px) {
+        .facility-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .layout-card:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
+    }
+</style>
+
 @endsection
