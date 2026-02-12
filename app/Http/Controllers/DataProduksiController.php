@@ -105,108 +105,96 @@ class DataProduksiController extends Controller
             ->sort()
             ->values();
 
-        // PENDEKATAN BARU: Group semua data berdasarkan no_kendaraan dulu
-        $groupedByKendaraan = $allData->groupBy('no_kendaraan');
+        // PENDEKATAN BARU: Pisahkan semua keberangkatan dan kedatangan tanpa grouping by kendaraan
+        // Ini akan membuat data terurut berdasarkan tanggal, bukan per kendaraan
+
+        // 1. Pisahkan data berdasarkan tipe (lengkap, keberangkatan, kedatangan)
+        $dataLengkap = $allData->filter(function ($item) {
+            return $item->waktu_berangkat && $item->waktu_datang;
+        });
+
+        $semuaKeberangkatan = $allData->filter(function ($item) {
+            return $item->waktu_berangkat && !$item->waktu_datang;
+        })->sortByDesc(function ($item) {
+            return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
+        })->values();
+
+        $semuaKedatangan = $allData->filter(function ($item) {
+            return $item->waktu_datang && !$item->waktu_berangkat;
+        })->sortByDesc(function ($item) {
+            return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
+        })->values();
+
+        // 2. Proses pairing - untuk setiap keberangkatan, cari kedatangan yang cocok
         $dataProduksi = [];
+        $usedKedatanganIds = [];
 
-        foreach ($groupedByKendaraan as $noKendaraan => $dataGroup) {
-            // Pisahkan data keberangkatan dan kedatangan untuk kendaraan ini
-            $keberangkatan = $dataGroup->filter(function ($item) {
-                return $item->waktu_berangkat && !$item->waktu_datang;
-            })->sortBy(function ($item) {
-                return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
-            })->values();
+        // Tambahkan data yang sudah lengkap
+        foreach ($dataLengkap as $item) {
+            $dataProduksi[] = $item;
+        }
 
-            $kedatangan = $dataGroup->filter(function ($item) {
-                return $item->waktu_datang && !$item->waktu_berangkat;
-            })->sortBy(function ($item) {
-                return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
-            })->values();
+        // Pairing keberangkatan dengan kedatangan
+        foreach ($semuaKeberangkatan as $berangkat) {
+            $bestMatch = null;
+            $shortestTimeDiff = null;
 
-            $lengkap = $dataGroup->filter(function ($item) {
-                return $item->waktu_berangkat && $item->waktu_datang;
-            });
-
-            // Tambahkan data yang sudah lengkap
-            foreach ($lengkap as $item) {
-                $dataProduksi[] = $item;
-            }
-
-            // Pairing keberangkatan dengan kedatangan terdekat
-            $usedKedatanganIds = [];
-
-            foreach ($keberangkatan as $berangkat) {
-                $bestMatch = null;
-                $shortestTimeDiff = null;
-
-                foreach ($kedatangan as $datang) {
-                    // Skip jika kedatangan sudah dipakai
-                    if (in_array($datang->id, $usedKedatanganIds)) {
-                        continue;
-                    }
-
-                    $berangkatTime = strtotime($berangkat->bus_berangkat . ' ' . $berangkat->waktu_berangkat);
-                    $datangTime = strtotime($datang->bus_datang . ' ' . $datang->waktu_datang);
-                    $timeDiff = abs($datangTime - $berangkatTime);
-
-                    // Cari yang terdekat dalam 48 jam
-                    if ($timeDiff <= 172800 && ($shortestTimeDiff === null || $timeDiff < $shortestTimeDiff)) {
-                        $shortestTimeDiff = $timeDiff;
-                        $bestMatch = $datang;
-                    }
+            // Cari kedatangan dengan no kendaraan yang sama
+            foreach ($semuaKedatangan as $datang) {
+                // Skip jika no kendaraan beda atau kedatangan sudah dipakai
+                if ($datang->no_kendaraan !== $berangkat->no_kendaraan || in_array($datang->id, $usedKedatanganIds)) {
+                    continue;
                 }
 
-                // Jika ada pasangan, gabungkan
-                if ($bestMatch) {
-                    $combined = (object)[
-                        'id' => $berangkat->id,
-                        'data_master_id' => $berangkat->data_master_id,
-                        'no_kendaraan' => $berangkat->no_kendaraan,
-                        'dataMaster' => $berangkat->dataMaster,
-                        'jml_pnp_berangkat' => $berangkat->jml_pnp_berangkat,
-                        'waktu_berangkat' => $berangkat->waktu_berangkat,
-                        'bus_berangkat' => $berangkat->bus_berangkat,
-                        'jml_pnp_datang' => $bestMatch->jml_pnp_datang,
-                        'waktu_datang' => $bestMatch->waktu_datang,
-                        'bus_datang' => $bestMatch->bus_datang,
-                        'created_at' => $berangkat->created_at,
-                    ];
-                    $dataProduksi[] = $combined;
-                    $usedKedatanganIds[] = $bestMatch->id;
-                } else {
-                    // Keberangkatan tanpa kedatangan
-                    $dataProduksi[] = $berangkat;
+                $berangkatTime = strtotime($berangkat->bus_berangkat . ' ' . $berangkat->waktu_berangkat);
+                $datangTime = strtotime($datang->bus_datang . ' ' . $datang->waktu_datang);
+                $timeDiff = abs($datangTime - $berangkatTime);
+
+                // Cari yang terdekat dalam 48 jam
+                if ($timeDiff <= 172800 && ($shortestTimeDiff === null || $timeDiff < $shortestTimeDiff)) {
+                    $shortestTimeDiff = $timeDiff;
+                    $bestMatch = $datang;
                 }
             }
 
-            // Tambahkan kedatangan yang tidak ter-pair
-            foreach ($kedatangan as $datang) {
-                if (!in_array($datang->id, $usedKedatanganIds)) {
-                    $dataProduksi[] = $datang;
-                }
+            // Jika ada pasangan, gabungkan
+            if ($bestMatch) {
+                $combined = (object)[
+                    'id' => $berangkat->id,
+                    'data_master_id' => $berangkat->data_master_id,
+                    'no_kendaraan' => $berangkat->no_kendaraan,
+                    'dataMaster' => $berangkat->dataMaster,
+                    'jml_pnp_berangkat' => $berangkat->jml_pnp_berangkat,
+                    'waktu_berangkat' => $berangkat->waktu_berangkat,
+                    'bus_berangkat' => $berangkat->bus_berangkat,
+                    'jml_pnp_datang' => $bestMatch->jml_pnp_datang,
+                    'waktu_datang' => $bestMatch->waktu_datang,
+                    'bus_datang' => $bestMatch->bus_datang,
+                    'created_at' => $berangkat->created_at,
+                ];
+                $dataProduksi[] = $combined;
+                $usedKedatanganIds[] = $bestMatch->id;
+            } else {
+                // Keberangkatan tanpa kedatangan
+                $dataProduksi[] = $berangkat;
             }
         }
 
-        // Sorting data produksi berdasarkan tanggal dan waktu (terbaru dulu)
-        $dataProduksi = collect($dataProduksi)->sort(function ($a, $b) {
-            // Ambil datetime untuk sorting (prioritas: bus_berangkat, jika tidak ada ambil bus_datang)
-            $dateTimeA = null;
-            $dateTimeB = null;
-
-            if (isset($a->bus_berangkat) && isset($a->waktu_berangkat)) {
-                $dateTimeA = strtotime($a->bus_berangkat . ' ' . $a->waktu_berangkat);
-            } elseif (isset($a->bus_datang) && isset($a->waktu_datang)) {
-                $dateTimeA = strtotime($a->bus_datang . ' ' . $a->waktu_datang);
+        // Tambahkan kedatangan yang tidak ter-pair
+        foreach ($semuaKedatangan as $datang) {
+            if (!in_array($datang->id, $usedKedatanganIds)) {
+                $dataProduksi[] = $datang;
             }
+        }
 
-            if (isset($b->bus_berangkat) && isset($b->waktu_berangkat)) {
-                $dateTimeB = strtotime($b->bus_berangkat . ' ' . $b->waktu_berangkat);
-            } elseif (isset($b->bus_datang) && isset($b->waktu_datang)) {
-                $dateTimeB = strtotime($b->bus_datang . ' ' . $b->waktu_datang);
+        // 3. Sorting FINAL berdasarkan tanggal (terbaru dulu)
+        $dataProduksi = collect($dataProduksi)->sortByDesc(function ($item) {
+            if (isset($item->bus_berangkat) && $item->bus_berangkat && isset($item->waktu_berangkat) && $item->waktu_berangkat) {
+                return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
+            } elseif (isset($item->bus_datang) && $item->bus_datang && isset($item->waktu_datang) && $item->waktu_datang) {
+                return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
             }
-
-            // Descending order (terbaru dulu)
-            return $dateTimeB - $dateTimeA;
+            return 0;
         })->values();
 
         // Filter berdasarkan tanggal SETELAH pairing
@@ -539,79 +527,85 @@ class DataProduksiController extends Controller
 
         $allData = $query->orderBy('created_at', 'desc')->get();
 
-        // Group dan pairing data (sama seperti di index)
-        $groupedByKendaraan = $allData->groupBy('no_kendaraan');
+        // Pisahkan semua keberangkatan dan kedatangan tanpa grouping
+        $dataLengkap = $allData->filter(function ($item) {
+            return $item->waktu_berangkat && $item->waktu_datang;
+        });
+
+        $semuaKeberangkatan = $allData->filter(function ($item) {
+            return $item->waktu_berangkat && !$item->waktu_datang;
+        })->sortByDesc(function ($item) {
+            return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
+        })->values();
+
+        $semuaKedatangan = $allData->filter(function ($item) {
+            return $item->waktu_datang && !$item->waktu_berangkat;
+        })->sortByDesc(function ($item) {
+            return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
+        })->values();
+
         $dataProduksi = [];
+        $usedKedatanganIds = [];
 
-        foreach ($groupedByKendaraan as $noKendaraan => $dataGroup) {
-            $keberangkatan = $dataGroup->filter(function ($item) {
-                return $item->waktu_berangkat && !$item->waktu_datang;
-            })->sortBy(function ($item) {
-                return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
-            })->values();
+        foreach ($dataLengkap as $item) {
+            $dataProduksi[] = $item;
+        }
 
-            $kedatangan = $dataGroup->filter(function ($item) {
-                return $item->waktu_datang && !$item->waktu_berangkat;
-            })->sortBy(function ($item) {
-                return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
-            })->values();
+        foreach ($semuaKeberangkatan as $berangkat) {
+            $bestMatch = null;
+            $shortestTimeDiff = null;
 
-            $lengkap = $dataGroup->filter(function ($item) {
-                return $item->waktu_berangkat && $item->waktu_datang;
-            });
-
-            foreach ($lengkap as $item) {
-                $dataProduksi[] = $item;
-            }
-
-            $usedKedatanganIds = [];
-
-            foreach ($keberangkatan as $berangkat) {
-                $bestMatch = null;
-                $shortestTimeDiff = null;
-
-                foreach ($kedatangan as $datang) {
-                    if (in_array($datang->id, $usedKedatanganIds)) {
-                        continue;
-                    }
-
-                    $berangkatTime = strtotime($berangkat->bus_berangkat . ' ' . $berangkat->waktu_berangkat);
-                    $datangTime = strtotime($datang->bus_datang . ' ' . $datang->waktu_datang);
-                    $timeDiff = abs($datangTime - $berangkatTime);
-
-                    if ($timeDiff <= 172800 && ($shortestTimeDiff === null || $timeDiff < $shortestTimeDiff)) {
-                        $shortestTimeDiff = $timeDiff;
-                        $bestMatch = $datang;
-                    }
+            foreach ($semuaKedatangan as $datang) {
+                if ($datang->no_kendaraan !== $berangkat->no_kendaraan || in_array($datang->id, $usedKedatanganIds)) {
+                    continue;
                 }
 
-                if ($bestMatch) {
-                    $combined = (object)[
-                        'id' => $berangkat->id,
-                        'data_master_id' => $berangkat->data_master_id,
-                        'no_kendaraan' => $berangkat->no_kendaraan,
-                        'dataMaster' => $berangkat->dataMaster,
-                        'jml_pnp_berangkat' => $berangkat->jml_pnp_berangkat,
-                        'waktu_berangkat' => $berangkat->waktu_berangkat,
-                        'bus_berangkat' => $berangkat->bus_berangkat,
-                        'jml_pnp_datang' => $bestMatch->jml_pnp_datang,
-                        'waktu_datang' => $bestMatch->waktu_datang,
-                        'bus_datang' => $bestMatch->bus_datang,
-                        'created_at' => $berangkat->created_at,
-                    ];
-                    $dataProduksi[] = $combined;
-                    $usedKedatanganIds[] = $bestMatch->id;
-                } else {
-                    $dataProduksi[] = $berangkat;
+                $berangkatTime = strtotime($berangkat->bus_berangkat . ' ' . $berangkat->waktu_berangkat);
+                $datangTime = strtotime($datang->bus_datang . ' ' . $datang->waktu_datang);
+                $timeDiff = abs($datangTime - $berangkatTime);
+
+                if ($timeDiff <= 172800 && ($shortestTimeDiff === null || $timeDiff < $shortestTimeDiff)) {
+                    $shortestTimeDiff = $timeDiff;
+                    $bestMatch = $datang;
                 }
             }
 
-            foreach ($kedatangan as $datang) {
-                if (!in_array($datang->id, $usedKedatanganIds)) {
-                    $dataProduksi[] = $datang;
-                }
+            if ($bestMatch) {
+                $combined = (object)[
+                    'id' => $berangkat->id,
+                    'data_master_id' => $berangkat->data_master_id,
+                    'no_kendaraan' => $berangkat->no_kendaraan,
+                    'dataMaster' => $berangkat->dataMaster,
+                    'jml_pnp_berangkat' => $berangkat->jml_pnp_berangkat,
+                    'waktu_berangkat' => $berangkat->waktu_berangkat,
+                    'bus_berangkat' => $berangkat->bus_berangkat,
+                    'jml_pnp_datang' => $bestMatch->jml_pnp_datang,
+                    'waktu_datang' => $bestMatch->waktu_datang,
+                    'bus_datang' => $bestMatch->bus_datang,
+                    'created_at' => $berangkat->created_at,
+                ];
+                $dataProduksi[] = $combined;
+                $usedKedatanganIds[] = $bestMatch->id;
+            } else {
+                $dataProduksi[] = $berangkat;
             }
         }
+
+        foreach ($semuaKedatangan as $datang) {
+            if (!in_array($datang->id, $usedKedatanganIds)) {
+                $dataProduksi[] = $datang;
+            }
+        }
+
+        // Sorting berdasarkan tanggal (terbaru dulu) setelah pairing
+        $dataProduksi = collect($dataProduksi)->sortByDesc(function ($item) {
+            if (isset($item->bus_berangkat) && $item->bus_berangkat && isset($item->waktu_berangkat) && $item->waktu_berangkat) {
+                return strtotime($item->bus_berangkat . ' ' . $item->waktu_berangkat);
+            } elseif (isset($item->bus_datang) && $item->bus_datang && isset($item->waktu_datang) && $item->waktu_datang) {
+                return strtotime($item->bus_datang . ' ' . $item->waktu_datang);
+            }
+            return 0;
+        })->values()->all();
 
         $data = [
             'dataProduksi' => $dataProduksi,
