@@ -586,8 +586,9 @@
                                             @endfor
                                         </select>
                                     </div>
+                                    
                                 </div>
-                                <div class="col-md-3 d-flex align-items-end">
+                                <div class="col-md-4 d-flex align-items-end">
                                     <button type="button" class="btn btn-primary" id="btnLoadGrafik">
                                         <i class="fa fa-bar-chart"></i> Tampilkan Grafik
                                     </button>

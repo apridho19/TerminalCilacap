@@ -22,8 +22,8 @@
                     <div class="ibox-title">Filter Data</div>
                 </div>
                 <div class="ibox-body">
-                    <div class="row align-items-end">
-                        <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label for="jenis_grafik" class="font-strong">Jenis Grafik:</label>
                                 <select class="form-control" id="jenis_grafik">
@@ -32,7 +32,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3" id="bulan_filter">
+                        <div class="col-md-3 mb-3" id="bulan_filter">
                             <div class="form-group">
                                 <label for="bulan" class="font-strong">Pilih Bulan:</label>
                                 <select class="form-control" id="bulan">
@@ -44,7 +44,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label for="tahun" class="font-strong">Pilih Tahun:</label>
                                 <select class="form-control" id="tahun">
@@ -54,13 +54,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-block" id="btnLoadGrafik">
-                                    <i class="fa fa-bar-chart"></i> Tampilkan Grafik
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

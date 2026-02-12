@@ -65,11 +65,45 @@ class DataProduksiController extends Controller
             ->distinct()
             ->get();
 
-        $jenisTrayekList = $filterData->pluck('jenis_trayek')->unique()->sort()->values();
-        $asalTujuanList = $filterData->pluck('asal_tujuan')->unique()->sort()->values();
-        $provinsiList = $filterData->pluck('provinsi')->unique()->sort()->values();
-        $terminalTujuanList = $filterData->pluck('terminal_tujuan')->unique()->sort()->values();
-        $kabupatenList = $filterData->pluck('kabupaten')->unique()->sort()->values();
+        $jenisTrayekList = $filterData->pluck('jenis_trayek')
+            ->filter(function ($value) {
+                return !is_null($value) && $value !== '';
+            })
+            ->unique()
+            ->sort()
+            ->values();
+
+        $asalTujuanList = $filterData->pluck('asal_tujuan')
+            ->filter(function ($value) {
+                return !is_null($value) && $value !== '';
+            })
+            ->unique()
+            ->sort()
+            ->values();
+
+        $provinsiList = $filterData->pluck('provinsi')
+            ->filter(function ($value) {
+                return !is_null($value) && $value !== '';
+            })
+            ->unique()
+            ->sort()
+            ->values();
+
+        $terminalTujuanList = $filterData->pluck('terminal_tujuan')
+            ->filter(function ($value) {
+                return !is_null($value) && $value !== '';
+            })
+            ->unique()
+            ->sort()
+            ->values();
+
+        $kabupatenList = $filterData->pluck('kabupaten')
+            ->filter(function ($value) {
+                return !is_null($value) && $value !== '';
+            })
+            ->unique()
+            ->sort()
+            ->values();
 
         // PENDEKATAN BARU: Group semua data berdasarkan no_kendaraan dulu
         $groupedByKendaraan = $allData->groupBy('no_kendaraan');
